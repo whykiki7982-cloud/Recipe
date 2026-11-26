@@ -197,10 +197,22 @@ input[type=search]::-webkit-search-cancel-button{display:none}
 .d-hero .thumb-emoji{font-size:56px}
 .d-hero .thumb-img{z-index:1}
 .d-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(60,20,0,.16),transparent 42%,rgba(60,20,0,.2));z-index:2;pointer-events:none}
-.d-close{
-  position:absolute;top:12px;left:12px;z-index:4;width:38px;height:38px;border-radius:50%;border:0;
-  background:rgba(255,255,255,.94);color:#5A3A24;font-size:16px;font-weight:800;
-  display:grid;place-items:center;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.18);
+/* 모든 시트 공통: 홈으로 돌아가기 버튼 */
+.home-btn{
+  flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;
+  min-height:40px;padding:0 14px;border-radius:999px;
+  border:1.5px solid #F2D6B6;background:#fff;color:#7A4A28;
+  font:inherit;font-size:13.5px;font-weight:900;letter-spacing:-.02em;
+  cursor:pointer;box-shadow:0 2px 6px rgba(120,60,20,.10);white-space:nowrap;
+  transition:transform .12s,background .15s;
+}
+.home-btn>span{font-size:14px;line-height:1}
+.home-btn:hover{background:#FFF6E8}
+.home-btn:active{transform:scale(.95);background:#FFEFDB}
+.home-btn:focus-visible{outline:3px solid rgba(255,138,43,.45);outline-offset:2px}
+.d-home{
+  position:absolute;top:12px;left:12px;z-index:4;background:rgba(255,255,255,.96);
+  border-color:rgba(255,255,255,.9);box-shadow:0 3px 12px rgba(0,0,0,.2);
 }
 .d-scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:15px 18px 26px;overscroll-behavior:contain}
 .d-tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
@@ -848,7 +860,7 @@ input[type=search]::-webkit-search-cancel-button{display:none}
     <form class="form" id="recipeForm" novalidate>
       <div class="f-head">
         <h2 id="formHeading">레시피 추가</h2>
-        <button type="button" class="x" data-close="form" aria-label="닫기">✕</button>
+        <button type="button" class="home-btn" data-close="form" aria-label="홈으로 돌아가기"><span aria-hidden="true">🏠</span> 홈으로</button>
       </div>
       <div class="f-body">
         <details class="sp" id="pasteBox">
@@ -941,7 +953,7 @@ input[type=search]::-webkit-search-cancel-button{display:none}
         <h2 id="fridgeHeading">🧊 냉장고 파먹기</h2>
         <p class="fh-sub" id="fridgeHeadSub">냉장고에 있는 재료로 메뉴를 찾아 드려요</p>
       </div>
-      <button type="button" class="x" data-close="fridge" aria-label="닫기">✕</button>
+      <button type="button" class="home-btn" data-close="fridge" aria-label="홈으로 돌아가기"><span aria-hidden="true">🏠</span> 홈으로</button>
     </div>
     <div class="fr-scroll">
       <div class="fr-hero">
@@ -983,7 +995,7 @@ input[type=search]::-webkit-search-cancel-button{display:none}
         <h2 id="shopHeading">🛒 장보기</h2>
         <p class="fh-sub" id="shopSub">장볼 것을 적어 두세요</p>
       </div>
-      <button type="button" class="x" data-close="shop" aria-label="닫기">✕</button>
+      <button type="button" class="home-btn" data-close="shop" aria-label="홈으로 돌아가기"><span aria-hidden="true">🏠</span> 홈으로</button>
     </div>
     <form class="shop-add" id="shopForm">
       <input id="shopInput" type="text" placeholder="예: 우유 2개, 대파 한 단" autocomplete="off" aria-label="살 것 입력">
@@ -1011,7 +1023,7 @@ input[type=search]::-webkit-search-cancel-button{display:none}
         <h2 id="schoolHeading">🎒 하교 시간</h2>
         <p class="fh-sub" id="schoolSub">아이들 하교 시간을 적어 두면 10분 전에 알려 드려요</p>
       </div>
-      <button type="button" class="x" data-close="school" aria-label="닫기">✕</button>
+      <button type="button" class="home-btn" data-close="school" aria-label="홈으로 돌아가기"><span aria-hidden="true">🏠</span> 홈으로</button>
     </div>
     <div class="sc-scroll">
       <section class="sc-hero">
@@ -1060,7 +1072,7 @@ input[type=search]::-webkit-search-cancel-button{display:none}
         <h2 id="weightHeading">⚖️ 몸무게 기록</h2>
         <p class="fh-sub" id="weightSub">매일 한 줄씩 적으면 변화가 그래프로 보여요</p>
       </div>
-      <button type="button" class="x" data-close="weight" aria-label="닫기">✕</button>
+      <button type="button" class="home-btn" data-close="weight" aria-label="홈으로 돌아가기"><span aria-hidden="true">🏠</span> 홈으로</button>
     </div>
     <div class="w-scroll">
       <section class="w-hero">
@@ -1128,7 +1140,7 @@ input[type=search]::-webkit-search-cancel-button{display:none}
         <h2 id="bikeTitle">🚴 자전거 타이머</h2>
         <p class="fh-sub" id="bikeSub">4분이면 충분해요 · 달리기와 회복을 번갈아요</p>
       </div>
-      <button type="button" class="x" data-close="bike" aria-label="닫기">✕</button>
+      <button type="button" class="home-btn" data-close="bike" aria-label="홈으로 돌아가기"><span aria-hidden="true">🏠</span> 홈으로</button>
     </div>
     <div class="bk-scroll">
       <div class="bk-modes" id="bikeMode" role="group" aria-label="타이머 방식">
@@ -1916,7 +1928,7 @@ function detailHTML(r){
   }
 
   return thumbHTML(r, true) +
-    '<button type="button" class="d-close" data-act="close" aria-label="닫기">←</button>'+
+    '<button type="button" class="home-btn d-home" data-act="close" aria-label="홈으로 돌아가기"><span aria-hidden="true">🏠</span> 홈으로</button>'+
     '<div class="d-scroll">'+
       '<div class="d-tags">'+
         '<span class="cat-pill">'+esc(r.category)+'</span>'+
@@ -1949,11 +1961,13 @@ function openDetail(id){
   lastFocus = document.activeElement;
   $('#detailSheet').innerHTML = detailHTML(r);
   $('#detailOverlay').classList.add('show');
+  sheetOpen('detail');
   document.body.classList.add('lock');
 }
 
 function closeDetail(){
   $('#detailOverlay').classList.remove('show');
+  sheetClosed('detail');
   openId = null;
   if(!isAnyOverlayOpen()) document.body.classList.remove('lock');
 }
@@ -1975,6 +1989,72 @@ function isAnyOverlayOpen(){
          $('#weightOverlay').classList.contains('show') ||
          $('#bikeOverlay').classList.contains('show');
 }
+
+/* =========================================================
+   🏠 뒤로가기 = 홈으로
+   창(시트)을 열면 history 에 한 칸씩 쌓아 두고,
+   휴대폰 뒤로가기·브라우저 뒤로(popstate)를 누르면
+   앱을 끄지 않고 열린 창을 하나씩 닫는다.
+   ========================================================= */
+var SHEET_CLOSERS = {
+  detail: function(){ closeDetail(); },
+  form: function(){ closeForm(); },
+  confirm: function(){ closeConfirm(); },
+  fridge: function(){ closeFridge(); },
+  shop: function(){ closeShop(); },
+  school: function(){ closeSchool(); },
+  weight: function(){ closeWeight(); },
+  bike: function(){ closeBike(); }
+};
+var sheetStack = [];        /* 열린 창 (아래→위) */
+var histOwned = 0;          /* history 에 쌓아 둔 우리 칸 수 */
+var histPending = 0;        /* history.back() 을 기다리는 수 */
+var histMute = false;       /* popstate 로 닫는 중이면 history 를 건드리지 않는다 */
+var histBroken = false;     /* pushState 가 막힌 환경(예: 일부 file://) */
+
+function sheetOpen(key){
+  if(sheetStack.indexOf(key) >= 0) return;
+  sheetStack.push(key);
+  syncSheetHistory();
+}
+function sheetClosed(key){
+  var i = sheetStack.lastIndexOf(key);
+  if(i >= 0) sheetStack.splice(i, 1);
+  if(histMute) return;
+  syncSheetHistory();
+}
+function syncSheetHistory(){
+  if(histBroken || histMute || histPending > 0) return;
+  var guard = 0;
+  while(histOwned < sheetStack.length && guard++ < 12){
+    try {
+      history.pushState({ recipeBookSheet: sheetStack[sheetStack.length-1] || '' }, '');
+      histOwned++;
+    } catch(e){ histBroken = true; return; }
+  }
+  if(histOwned > sheetStack.length){
+    histPending++;
+    try { history.back(); } catch(e){ histPending = 0; }
+  }
+}
+function closeSheetByBack(){
+  var key = sheetStack.pop();
+  if(!key) return;
+  var fn = SHEET_CLOSERS[key];
+  if(!fn) return;
+  histMute = true;
+  try { fn(); } catch(e){ /* 창을 못 닫아도 뒤로가기는 막지 않는다 */ }
+  histMute = false;
+}
+window.addEventListener('popstate', function(){
+  if(histPending > 0){
+    histPending--;
+  } else {
+    closeSheetByBack();
+  }
+  histOwned = Math.max(0, histOwned - 1);
+  syncSheetHistory();
+});
 
 /* =========================================================
    즐겨찾기 / 재료 체크
@@ -2059,12 +2139,14 @@ function openForm(id){
   updateLiveNut();
   lastFocus = document.activeElement;
   $('#formOverlay').classList.add('show');
+  sheetOpen('form');
   document.body.classList.add('lock');
   setTimeout(function(){ try{ $('#fTitle').focus(); }catch(e){} }, 260);
 }
 
 function closeForm(){
   $('#formOverlay').classList.remove('show');
+  sheetClosed('form');
   editingId = null;
   if(!isAnyOverlayOpen()) document.body.classList.remove('lock');
 }
@@ -2386,6 +2468,7 @@ function askDelete(id){
   $('#confirmTitle').textContent = '이 레시피를 지울까요?';
   $('#confirmText').innerHTML = '<b>'+esc(r.title)+'</b><br>지우면 되돌릴 수 없어요.';
   $('#confirmOverlay').classList.add('show');
+  sheetOpen('confirm');
   document.body.classList.add('lock');
 }
 function askDeleteChild(id){
@@ -2398,10 +2481,12 @@ function askDeleteChild(id){
   $('#confirmTitle').textContent = '이 아이를 지울까요?';
   $('#confirmText').innerHTML = '<b>'+esc(childName(k, i))+'</b>의 하교 시간과 메모가 사라져요.';
   $('#confirmOverlay').classList.add('show');
+  sheetOpen('confirm');
   document.body.classList.add('lock');
 }
 function closeConfirm(){
   $('#confirmOverlay').classList.remove('show');
+  sheetClosed('confirm');
   pendingDelete = null;
   pendingChild = null;
   pendingWeight = null;
@@ -2783,12 +2868,14 @@ function openFridge(){
   lastFocus = document.activeElement;
   renderFridge();
   $('#fridgeOverlay').classList.add('show');
+  sheetOpen('fridge');
   document.body.classList.add('lock');
 }
 
 function closeFridge(){
   fridgeOpen = false;
   $('#fridgeOverlay').classList.remove('show');
+  sheetClosed('fridge');
   if(!isAnyOverlayOpen()) document.body.classList.remove('lock');
 }
 
@@ -2960,12 +3047,14 @@ function openShop(){
   lastFocus = document.activeElement;
   renderShop();
   $('#shopOverlay').classList.add('show');
+  sheetOpen('shop');
   document.body.classList.add('lock');
 }
 
 function closeShop(){
   shopOpen = false;
   $('#shopOverlay').classList.remove('show');
+  sheetClosed('shop');
   if(!isAnyOverlayOpen()) document.body.classList.remove('lock');
 }
 
@@ -3301,11 +3390,13 @@ function openSchool(){
   schoolLastMinute = '';
   renderSchool();
   $('#schoolOverlay').classList.add('show');
+  sheetOpen('school');
   document.body.classList.add('lock');
 }
 function closeSchool(){
   schoolOpen = false;
   $('#schoolOverlay').classList.remove('show');
+  sheetClosed('school');
   if(!isAnyOverlayOpen()) document.body.classList.remove('lock');
 }
 
@@ -3898,12 +3989,14 @@ function openWeight(){
   var dateEl = $('#wDate');
   if(dateEl && !normWeightDate(dateEl.value)) dateEl.value = todayStr();
   $('#weightOverlay').classList.add('show');
+  sheetOpen('weight');
   document.body.classList.add('lock');
 }
 function closeWeight(){
   weightOpen = false;
   hideWeightTip();
   $('#weightOverlay').classList.remove('show');
+  sheetClosed('weight');
   if(!isAnyOverlayOpen()) document.body.classList.remove('lock');
 }
 
@@ -3954,6 +4047,7 @@ function askDeleteWeight(date){
   $('#confirmTitle').textContent = '이 날 기록을 지울까요?';
   $('#confirmText').innerHTML = '<b>'+esc(weightDateLabel(e.date))+' '+wKg(e.kg)+'kg</b><br>지우면 되돌릴 수 없어요.';
   $('#confirmOverlay').classList.add('show');
+  sheetOpen('confirm');
   document.body.classList.add('lock');
 }
 
@@ -4432,6 +4526,7 @@ function openBike(){
   lastFocus = document.activeElement;
   renderBikeTimer();
   $('#bikeOverlay').classList.add('show');
+  sheetOpen('bike');
   document.body.classList.add('lock');
 }
 function closeBike(){
@@ -4441,6 +4536,7 @@ function closeBike(){
   bikeBgmStop();
   bikeKeepAwake(false);
   $('#bikeOverlay').classList.remove('show');
+  sheetClosed('bike');
   renderBikeTimer();
   if(!isAnyOverlayOpen()) document.body.classList.remove('lock');
 }
@@ -4898,7 +4994,10 @@ function init(){
     bikeToggleBgm: bikeToggleBgm,
     renderBike: renderBikeTimer,
     openBike: openBike,
-    closeBike: closeBike
+    closeBike: closeBike,
+    /* 🏠 뒤로가기 = 홈으로: 열린 창 목록(아래→위) */
+    get openSheets(){ return sheetStack.slice(); },
+    get historyEntries(){ return histOwned; }
   };
 }
 
