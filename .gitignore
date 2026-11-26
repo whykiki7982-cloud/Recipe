@@ -1,0 +1,18 @@
+# 빌드 산출물
+.gradle/
+build/
+app/build/
+dist/
+local.properties
+*.iml
+.idea/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# 서명 키 파일 (GitHub Actions secret 으로 따로 보관)
+keystore/*
+!keystore/README.md
+
+# 아이콘 미리보기
+tools/preview/

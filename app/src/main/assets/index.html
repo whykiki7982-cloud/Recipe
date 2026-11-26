@@ -1,0 +1,3548 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FF5A36">
+<title>📖 민정님의 레시피북</title>
+<style>
+:root{
+  --cream:#FFFBF2; --paper:#FFFFFF; --ink:#3A2418; --ink-soft:#8A6A55;
+  --red:#FF5A36; --red-deep:#E8431F; --orange:#FF8A2B; --yellow:#FFD147;
+  --yellow-soft:#FFF4CC; --peach:#FFE7D6; --line:#F6E3C8;
+  --shadow:0 8px 24px rgba(190,100,40,.10);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',system-ui,sans-serif;
+  background:var(--cream); color:var(--ink); font-size:16px; line-height:1.5;
+  min-height:100vh; overflow-x:hidden;
+  background-image:
+    radial-gradient(680px 320px at 8% -6%, #FFE6B8 0%, rgba(255,230,184,0) 62%),
+    radial-gradient(520px 300px at 100% 0%, #FFD3C0 0%, rgba(255,211,192,0) 60%),
+    radial-gradient(600px 420px at 50% 112%, #FFF0CC 0%, rgba(255,240,204,0) 70%);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+}
+body.lock{overflow:hidden}
+button{font-family:inherit}
+:focus-visible{outline:3px solid rgba(255,138,43,.55);outline-offset:2px}
+
+/* ---------- layout ---------- */
+.app{max-width:980px;margin:0 auto;padding:0 16px 132px}
+
+/* ---------- hero ---------- */
+.hero{
+  position:relative;margin:14px 0 4px;padding:20px 18px 18px;border-radius:26px;
+  background:linear-gradient(135deg,#FFF7E6 0%,#FFEBD2 52%,#FFDFC9 100%);
+  border:1px solid #FFE0BC;box-shadow:var(--shadow);overflow:hidden;
+}
+.hero-dots{
+  position:absolute;inset:0;pointer-events:none;opacity:.35;
+  background-image:radial-gradient(#FFC98A 1.1px, transparent 1.1px);
+  background-size:15px 15px;
+  -webkit-mask-image:linear-gradient(120deg,#000 0%,transparent 62%);
+  mask-image:linear-gradient(120deg,#000 0%,transparent 62%);
+}
+.hero-row{display:flex;align-items:center;gap:6px;position:relative;z-index:1}
+.hero-text{flex:1 1 auto;min-width:0}
+.eyebrow{margin:0;font-size:11.5px;letter-spacing:.14em;color:var(--red-deep);font-weight:800}
+.hero h1{margin:3px 0 4px;font-size:clamp(20px,5.5vw,28px);line-height:1.24;letter-spacing:-.03em;font-weight:900}
+.hero-sub{margin:0;font-size:12.5px;color:#8A5E3A;font-weight:700}
+.hero-sub b{color:var(--red-deep);font-size:14px}
+.hero-tools{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap;position:relative;z-index:1}
+.tool-btn{
+  display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:999px;
+  border:1.5px solid #FFD9B0;background:#FFFDF8;color:#8A4E23;
+  font-size:12px;font-weight:800;cursor:pointer;transition:.15s;
+}
+.tool-btn:hover{background:#FFF3E1;border-color:var(--orange);transform:translateY(-1px)}
+.hero-mascot{width:112px;flex:0 0 auto;margin:-10px -6px -16px 0;filter:drop-shadow(0 7px 10px rgba(200,90,30,.18))}
+
+.mascot{display:block;width:120px;height:auto;animation:bob 3.8s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@media (prefers-reduced-motion: reduce){.mascot{animation:none}}
+
+/* ---------- toolbar ---------- */
+.toolbar{
+  position:sticky;top:0;z-index:30;
+  margin:2px -16px 2px;padding:10px 16px 6px;
+  background:linear-gradient(#FFFBF2 72%, rgba(255,251,242,.9));
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.search{
+  display:flex;align-items:center;gap:8px;background:#fff;border:2px solid #FFE1BE;
+  border-radius:16px;padding:0 12px;height:48px;
+  box-shadow:0 4px 14px rgba(210,130,60,.07);transition:.18s;
+}
+.search:focus-within{border-color:var(--orange);box-shadow:0 0 0 4px rgba(255,138,43,.14)}
+.search-ico{font-size:15px;opacity:.75}
+.search input{flex:1 1 auto;min-width:0;border:0;outline:0;font:inherit;font-size:15px;background:transparent;color:var(--ink)}
+.search input::placeholder{color:#B99B84}
+input[type=search]::-webkit-search-cancel-button{display:none}
+.search-clear{border:0;background:#FFEFDB;color:#9A5A2A;width:26px;height:26px;border-radius:50%;font-size:12px;font-weight:900;cursor:pointer;display:grid;place-items:center}
+.chips{display:flex;gap:7px;overflow-x:auto;padding:10px 0 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.chips::-webkit-scrollbar{display:none}
+.chip{
+  flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;height:36px;padding:0 14px;
+  border-radius:999px;border:1.5px solid #FFE1BE;background:#fff;color:#7A5540;
+  font-size:13px;font-weight:800;cursor:pointer;transition:.15s;white-space:nowrap;
+}
+.chip:hover{border-color:#FFC28A}
+.chip.on{background:linear-gradient(135deg,var(--red),var(--orange));color:#fff;border-color:transparent;box-shadow:0 6px 14px rgba(255,90,54,.26)}
+.chip .n{font-size:10.5px;opacity:.8;font-weight:900}
+.chip.star.on{background:linear-gradient(135deg,#FFC93C,#FF9A1F);color:#5A3600;box-shadow:0 6px 14px rgba(255,170,40,.3)}
+
+/* ---------- cards ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;padding:8px 0 24px}
+@media (max-width:380px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}
+.card{
+  background:var(--paper);border:1px solid var(--line);border-radius:20px;overflow:hidden;
+  box-shadow:0 6px 18px rgba(190,100,40,.07);cursor:pointer;
+  display:flex;flex-direction:column;position:relative;
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 26px rgba(190,100,40,.15)}
+.card:active{transform:scale(.985)}
+.thumb{position:relative;aspect-ratio:16/10;display:grid;place-items:center;overflow:hidden}
+.thumb::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 22% 16%,rgba(255,255,255,.5),transparent 58%);pointer-events:none}
+.thumb-emoji{font-size:40px;filter:drop-shadow(0 3px 4px rgba(120,50,0,.2));z-index:1}
+.thumb-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+.cat-0{background:linear-gradient(135deg,#FFE28A,#FFB347)}
+.cat-1{background:linear-gradient(135deg,#FFC08A,#FF7A45)}
+.cat-2{background:linear-gradient(135deg,#FFB07A,#FF7043)}
+.cat-3{background:linear-gradient(135deg,#FFD166,#FF8A2B)}
+.cat-4{background:linear-gradient(135deg,#FFC2A8,#FF8A6B)}
+.cat-5{background:linear-gradient(135deg,#FFE9A8,#FFC24A)}
+.play{
+  position:absolute;z-index:3;background:rgba(238,60,32,.94);color:#fff;
+  display:inline-flex;align-items:center;justify-content:center;
+  box-shadow:0 3px 10px rgba(120,20,0,.32);
+}
+.thumb .play{left:10px;bottom:10px;height:26px;padding:0 10px;border-radius:999px;font-size:11px;font-weight:900;gap:3px}
+.d-hero .play{left:50%;top:50%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;font-size:16px;padding-left:2px}
+.favbtn{
+  position:absolute;top:8px;right:8px;z-index:3;width:34px;height:34px;border-radius:50%;
+  border:0;background:rgba(255,255,255,.9);color:#D3B49A;font-size:17px;line-height:1;
+  display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(4px);
+  box-shadow:0 2px 8px rgba(120,60,20,.12);transition:.15s;
+}
+.favbtn:hover{transform:scale(1.08)}
+.favbtn.on{color:#FFAE00;background:#FFF9E6;text-shadow:0 1px 0 #FFE08A}
+.card-body{padding:10px 11px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card-title{
+  margin:0;font-size:14.5px;font-weight:800;line-height:1.32;letter-spacing:-.015em;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.card-meta{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.cat-pill{font-size:10.5px;font-weight:900;padding:3px 8px;border-radius:999px;background:#FFF1DC;color:#B4602A;white-space:nowrap}
+.meta-t{font-size:11.5px;color:var(--ink-soft);font-weight:700}
+.card-nut{
+  align-self:flex-start;font-size:11.5px;font-weight:900;color:var(--red-deep);
+  background:#FFF2EA;padding:4px 8px;border-radius:8px;letter-spacing:-.01em;
+}
+
+/* ---------- empty ---------- */
+.empty{text-align:center;padding:14px 16px 48px;color:var(--ink-soft)}
+.empty .mascot{width:148px;margin:0 auto 2px}
+.empty h3{color:var(--ink);font-size:17px;margin:2px 0 5px;font-weight:900}
+.empty p{margin:0 0 14px;font-size:13.5px;line-height:1.5}
+.empty .btn{flex:0 0 auto}
+
+/* ---------- fab ---------- */
+.fab{
+  position:fixed;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:40;
+  display:inline-flex;align-items:center;gap:6px;height:56px;padding:0 22px;border-radius:999px;border:0;
+  background:linear-gradient(135deg,#FF6A2B,#FF3D2E);color:#fff;font-size:15.5px;font-weight:900;
+  box-shadow:0 12px 26px rgba(255,70,40,.4);cursor:pointer;transition:.15s;
+}
+.fab:active{transform:scale(.96)}
+.fab[hidden]{display:none}
+.fab .plus{font-size:20px;line-height:1;margin-top:-1px}
+@media (min-width:720px){.fab{right:max(16px,calc((100vw - 980px)/2 + 16px))}}
+
+/* ---------- overlay & sheet ---------- */
+.overlay{
+  position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center;
+  background:rgba(58,36,24,.42);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+  opacity:0;visibility:hidden;transition:opacity .22s;
+}
+.overlay.show{opacity:1;visibility:visible}
+.overlay.center{align-items:center;padding:20px}
+#confirmOverlay{z-index:70}
+.sheet{
+  background:var(--cream);width:100%;max-width:680px;max-height:93vh;position:relative;
+  border-radius:26px 26px 0 0;display:flex;flex-direction:column;overflow:hidden;
+  transform:translateY(22px);transition:transform .26s cubic-bezier(.2,.85,.25,1);
+  box-shadow:0 -10px 40px rgba(90,40,10,.2);
+}
+.overlay.show .sheet{transform:none}
+@media (min-width:720px){
+  .overlay{align-items:center;padding:24px}
+  .sheet{border-radius:26px;max-height:88vh}
+}
+
+/* ---------- detail ---------- */
+.d-hero{position:relative;flex:0 0 auto;height:172px;display:grid;place-items:center;overflow:hidden}
+.d-hero::before{content:'';position:absolute;inset:0;z-index:0;opacity:.55;background-image:radial-gradient(rgba(255,255,255,.6) 1.3px, transparent 1.3px);background-size:17px 17px}
+.d-hero .thumb-emoji{font-size:56px}
+.d-hero .thumb-img{z-index:1}
+.d-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(60,20,0,.16),transparent 42%,rgba(60,20,0,.2));z-index:2;pointer-events:none}
+.d-close{
+  position:absolute;top:12px;left:12px;z-index:4;width:38px;height:38px;border-radius:50%;border:0;
+  background:rgba(255,255,255,.94);color:#5A3A24;font-size:16px;font-weight:800;
+  display:grid;place-items:center;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.18);
+}
+.d-scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:15px 18px 26px;overscroll-behavior:contain}
+.d-tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.tag{font-size:11.5px;font-weight:800;padding:4px 9px;border-radius:999px;background:#FFF0DA;color:#A96233}
+.d-title{font-size:22px;font-weight:900;margin:9px 0 12px;letter-spacing:-.03em;line-height:1.28;word-break:keep-all}
+.d-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;height:44px;padding:0 16px;
+  border-radius:14px;border:0;font:inherit;font-size:14px;font-weight:800;cursor:pointer;
+  text-decoration:none;transition:.15s;white-space:nowrap;
+}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:linear-gradient(135deg,#FF6B2C,#FF3B2F);color:#fff;box-shadow:0 8px 18px rgba(255,70,40,.3);flex:1 1 auto}
+.btn-soft{background:#FFEBCB;color:#8A4A12}
+.btn-danger{background:#fff;color:var(--red-deep);border:1.5px solid #FFD6C9}
+.btn-ghost{background:#FFEFDB;color:#8A5530}
+
+/* nutrition */
+.nut-card{
+  position:relative;background:linear-gradient(140deg,#FFF6DC,#FFE9D3);
+  border:1.5px solid #FFDFAE;border-radius:20px;padding:14px 14px 12px;margin:0 0 18px;overflow:hidden;
+}
+.nut-head{display:flex;align-items:flex-start;gap:8px}
+.nut-headtext{flex:1 1 auto;min-width:0}
+.nut-eyebrow{margin:0;font-size:11.5px;font-weight:900;color:#B0602A;letter-spacing:.03em}
+.nut-kcal{margin:1px 0 0;font-size:13px;font-weight:800;color:#7A3A12}
+.nut-kcal strong{font-size:30px;line-height:1.1;color:#F0401E;letter-spacing:-.03em;margin:0 2px}
+.nut-mascot{width:74px;flex:0 0 auto;margin:-10px -6px -8px 0;filter:drop-shadow(0 4px 7px rgba(200,100,40,.18))}
+.nut-say{
+  display:inline-block;margin-top:5px;font-size:11px;font-weight:900;color:#A95A22;
+  background:#FFFDF6;border:1px solid #FFE0B0;border-radius:999px;padding:3px 9px;
+}
+.macro-bar{display:flex;height:12px;border-radius:999px;overflow:hidden;background:#fff;margin:12px 0 9px;box-shadow:inset 0 1px 2px rgba(120,60,20,.12)}
+.macro-bar span{height:100%;transition:width .3s}
+.m-carb{background:#FFC93C}.m-pro{background:#FF8A3D}.m-fat{background:#F0422E}
+.macro-legend{display:flex;flex-wrap:wrap;gap:8px 14px;margin:0;padding:0;list-style:none;font-size:12px;font-weight:800;color:#7A4A28}
+.macro-legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:1px}
+.macro-legend b{color:#5A3218}
+.nut-note{margin:9px 0 0;font-size:11px;color:#9A6A44;line-height:1.45}
+.nut-warn{margin:4px 0 0;font-size:11px;font-weight:800;color:#C05A1E}
+
+/* detail sections */
+.d-sec{margin-bottom:18px}
+.d-sec h3{display:flex;align-items:center;gap:6px;font-size:14.5px;margin:0 0 8px;font-weight:900}
+.ing-progress{margin-left:auto;font-size:11.5px;font-weight:900;color:#B0602A;background:#FFEEDB;padding:3px 9px;border-radius:999px}
+.prog{height:6px;background:#FFEBD6;border-radius:999px;overflow:hidden;margin:0 0 10px}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,#FFC93C,#FF6A2B);transition:width .22s}
+.ing-list{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.ing{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border:1.5px solid var(--line);
+  border-radius:13px;cursor:pointer;font-size:14px;font-weight:600;transition:.15s;
+}
+.ing:hover{border-color:#FFCFA0}
+.ing .box{
+  width:20px;height:20px;border-radius:7px;border:2px solid #FFCFA8;flex:0 0 auto;
+  display:grid;place-items:center;font-size:12px;color:#fff;font-weight:900;background:#fff;
+}
+.ing.done{background:#FFF8E8;border-color:#FFE0A6;color:#9A7A5A}
+.ing.done .box{background:linear-gradient(135deg,#FFB300,#FF7A1F);border-color:transparent}
+.ing.done .ing-name{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:#FFC07A}
+.steps{list-style:none;counter-reset:s;margin:0;padding:0;display:grid;gap:8px}
+.steps li{
+  counter-increment:s;position:relative;padding:11px 12px 11px 44px;background:#fff;
+  border:1.5px solid var(--line);border-radius:14px;font-size:14px;line-height:1.55;word-break:keep-all;
+}
+.steps li::before{
+  content:counter(s);position:absolute;left:10px;top:10px;width:24px;height:24px;border-radius:50%;
+  background:linear-gradient(135deg,#FFC93C,#FF8A2B);color:#fff;font-size:12.5px;font-weight:900;
+  display:grid;place-items:center;
+}
+.memo{display:flex;gap:10px;background:#FFF8E1;border:1.5px dashed #FFD37A;border-radius:16px;padding:12px;margin-top:2px}
+.memo span{font-size:18px;line-height:1.2}
+.memo p{margin:0;font-size:13.5px;line-height:1.55;color:#7A5326;word-break:keep-all}
+.d-foot{margin-top:16px;font-size:11.5px;color:#B0917A;text-align:center}
+
+/* ---------- form ---------- */
+.form-sheet{max-height:93vh}
+.form{display:flex;flex-direction:column;height:100%;min-height:0;background:var(--cream)}
+.f-head{display:flex;align-items:center;gap:10px;padding:15px 18px 11px;border-bottom:1px solid var(--line);background:#FFFDF7}
+.f-head h2{margin:0;font-size:18px;font-weight:900;letter-spacing:-.02em;flex:1}
+.f-head .x{border:0;background:#FFEFDB;color:#8A5530;width:34px;height:34px;border-radius:50%;font-size:15px;font-weight:900;cursor:pointer;display:grid;place-items:center}
+.f-body{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 18px 10px;display:grid;gap:12px;overscroll-behavior:contain}
+.field{display:grid;gap:5px}
+.field>span{font-size:12.5px;font-weight:800;color:#8A5530}
+.field em{color:var(--red);font-style:normal}
+.field input,.field textarea{
+  font:inherit;font-size:15px;padding:11px 12px;border-radius:13px;border:1.5px solid #F1DCC0;
+  background:#fff;color:var(--ink);outline:0;width:100%;transition:.15s;
+}
+.field input:focus,.field textarea:focus{border-color:var(--orange);box-shadow:0 0 0 4px rgba(255,138,43,.14)}
+.field textarea{resize:vertical;min-height:62px;line-height:1.55}
+.field small{font-size:11px;color:#A08066}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cat-picker{display:flex;gap:6px;flex-wrap:wrap}
+.cat-opt{
+  padding:8px 12px;border-radius:999px;border:1.5px solid #F1DCC0;background:#fff;
+  font:inherit;font-size:12.5px;font-weight:800;color:#8A5530;cursor:pointer;transition:.15s;
+}
+.cat-opt.on{background:linear-gradient(135deg,#FF6B2C,#FF3B2F);color:#fff;border-color:transparent;box-shadow:0 5px 12px rgba(255,80,40,.25)}
+.nut-live{background:#FFF6DC;border:1.5px solid #FFE1AE;border-radius:16px;padding:12px;font-size:13px;color:#8A4A12}
+.nut-live .nl-row{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;font-weight:800}
+.nut-live b{font-size:19px;color:#E8401E}
+.nut-live .nl-sub{font-size:11.5px;color:#9A6A44;margin-top:5px;line-height:1.45}
+.manual-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.f-foot{display:flex;gap:10px;padding:12px 18px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:#FFFDF7}
+.f-foot .btn{flex:1;height:50px;font-size:15px}
+.check-line{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:#7A5533;cursor:pointer}
+.check-line input{width:18px;height:18px;accent-color:#FF5A36;margin:0}
+
+/* ---------- 붙여넣어 자동 정리 ---------- */
+.sp{
+  background:linear-gradient(140deg,#FFF8E4,#FFEEDC);border:1.5px solid #FFDFAE;
+  border-radius:16px;align-self:start;
+}
+.sp[open]{box-shadow:0 6px 16px rgba(210,120,40,.12)}
+.sp summary{
+  display:block;position:relative;padding:11px 34px 11px 13px;cursor:pointer;list-style:none;
+  font-size:13.5px;font-weight:900;color:#8A4A12;line-height:1.35;
+}
+.sp summary::-webkit-details-marker{display:none}
+.sp summary::marker{content:''}
+.sp summary::after{content:'\25BE';position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:11px;color:#B0602A;transition:transform .18s}
+.sp[open] summary::after{transform:translateY(-50%) rotate(180deg)}
+.sp summary .em{font-size:15px;line-height:1;margin-right:2px}
+.sp-body{padding:0 13px 12px;display:grid;gap:8px}
+.sp-body .field>span{font-size:12px;color:#8A5530}
+.sp-body textarea{
+  font:inherit;font-size:13.5px;line-height:1.55;padding:10px 11px;border-radius:12px;
+  border:1.5px solid #F3DAB8;background:#fff;color:var(--ink);outline:0;width:100%;
+  resize:vertical;min-height:78px;
+}
+.sp-body textarea:focus{border-color:var(--orange);box-shadow:0 0 0 4px rgba(255,138,43,.14)}
+.sp-row{display:flex;gap:8px}
+.sp-row .btn{height:42px;font-size:13.5px;padding:0 12px}
+.sp-row .btn-primary{flex:1 1 auto}
+.sp-row .btn-ghost{flex:0 0 auto}
+.sp-hint{margin:0;font-size:11px;color:#9A6A44;line-height:1.45}
+.sp-hint b{color:#B4602A}
+
+/* ---------- confirm ---------- */
+.confirm{background:#FFFDF7;border-radius:24px;width:100%;max-width:380px;padding:20px 20px 18px;text-align:center;box-shadow:0 20px 50px rgba(90,40,10,.28)}
+.confirm .mascot{width:88px;margin:0 auto 2px}
+.confirm h3{margin:2px 0 6px;font-size:17px;font-weight:900}
+.confirm p{margin:0 0 16px;font-size:13.5px;color:#8A6A55;line-height:1.5}
+.confirm p b{color:#5A3218}
+.confirm .row{display:flex;gap:10px}
+.confirm .row .btn{flex:1}
+
+/* ---------- 빠른 기능: 냉장고 파먹기 / 장보기 ---------- */
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0 4px}
+@media (max-width:359px){.quick{grid-template-columns:1fr;gap:8px}}
+.quick-btn{
+  position:relative;display:flex;align-items:center;gap:9px;padding:11px 12px;border-radius:20px;
+  border:1.5px solid #FFE2C0;cursor:pointer;text-align:left;font:inherit;color:inherit;
+  box-shadow:0 6px 16px rgba(190,100,40,.08);transition:.16s;
+}
+.quick-btn:hover{transform:translateY(-2px);box-shadow:0 12px 22px rgba(190,100,40,.15);border-color:#FFC892}
+.quick-btn:active{transform:scale(.985)}
+.q-fridge{background:linear-gradient(125deg,#E9F5FF 0%,#FFF8EC 62%,#FFEEDC 100%)}
+.q-shop{background:linear-gradient(125deg,#FFF6D8 0%,#FFEFD9 58%,#FFE4C8 100%)}
+.quick-ico{width:38px;height:38px;flex:0 0 auto;border-radius:13px;display:grid;place-items:center;font-size:20px;background:#fff;box-shadow:0 2px 7px rgba(190,110,50,.14)}
+.quick-txt{min-width:0;flex:1 1 auto}
+.quick-txt b{display:block;font-size:13.5px;font-weight:900;letter-spacing:-.02em;color:#5A3218;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.quick-txt small{display:block;margin-top:1px;font-size:11px;font-weight:700;color:#A08066;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.quick-badge{
+  position:absolute;top:-6px;right:-5px;min-width:23px;height:23px;padding:0 6px;border-radius:999px;
+  background:linear-gradient(135deg,#FF6A2B,#FF3D2E);color:#fff;font-size:11.5px;font-weight:900;
+  display:grid;place-items:center;border:2px solid #FFFBF2;box-shadow:0 4px 10px rgba(255,70,40,.32);
+}
+.quick-badge[hidden]{display:none}
+
+/* ---------- 냉장고 파먹기 ---------- */
+.f-head .fh-text{flex:1 1 auto;min-width:0}
+.f-head .fh-sub{margin:1px 0 0;font-size:11.5px;font-weight:700;color:#A08066;line-height:1.35}
+.fridge-sheet{max-height:93vh}
+.fr-scroll{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:0 16px calc(20px + env(safe-area-inset-bottom))}
+.fr-hero{display:flex;align-items:center;gap:8px;margin:12px 0 2px;padding:10px 12px;border-radius:18px;background:linear-gradient(135deg,#E9F5FF,#FFF6E8 66%,#FFEBD8);border:1.5px solid #E3EEF9}
+.mascot-wrap{position:relative;flex:0 0 auto;display:block}
+.fr-hero .mascot{width:78px;display:block;margin:-6px 0 -8px}
+.mascot-tag{position:absolute;right:-5px;bottom:2px;width:27px;height:27px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:14px;box-shadow:0 3px 8px rgba(160,90,30,.22)}
+.fr-say{margin:0;font-size:12.5px;line-height:1.55;font-weight:800;color:#6A4A32;word-break:keep-all}
+.fr-say b{color:var(--red-deep)}
+.fr-sec{margin-top:15px}
+.fr-sec h3{display:flex;align-items:center;gap:6px;margin:0 0 8px;font-size:14.5px;font-weight:900;letter-spacing:-.02em}
+.fr-sec h3 .cnt{margin-left:auto;font-size:11px;font-weight:900;color:#B0602A;background:#FFEEDB;padding:3px 9px;border-radius:999px}
+.fsel-wrap{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 9px;padding:8px;border-radius:14px;background:#FFF7EA;border:1.5px dashed #FFD8A8}
+.fsel-wrap[hidden]{display:none}
+.fsel{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:999px;border:0;background:linear-gradient(135deg,#FF6B2C,#FF3B2F);color:#fff;font:inherit;font-size:12px;font-weight:800;cursor:pointer;box-shadow:0 4px 10px rgba(255,80,40,.22)}
+.fsel i{font-style:normal;font-size:10px;opacity:.85}
+.fsel-go{align-self:center;padding:5px 7px;border:0;background:transparent;color:#A95A22;font:inherit;font-size:11.5px;font-weight:900;cursor:pointer;text-decoration:underline}
+.fchips{display:flex;flex-wrap:wrap;gap:6px}
+.fchip{display:inline-flex;align-items:center;gap:4px;height:34px;padding:0 11px;border-radius:999px;border:1.5px solid #FFE0BC;background:#fff;color:#7A5540;font:inherit;font-size:12.5px;font-weight:800;cursor:pointer;transition:.14s;white-space:nowrap}
+.fchip:hover{border-color:#FFC28A;background:#FFFCF5}
+.fchip.on{background:linear-gradient(135deg,#FF6B2C,#FF3B2F);border-color:transparent;color:#fff;box-shadow:0 5px 12px rgba(255,80,40,.25)}
+.fr-more{display:block;width:100%;margin-top:8px;padding:9px;border-radius:14px;border:1.5px dashed #FFD8A8;background:#FFFDF6;color:#A95A22;font:inherit;font-size:12.5px;font-weight:900;cursor:pointer}
+.fr-more[hidden]{display:none}
+.fr-form{display:flex;gap:8px;margin-top:10px}
+.fr-form input{flex:1 1 auto;min-width:0;font:inherit;font-size:14px;padding:11px 12px;border-radius:13px;border:1.5px solid #F1DCC0;background:#fff;color:var(--ink);outline:0;transition:.15s}
+.fr-form input:focus{border-color:var(--orange);box-shadow:0 0 0 4px rgba(255,138,43,.14)}
+.fr-form input::placeholder{color:#B99B84;font-size:13px}
+.fr-form .btn{flex:0 0 auto;height:42px;padding:0 13px;font-size:13.5px}
+.fr-hint{margin:8px 0 0;font-size:11px;color:#A08066;line-height:1.5}
+.fr-hint button{border:0;background:transparent;color:#C0502A;font:inherit;font-size:11px;font-weight:900;cursor:pointer;text-decoration:underline;padding:0}
+.fr-list{display:grid;gap:8px}
+.fr-card{display:flex;gap:10px;padding:10px;border-radius:18px;border:1.5px solid var(--line);background:#fff;box-shadow:0 4px 12px rgba(190,100,40,.06);cursor:pointer;transition:.16s}
+.fr-card:hover{border-color:#FFC892;transform:translateY(-1px)}
+.fr-thumb{width:54px;height:54px;border-radius:14px;display:grid;place-items:center;font-size:24px;flex:0 0 auto}
+.fr-body{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:5px}
+.fr-top{display:flex;align-items:flex-start;gap:6px}
+.fr-title{margin:0;font-size:14px;font-weight:900;line-height:1.3;letter-spacing:-.02em;word-break:keep-all}
+.fr-pct{align-self:flex-start;font-size:10.5px;font-weight:900;padding:3px 8px;border-radius:999px;background:#FFF1DC;color:#B4602A;white-space:nowrap}
+.fr-pct.full{background:linear-gradient(135deg,#FFE082,#FFC93C);color:#7A4200;box-shadow:0 3px 8px rgba(255,180,40,.26)}
+.fr-pills{display:flex;flex-wrap:wrap;gap:4px}
+.fr-pill{font-size:10.5px;font-weight:800;padding:3px 7px;border-radius:999px;white-space:nowrap}
+.fr-pill.ok{background:#FFF6E0;color:#8A5A00}
+.fr-pill.no{background:#FFEFE8;color:#C0502A;border:1px dashed #FFC3AE}
+.fr-foot{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:1px}
+.fr-meta{font-size:11px;color:#A08066;font-weight:700}
+.fr-add{margin-left:auto;border:0;background:#FFF1DC;color:#A95A22;font:inherit;font-size:11.5px;font-weight:900;padding:6px 10px;border-radius:999px;cursor:pointer}
+.fr-add:hover{background:#FFE6C6}
+.fr-full{margin-left:auto;font-size:11.5px;font-weight:900;color:#B0602A}
+.fr-note{margin:0;padding:14px;border-radius:16px;border:1.5px dashed #FFD8A8;background:#FFFAF0;font-size:12.5px;line-height:1.55;color:#8A6A55;text-align:center;word-break:keep-all}
+.fr-note b{color:#C0502A}
+.fd{display:flex;gap:9px;padding:10px;border-radius:16px;border:1.5px solid var(--line);background:#fff;align-items:flex-start}
+.fd-emoji{width:44px;height:44px;border-radius:13px;background:#FFF3DF;display:grid;place-items:center;font-size:22px;flex:0 0 auto}
+.fd-body{flex:1 1 auto;min-width:0}
+.fd-top{display:flex;align-items:baseline;gap:6px}
+.fd-name{font-size:14px;font-weight:900;letter-spacing:-.02em;word-break:keep-all}
+.fd-kcal{margin-left:auto;font-size:11px;font-weight:900;color:#C0502A;white-space:nowrap}
+.fd-desc{margin:3px 0 5px;font-size:11.5px;color:#8A6A55;line-height:1.45;word-break:keep-all}
+.fd-add{border:0;background:#FFF1DC;color:#A95A22;width:32px;height:32px;border-radius:50%;font-size:14px;cursor:pointer;flex:0 0 auto;align-self:center}
+.fd-add:hover{background:#FFE6C6}
+
+/* ---------- 장보기 ---------- */
+.shop-sheet{max-height:88vh}
+.shop-add{display:flex;gap:8px;padding:12px 16px;background:#FFFDF7;border-bottom:1px solid var(--line)}
+.shop-add input{flex:1 1 auto;min-width:0;font:inherit;font-size:14.5px;padding:11px 12px;border-radius:13px;border:1.5px solid #F1DCC0;background:#fff;color:var(--ink);outline:0;transition:.15s}
+.shop-add input:focus{border-color:var(--orange);box-shadow:0 0 0 4px rgba(255,138,43,.14)}
+.shop-add input::placeholder{color:#B99B84;font-size:13.5px}
+.shop-add .btn{flex:0 0 auto;height:44px;padding:0 14px;font-size:14px}
+.shop-body{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:12px 16px 12px}
+.shop-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.shop-item{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:9px 10px;transition:.18s}
+.shop-item.done{background:#FFF8E8;border-color:#FFE0A6}
+.shop-check{width:25px;height:25px;border-radius:9px;border:2px solid #FFCFA8;background:#fff;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:900;cursor:pointer;flex:0 0 auto;padding:0;transition:.16s}
+.shop-item.done .shop-check{background:linear-gradient(135deg,#FFB300,#FF7A1F);border-color:transparent}
+.shop-text{flex:1 1 auto;min-width:0;font-size:14.5px;font-weight:700;line-height:1.4;word-break:keep-all;transition:.18s}
+.shop-item.done .shop-text{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:#FFC07A;color:#A08066}
+.shop-del{border:0;background:#FFF1E4;color:#B0602A;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:12px;font-weight:900;flex:0 0 auto;padding:0}
+.shop-del:hover{background:#FFE2CC}
+.shop-foot{padding:10px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:#FFFDF7}
+.shop-foot .btn{width:100%;height:46px}
+.shop-foot .btn[disabled]{opacity:.45;cursor:default}
+.shop-empty{display:flex;flex-direction:column;align-items:center;gap:3px;padding:22px 14px;text-align:center;color:var(--ink-soft)}
+.shop-empty[hidden]{display:none}
+.shop-empty .se-emoji{font-size:34px;line-height:1.2;filter:drop-shadow(0 4px 6px rgba(180,110,50,.18))}
+.shop-empty b{font-size:14px;color:var(--ink);font-weight:900}
+.shop-empty p{margin:0;font-size:12px;line-height:1.5;word-break:keep-all}
+
+/* 상세 재료 → 장보기 */
+.d-shop{margin:0 0 10px;width:100%;height:42px;font-size:13.5px}
+.ing-name{flex:1 1 auto;min-width:0}
+.ing-shop{margin-left:auto;border:0;background:#FFF1DC;color:#A95A22;width:28px;height:28px;border-radius:50%;font-size:13px;cursor:pointer;flex:0 0 auto;opacity:.85;padding:0;transition:.15s}
+.ing-shop:hover{opacity:1;background:#FFE6C6}
+.ing.done .ing-shop{opacity:.32}
+
+/* ---------- 🎒 하교 시간 ---------- */
+.quick-btn.q-school{grid-column:1/-1;background:linear-gradient(125deg,#EAF8EE 0%,#FFF8EC 58%,#FFECD7 100%)}
+.q-school .quick-ico{background:#fff}
+.school-sheet{max-height:93vh}
+.sc-scroll{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:12px 14px calc(20px + env(safe-area-inset-bottom))}
+.sc-hero{display:flex;align-items:center;gap:8px;padding:10px 11px;border-radius:20px;background:linear-gradient(135deg,#EAF8EE,#FFF7E8 62%,#FFEBD6);border:1.5px solid #D8ECDD}
+.sc-hero .mascot{width:72px;display:block;margin:-6px 0 -8px}
+.sc-hero-body{flex:1 1 auto;min-width:0}
+.sc-day{margin:0 0 3px;font-size:11.5px;font-weight:900;color:#2F7A45;letter-spacing:.01em}
+.sc-today{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.sc-today li{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;font-size:12.5px;font-weight:800;color:#5A3218;line-height:1.35}
+.sc-today .who{color:#7A5232}
+.sc-today .t{font-size:18px;font-weight:900;color:var(--red-deep);letter-spacing:-.02em}
+.sc-today .cd{font-size:10.5px;font-weight:900;padding:2px 8px;border-radius:999px;background:#EAF8EE;border:1px solid #CFE7D6;color:#2F7A45;white-space:nowrap}
+.sc-today .cd.soon{background:#FFEADC;border-color:#FFC7A6;color:#C0471F}
+.sc-today .cd.done{background:#F3EFE8;border-color:#E6DED2;color:#8A7C6C}
+.sc-today .memo{font-size:10.5px;font-weight:700;color:#A08066}
+.sc-today .sc-today-empty{font-size:12px;color:#8A6A55;font-weight:700}
+.sc-set{margin-top:10px;padding:9px 10px;border-radius:16px;border:1.5px solid var(--line);background:#FFFDF7;display:grid;gap:7px}
+.sc-set-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.sc-sw{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:900;color:#5A3218;cursor:pointer}
+.sc-sw input{width:18px;height:18px;accent-color:#FF5A36;margin:0}
+.sc-lead{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:800;color:#8A5530;margin-left:auto}
+.sc-lead select{font:inherit;font-size:12.5px;font-weight:800;padding:5px 6px;border-radius:10px;border:1.5px solid #F1DCC0;background:#fff;color:var(--ink);outline:0}
+.sc-lead select:focus{border-color:var(--orange)}
+.sc-pill{border:1.5px solid #F1DCC0;background:#fff;color:#8A5530;font:inherit;font-size:11.5px;font-weight:900;padding:6px 10px;border-radius:999px;cursor:pointer;transition:.14s}
+.sc-pill:hover{border-color:#FFC892;background:#FFFCF5}
+.sc-pill.on{background:#FFF1DC;border-color:#FFCE9C;color:#A95A22}
+.sc-pill[hidden]{display:none}
+.sc-kids{display:grid;gap:10px;margin-top:11px}
+.sc-kid{border:1.5px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 4px 12px rgba(190,100,40,.06);overflow:hidden}
+.sc-kid-head{display:flex;align-items:center;gap:6px;padding:8px 9px;background:#FFFCF6;border-bottom:1px solid var(--line)}
+.sc-kid-emoji{width:30px;height:30px;flex:0 0 auto;border-radius:10px;display:grid;place-items:center;font-size:15px;background:#FFF3DF}
+.sc-name{font:inherit;font-size:14px;font-weight:900;letter-spacing:-.02em;border:1.5px solid #F6E7D2;background:#FFF9EE;border-radius:9px;padding:3px 6px;min-width:0;width:96px;flex:0 1 auto;color:var(--ink);outline:0}
+.sc-name::placeholder{color:#C4A992;font-weight:800}
+.sc-name:hover{background:#fff;border-color:#F5DCC0}
+.sc-name:focus{background:#fff;border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,138,43,.13)}
+.sc-age{font-size:11px;font-weight:800;color:#A08066;white-space:nowrap}
+.sc-bell{margin-left:auto;border:0;background:#F3EFE8;color:#9A8A78;width:32px;height:32px;border-radius:50%;font-size:14px;cursor:pointer;flex:0 0 auto;padding:0;line-height:1}
+.sc-bell.on{background:#FFF1DC;color:#B4602A}
+.sc-del{border:0;background:#FFF1E4;color:#B0602A;width:28px;height:28px;border-radius:50%;font-size:12px;font-weight:900;cursor:pointer;flex:0 0 auto;padding:0}
+.sc-del:hover{background:#FFE2CC}
+.sc-days{padding:8px 9px 10px;display:grid;gap:6px}
+.sc-row{display:grid;grid-template-columns:28px minmax(0,106px) minmax(0,1fr);gap:5px;align-items:center}
+.sc-dl{height:32px;display:grid;place-items:center;border-radius:9px;background:#FFF3E1;color:#8A5530;font-size:12.5px;font-weight:900}
+.sc-dl.today{background:linear-gradient(135deg,#FF6B2C,#FF3B2F);color:#fff;box-shadow:0 3px 8px rgba(255,90,54,.26)}
+.sc-dl.weekend{background:#EFF6F0;color:#4A7A5C}
+.sc-row input{width:100%;min-width:0;font:inherit;outline:0;border:1.5px solid #F1DCC0;border-radius:10px;background:#fff;color:var(--ink);transition:.14s}
+.sc-row input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,138,43,.13)}
+.sc-row input[type=time]{font-size:13px;font-weight:800;padding:7px 5px}
+.sc-row input[type=text]{font-size:12.5px;font-weight:700;padding:7px 8px}
+.sc-row input::placeholder{color:#C4A992;font-weight:700}
+.sc-add{display:block;width:100%;margin-top:10px;padding:11px;border-radius:16px;border:1.5px dashed #FFD8A8;background:#FFFDF6;color:#A95A22;font:inherit;font-size:13px;font-weight:900;cursor:pointer}
+.sc-add:hover{background:#FFF6E6}
+.sc-empty{margin:0;padding:16px 12px;border-radius:16px;border:1.5px dashed #FFD8A8;background:#FFFAF0;font-size:12.5px;line-height:1.55;color:#8A6A55;text-align:center;word-break:keep-all}
+.sc-empty b{color:#C0502A}
+.sc-note{margin:12px 0 0;padding:10px 11px;border-radius:14px;background:#FFF7EA;border:1px dashed #FFDCAE;font-size:11px;line-height:1.5;color:#9A6A44;word-break:keep-all}
+.sc-note b{color:#B4602A}
+@media (max-width:340px){
+  .sc-row{grid-template-columns:26px minmax(0,98px) minmax(0,1fr);gap:4px}
+  .sc-row input[type=time]{font-size:12px;padding:7px 4px}
+  .sc-row input[type=text]{font-size:12px;padding:7px 6px}
+  .sc-name{width:78px}
+}
+/* 하교 10분 전 팝업 */
+.school-alert{
+  position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top));z-index:96;
+  width:calc(100vw - 24px);max-width:430px;display:flex;align-items:center;gap:8px;
+  padding:10px 11px;border-radius:22px;border:2px solid #FFB47A;
+  background:linear-gradient(135deg,#FFF7E8 0%,#FFE7D2 68%,#FFD9BC 100%);
+  box-shadow:0 16px 34px rgba(170,70,20,.3);
+  opacity:0;visibility:hidden;pointer-events:none;transform:translate(-50%,-14px);
+  transition:opacity .24s ease,transform .24s ease;
+}
+.school-alert.show{opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%,0)}
+.school-alert .sa-mascot{width:56px;flex:0 0 auto;margin:-8px 0 -8px -3px;filter:drop-shadow(0 4px 7px rgba(200,90,30,.2))}
+.sa-body{flex:1 1 auto;min-width:0}
+.sa-title{margin:0;font-size:13.5px;font-weight:900;color:#7A3A12;letter-spacing:-.02em;line-height:1.3;word-break:keep-all}
+.sa-text{margin:2px 0 0;font-size:11px;font-weight:800;color:#A05A28;line-height:1.4;word-break:keep-all}
+.sa-close{flex:0 0 auto;border:0;background:linear-gradient(135deg,#FF6B2C,#FF3B2F);color:#fff;font:inherit;font-size:12.5px;font-weight:900;padding:8px 12px;border-radius:999px;cursor:pointer;box-shadow:0 5px 12px rgba(255,80,40,.3)}
+.sa-close:active{transform:scale(.97)}
+@media (prefers-reduced-motion: reduce){.school-alert{transition:none}}
+
+/* ---------- toast ---------- */
+.toast{
+  position:fixed;left:50%;bottom:88px;transform:translate(-50%,14px);
+  background:#3A2418;color:#FFF6E3;padding:11px 18px;border-radius:999px;
+  font-size:13px;font-weight:700;z-index:90;opacity:0;pointer-events:none;
+  transition:.25s;box-shadow:0 10px 24px rgba(0,0,0,.22);max-width:92vw;text-align:center;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:360px){
+  .hero{padding:16px 14px 14px;border-radius:22px}
+  .hero-mascot{width:92px;margin-right:-8px}
+  .hero h1{font-size:19px}
+  .d-title{font-size:20px}
+  .d-scroll{padding:14px 14px 24px}
+  .f-body{padding:12px 14px 8px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ mascot sprite ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="gFace" cx="36%" cy="26%" r="82%">
+      <stop offset="0" stop-color="#FFFBF0"/>
+      <stop offset="60%" stop-color="#FFF0D2"/>
+      <stop offset="100%" stop-color="#FFDCA8"/>
+    </radialGradient>
+    <linearGradient id="gBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFEFD3"/>
+      <stop offset="100%" stop-color="#FFDCA8"/>
+    </linearGradient>
+    <linearGradient id="gHat" x1="0" y1="0" x2="0.2" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#FFF1DA"/>
+    </linearGradient>
+    <linearGradient id="gSpoon" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#E8B277"/>
+      <stop offset="100%" stop-color="#C07E42"/>
+    </linearGradient>
+    <symbol id="chefCat" viewBox="0 0 220 222">
+      <ellipse cx="110" cy="212" rx="56" ry="7" fill="#C9855B" opacity=".16"/>
+      <!-- body -->
+      <path d="M63 170c0-21 20-33 47-33s47 12 47 33c0 19-21 29-47 29s-47-10-47-29z" fill="url(#gBody)" stroke="#F3D3A6" stroke-width="2.5"/>
+      <!-- left arm -->
+      <ellipse cx="54" cy="167" rx="12" ry="9.5" fill="url(#gBody)" stroke="#F3D3A6" stroke-width="2.5" transform="rotate(-22 54 167)"/>
+      <!-- apron -->
+      <path d="M87 156h46l-4.5 29a18.6 18.6 0 0 1-37 0z" fill="#FFFDF8" stroke="#F5DDBE" stroke-width="2"/>
+      <path d="M110 168.5c-2.6-3.6-8-2.2-8 1.8 0 3.4 4.4 5.6 8 8.2 3.6-2.6 8-4.8 8-8.2 0-4-5.4-5.4-8-1.8z" fill="#FF5A36"/>
+      <!-- spoon -->
+      <g transform="rotate(16 168 158)">
+        <rect x="164" y="116" width="8" height="50" rx="4" fill="url(#gSpoon)"/>
+        <ellipse cx="168" cy="112" rx="13" ry="10" fill="url(#gSpoon)"/>
+        <ellipse cx="168" cy="110" rx="7.5" ry="5" fill="#FFF3DD" opacity=".55"/>
+      </g>
+      <!-- right arm -->
+      <ellipse cx="166" cy="160" rx="12" ry="9.5" fill="url(#gBody)" stroke="#F3D3A6" stroke-width="2.5" transform="rotate(22 166 160)"/>
+      <!-- head -->
+      <circle cx="110" cy="112" r="58" fill="url(#gFace)" stroke="#F3D3A6" stroke-width="2.5"/>
+      <!-- chef hat -->
+      <path d="M66 74c-14 0-24-9-24-21 0-12 9-21 21-21 3-14 15-24 30-24 13 0 24 7 29 18 4-3 9-5 14-5 11 0 20 8 21 18 12 1 21 10 21 21 0 12-10 22-23 22z" fill="url(#gHat)" stroke="#F0DDBE" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M65 64h90c4.2 0 7.5 3.3 7.5 7.5S159.2 79 155 79H65c-4.2 0-7.5-3.3-7.5-7.5S60.8 64 65 64z" fill="#FFF6E4" stroke="#F0DDBE" stroke-width="2"/>
+      <!-- eyes -->
+      <ellipse cx="88" cy="117" rx="11" ry="13" fill="#3A2418"/>
+      <ellipse cx="132" cy="117" rx="11" ry="13" fill="#3A2418"/>
+      <circle cx="84.4" cy="112" r="4" fill="#fff"/>
+      <circle cx="128.4" cy="112" r="4" fill="#fff"/>
+      <circle cx="92.2" cy="122.5" r="1.8" fill="#fff" opacity=".9"/>
+      <circle cx="136.2" cy="122.5" r="1.8" fill="#fff" opacity=".9"/>
+      <!-- brows -->
+      <path d="M79 97q9-6 18-1" stroke="#C89A6C" stroke-width="3" fill="none" stroke-linecap="round" opacity=".85"/>
+      <path d="M123 96q9-5 18 1" stroke="#C89A6C" stroke-width="3" fill="none" stroke-linecap="round" opacity=".85"/>
+      <!-- cheeks -->
+      <ellipse cx="69" cy="135" rx="10.5" ry="6.5" fill="#FF8A6B" opacity=".48"/>
+      <ellipse cx="151" cy="135" rx="10.5" ry="6.5" fill="#FF8A6B" opacity=".48"/>
+      <!-- nose & mouth -->
+      <ellipse cx="110" cy="129" rx="3.2" ry="2.2" fill="#E8896B"/>
+      <path d="M101 140q9 9 18 0" stroke="#4A2A1A" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+      <!-- sparkles -->
+      <path d="M184 42c1.6 6.4 4.4 9.2 10.8 10.8-6.4 1.6-9.2 4.4-10.8 10.8-1.6-6.4-4.4-9.2-10.8-10.8 6.4-1.6 9.2-4.4 10.8-10.8z" fill="#FFC93C"/>
+      <path d="M34 94c1.2 5 3.4 7.2 8.4 8.4-5 1.2-7.2 3.4-8.4 8.4-1.2-5-3.4-7.2-8.4-8.4 5-1.2 7.2-3.4 8.4-8.4z" fill="#FF8A2B" opacity=".9"/>
+      <path d="M190 140c.9 3.6 2.4 5.1 6 6-3.6.9-5.1 2.4-6 6-.9-3.6-2.4-5.1-6-6 3.6-.9 5.1-2.4 6-6z" fill="#FFD147" opacity=".95"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="app">
+  <header class="hero">
+    <div class="hero-dots" aria-hidden="true"></div>
+    <div class="hero-row">
+      <div class="hero-text">
+        <p class="eyebrow">나만의 요리 노트</p>
+        <h1>📖 민정님의 레시피북</h1>
+        <p class="hero-sub">레시피 <b id="statTotal">0</b>개 · 즐겨찾기 <b id="statFav">0</b>개</p>
+      </div>
+      <svg class="mascot hero-mascot" viewBox="0 0 220 222" aria-hidden="true"><use href="#chefCat"/></svg>
+    </div>
+    <div class="hero-tools">
+      <button type="button" class="tool-btn" id="btnExport">📤 백업 저장</button>
+      <button type="button" class="tool-btn" id="btnImport">📥 백업 불러오기</button>
+      <input type="file" id="fileImport" accept=".json,application/json" hidden>
+    </div>
+  </header>
+
+  <nav class="quick" aria-label="빠른 기능">
+    <button type="button" class="quick-btn q-fridge" id="btnFridge" aria-haspopup="dialog">
+      <span class="quick-ico" aria-hidden="true">🧊</span>
+      <span class="quick-txt"><b>냉장고 파먹기</b><small>있는 재료로 메뉴 추천</small></span>
+    </button>
+    <button type="button" class="quick-btn q-shop" id="btnShop" aria-haspopup="dialog">
+      <span class="quick-ico" aria-hidden="true">🛒</span>
+      <span class="quick-txt"><b>장보기</b><small id="shopQuickSub">살 것 적어 두기</small></span>
+      <span class="quick-badge" id="shopBadge" hidden>0</span>
+    </button>
+    <button type="button" class="quick-btn q-school" id="btnSchool" aria-haspopup="dialog">
+      <span class="quick-ico" aria-hidden="true">🎒</span>
+      <span class="quick-txt"><b>하교 시간</b><small id="schoolQuickSub">아이들 하교 시간 적어 두기</small></span>
+    </button>
+  </nav>
+
+  <div class="toolbar">
+    <div class="search">
+      <span class="search-ico" aria-hidden="true">🔍</span>
+      <input id="search" type="search" placeholder="요리 이름·재료·메모로 검색" autocomplete="off" aria-label="레시피 검색">
+      <button type="button" class="search-clear" id="searchClear" hidden aria-label="검색어 지우기">✕</button>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="카테고리 필터"></div>
+  </div>
+
+  <main>
+    <section class="grid" id="grid" aria-live="polite"></section>
+    <div class="empty" id="empty" hidden>
+      <svg class="mascot" viewBox="0 0 220 222" aria-hidden="true"><use href="#chefCat"/></svg>
+      <h3 id="emptyTitle">아직 저장한 레시피가 없어요</h3>
+      <p id="emptyText">유튜브에서 본 그 레시피, 링크랑 같이 담아 두세요.</p>
+      <button type="button" class="btn btn-primary" id="emptyBtn">＋ 첫 레시피 담기</button>
+    </div>
+  </main>
+</div>
+
+<button type="button" class="fab" id="fab"><span class="plus">＋</span> 레시피 추가</button>
+
+<!-- detail -->
+<div class="overlay" id="detailOverlay">
+  <div class="sheet" id="detailSheet" role="dialog" aria-modal="true" aria-label="레시피 상세"></div>
+</div>
+
+<!-- form -->
+<div class="overlay" id="formOverlay">
+  <div class="sheet form-sheet" role="dialog" aria-modal="true" aria-labelledby="formHeading">
+    <form class="form" id="recipeForm" novalidate>
+      <div class="f-head">
+        <h2 id="formHeading">레시피 추가</h2>
+        <button type="button" class="x" data-close="form" aria-label="닫기">✕</button>
+      </div>
+      <div class="f-body">
+        <details class="sp" id="pasteBox">
+          <summary><span class="em" aria-hidden="true">✨</span> 댓글·설명 붙여넣어 자동 정리</summary>
+          <div class="sp-body">
+            <label class="field">
+              <span>유튜브 댓글이나 설명을 그대로 붙여넣으세요</span>
+              <textarea id="pasteText" rows="4" placeholder="[재료]&#10;달걀 3개, 쪽파 4대, 소금 약간&#10;&#10;만드는 법&#10;1. 쪽파를 송송 썰어요&#10;2. 달걀물에 넣고 섞어요"></textarea>
+            </label>
+            <div class="sp-row">
+              <button type="button" class="btn btn-primary" id="btnSmartParse">✨ 자동 정리하기</button>
+              <button type="button" class="btn btn-ghost" id="btnPasteClear">비우기</button>
+            </div>
+            <p class="sp-hint" id="spHint">제목·재료·순서를 찾아 아래 칸을 채우고 <b>칼로리까지 계산</b>해요.</p>
+          </div>
+        </details>
+        <label class="field">
+          <span>요리 이름 <em>*</em></span>
+          <input id="fTitle" type="text" placeholder="예) 우리 집 계란말이" maxlength="60" required>
+        </label>
+        <label class="field">
+          <span>링크 (유튜브·블로그)</span>
+          <input id="fUrl" type="text" placeholder="https://youtu.be/..." inputmode="url" autocomplete="off">
+          <small>유튜브 링크를 넣으면 썸네일이 자동으로 붙어요</small>
+        </label>
+        <div class="field">
+          <span>카테고리</span>
+          <div class="cat-picker" id="fCats"></div>
+        </div>
+        <div class="row2">
+          <label class="field">
+            <span>조리 시간</span>
+            <input id="fTime" type="text" placeholder="15분" maxlength="12">
+          </label>
+          <label class="field">
+            <span>인분</span>
+            <input id="fServings" type="number" min="1" max="20" step="1" value="2" inputmode="numeric">
+          </label>
+        </div>
+        <label class="field">
+          <span>재료 (한 줄에 하나씩)</span>
+          <textarea id="fIng" rows="5" placeholder="달걀 3개&#10;대파 1대&#10;소금 약간"></textarea>
+          <small>쉼표로 구분해도 돼요. 양을 적으면 칼로리를 계산해 드려요.</small>
+        </label>
+        <label class="field">
+          <span>요약 순서 (한 줄에 한 단계)</span>
+          <textarea id="fSteps" rows="5" placeholder="대파를 송송 썰어요&#10;계란물을 고루 풀어요&#10;약불에서 돌돌 말아요"></textarea>
+          <small>번호는 자동으로 붙어요</small>
+        </label>
+        <label class="field">
+          <span>나만의 메모</span>
+          <textarea id="fMemo" rows="2" placeholder="아이들용으로 덜 맵게"></textarea>
+        </label>
+
+        <div class="nut-live" id="nutLive" aria-live="polite"></div>
+        <label class="check-line"><input type="checkbox" id="fManual"> 영양을 직접 입력할게요</label>
+        <div class="manual-grid" id="manualGrid" hidden>
+          <label class="field"><span>칼로리 (kcal)</span><input id="fKcal" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></label>
+          <label class="field"><span>탄수화물 (g)</span><input id="fCarb" type="number" min="0" step="0.1" inputmode="decimal" placeholder="0"></label>
+          <label class="field"><span>단백질 (g)</span><input id="fProt" type="number" min="0" step="0.1" inputmode="decimal" placeholder="0"></label>
+          <label class="field"><span>지방 (g)</span><input id="fFat" type="number" min="0" step="0.1" inputmode="decimal" placeholder="0"></label>
+        </div>
+      </div>
+      <div class="f-foot">
+        <button type="button" class="btn btn-ghost" data-close="form">취소</button>
+        <button type="submit" class="btn btn-primary">저장하기</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- confirm -->
+<div class="overlay center" id="confirmOverlay">
+  <div class="confirm" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <svg class="mascot" viewBox="0 0 220 222" aria-hidden="true"><use href="#chefCat"/></svg>
+    <h3 id="confirmTitle">이 레시피를 지울까요?</h3>
+    <p id="confirmText">지우면 되돌릴 수 없어요.</p>
+    <div class="row">
+      <button type="button" class="btn btn-ghost" id="confirmNo">그만두기</button>
+      <button type="button" class="btn btn-primary" id="confirmYes">지우기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 냉장고 파먹기 -->
+<div class="overlay" id="fridgeOverlay">
+  <div class="sheet fridge-sheet" role="dialog" aria-modal="true" aria-labelledby="fridgeHeading">
+    <div class="f-head">
+      <div class="fh-text">
+        <h2 id="fridgeHeading">🧊 냉장고 파먹기</h2>
+        <p class="fh-sub" id="fridgeHeadSub">냉장고에 있는 재료로 메뉴를 찾아 드려요</p>
+      </div>
+      <button type="button" class="x" data-close="fridge" aria-label="닫기">✕</button>
+    </div>
+    <div class="fr-scroll">
+      <div class="fr-hero">
+        <span class="mascot-wrap">
+          <svg class="mascot" viewBox="0 0 220 222" aria-hidden="true"><use href="#chefCat"/></svg>
+          <span class="mascot-tag" aria-hidden="true">🔍</span>
+        </span>
+        <p class="fr-say" id="fridgeSay">냉장고에 있는 재료를 눌러 주세요. 메뉴를 찾아 드릴게요!</p>
+      </div>
+      <section class="fr-sec">
+        <h3>냉장고 재료 <span class="cnt" id="fridgeCount">0개</span></h3>
+        <div class="fsel-wrap" id="fridgeSelWrap" hidden></div>
+        <div class="fchips" id="fridgeChips"></div>
+        <button type="button" class="fr-more" id="fridgeChipMore" hidden>＋ 재료 더 보기</button>
+        <form class="fr-form" id="fridgeForm">
+          <input id="fridgeInput" type="text" placeholder="예: 계란, 새송이버섯, 김치" autocomplete="off" aria-label="냉장고 재료 직접 입력">
+          <button type="submit" class="btn btn-primary">추천 받기</button>
+        </form>
+        <p class="fr-hint">쉼표로 여러 개를 한 번에 넣어도 돼요 · <button type="button" id="fridgeClear">전부 지우기</button></p>
+      </section>
+      <section class="fr-sec">
+        <h3>① 내 레시피북 추천 <span class="cnt" id="frRecipeCount">0</span></h3>
+        <div class="fr-list" id="frRecipeList"></div>
+      </section>
+      <section class="fr-sec">
+        <h3>② 이 재료로 추천하는 집밥 메뉴 <span class="cnt" id="frDishCount">0</span></h3>
+        <div class="fr-list" id="frDishList"></div>
+        <button type="button" class="fr-more" id="frDishMore" hidden>＋ 메뉴 더 보기</button>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- 장보기 -->
+<div class="overlay" id="shopOverlay">
+  <div class="sheet shop-sheet" role="dialog" aria-modal="true" aria-labelledby="shopHeading">
+    <div class="f-head">
+      <div class="fh-text">
+        <h2 id="shopHeading">🛒 장보기</h2>
+        <p class="fh-sub" id="shopSub">장볼 것을 적어 두세요</p>
+      </div>
+      <button type="button" class="x" data-close="shop" aria-label="닫기">✕</button>
+    </div>
+    <form class="shop-add" id="shopForm">
+      <input id="shopInput" type="text" placeholder="예: 우유 2개, 대파 한 단" autocomplete="off" aria-label="살 것 입력">
+      <button type="submit" class="btn btn-primary" id="shopAddBtn">＋ 추가</button>
+    </form>
+    <div class="shop-body">
+      <ul class="shop-list" id="shopList"></ul>
+      <div class="shop-empty" id="shopEmpty">
+        <span class="se-emoji" aria-hidden="true">🛒</span>
+        <b>장보기 목록이 비어 있어요</b>
+        <p>레시피의 없는 재료를 바로 담거나, 위에 적어서 추가해 보세요.</p>
+      </div>
+    </div>
+    <div class="shop-foot">
+      <button type="button" class="btn btn-ghost" id="shopClearDone" disabled>🧹 완료된 항목 비우기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 🎒 하교 시간 -->
+<div class="overlay" id="schoolOverlay">
+  <div class="sheet school-sheet" role="dialog" aria-modal="true" aria-labelledby="schoolHeading">
+    <div class="f-head">
+      <div class="fh-text">
+        <h2 id="schoolHeading">🎒 하교 시간</h2>
+        <p class="fh-sub" id="schoolSub">아이들 하교 시간을 적어 두면 10분 전에 알려 드려요</p>
+      </div>
+      <button type="button" class="x" data-close="school" aria-label="닫기">✕</button>
+    </div>
+    <div class="sc-scroll">
+      <section class="sc-hero">
+        <span class="mascot-wrap">
+          <svg class="mascot" viewBox="0 0 220 222" aria-hidden="true"><use href="#chefCat"/></svg>
+          <span class="mascot-tag" aria-hidden="true">🎒</span>
+        </span>
+        <div class="sc-hero-body">
+          <p class="sc-day" id="scDay">오늘</p>
+          <ul class="sc-today" id="schoolToday"></ul>
+        </div>
+      </section>
+
+      <section class="sc-set" aria-label="알림 설정">
+        <div class="sc-set-row">
+          <label class="sc-sw"><input type="checkbox" id="schoolAlertOn" checked> <span id="schoolAlertLbl">하교 10분 전 알림</span></label>
+          <label class="sc-lead">몇 분 전
+            <select id="schoolLead" aria-label="몇 분 전에 알릴지">
+              <option value="5">5분</option>
+              <option value="10" selected>10분</option>
+              <option value="15">15분</option>
+              <option value="20">20분</option>
+              <option value="30">30분</option>
+            </select>
+          </label>
+        </div>
+        <div class="sc-set-row">
+          <button type="button" class="sc-pill on" id="schoolSound" aria-pressed="true">🔔 소리 켜짐</button>
+          <button type="button" class="sc-pill" id="schoolWeekend" aria-pressed="false">주말도 적기</button>
+          <button type="button" class="sc-pill" id="schoolNotif" hidden>📱 휴대폰 알림도 받기</button>
+        </div>
+      </section>
+
+      <div class="sc-kids" id="schoolKids"></div>
+      <button type="button" class="sc-add" id="schoolAddChild">＋ 아이 추가</button>
+      <p class="sc-note">하교 <b id="scNoteLead">10분</b> 전에 팝업으로 알려 드려요. 이 앱을 <b>켜 둔 동안에만</b> 뜨는 알림이라, 앱을 닫아 두면 오지 않아요.</p>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- 🎒 하교 10분 전 팝업 -->
+<div class="school-alert" id="schoolAlert" role="alertdialog" aria-live="assertive" aria-labelledby="schoolAlertTitle" aria-describedby="schoolAlertBody">
+  <svg class="sa-mascot" viewBox="0 0 220 222" aria-hidden="true"><use href="#chefCat"/></svg>
+  <div class="sa-body">
+    <p class="sa-title" id="schoolAlertTitle">🎒 하교 10분 전이에요!</p>
+    <p class="sa-text" id="schoolAlertBody">첫째 13:50 하교</p>
+  </div>
+  <button type="button" class="sa-close" id="schoolAlertClose">확인</button>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* =========================================================
+   기본 상수
+   ========================================================= */
+var STORE_KEY = 'minjeong-recipebook-v1';
+var CATS = [
+  {id:'아이들 반찬', emoji:'🍳'},
+  {id:'한식·반찬', emoji:'🥘'},
+  {id:'한식·국/찌개', emoji:'🍲'},
+  {id:'면·분식', emoji:'🍜'},
+  {id:'간식·디저트', emoji:'🧁'},
+  {id:'기타', emoji:'🥗'}
+];
+var CAT_IDS = CATS.map(function(c){ return c.id; });
+var CAT_EMOJI = {};
+var CAT_INDEX = {};
+CATS.forEach(function(c,i){ CAT_EMOJI[c.id]=c.emoji; CAT_INDEX[c.id]=i; });
+
+var $ = function(s, el){ return (el||document).querySelector(s); };
+var $$ = function(s, el){ return Array.prototype.slice.call((el||document).querySelectorAll(s)); };
+
+function esc(s){
+  return String(s==null?'':s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+function uid(){ return 'r'+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function r1(v){ return Math.round((Number(v)||0)*10)/10; }
+function fmtNum(v){ return (Math.round(Number(v)||0)).toLocaleString('ko-KR'); }
+function fmtMacro(v){
+  var n = r1(v);
+  return (n % 1 === 0) ? String(n) : n.toFixed(1);
+}
+function todayStr(){
+  var d = new Date();
+  var p = function(n){ return (n<10?'0':'')+n; };
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());
+}
+
+/* =========================================================
+   🍽 영양 추정 엔진 (재료 → 대략 칼로리/탄단지)
+   ========================================================= */
+/* 100g 기준 영양값 + 재료별 단위 무게(g) */
+var FOODS = [
+  {n:'달걀', a:['달걀','계란','에그'], k:143, c:1.1, p:12.6, f:9.5, w:{'개':50,'알':50,'큰술':15}},
+  {n:'쌀밥', a:['쌀밥','흰밥','공깃밥','밥'], k:130, c:28, p:2.5, f:0.3, w:{'공기':210,'그릇':250,'큰술':15}},
+  {n:'잡곡밥', a:['잡곡밥','현미밥','보리밥'], k:120, c:25, p:3, f:0.6, w:{'공기':210}},
+  {n:'소고기', a:['소고기','쇠고기','한우','차돌박이','등심','안심'], k:200, c:0, p:19, f:13, w:{'개':100}},
+  {n:'돼지고기', a:['돼지고기','앞다리살','앞다리','불고기용 돼지'], k:220, c:0, p:18, f:15, w:{'개':100}},
+  {n:'삼겹살', a:['냉동삼겹살','냉동 삼겹살','대패삼겹살','삼겹살','오겹살','목살'], k:340, c:0, p:17, f:30, w:{'개':100,'줄':100,'줌':100,'팩':600}},
+  {n:'닭고기', a:['닭고기','닭다리살','닭정육','닭'], k:185, c:0, p:19, f:11, w:{'개':100,'마리':600}},
+  {n:'닭가슴살', a:['닭가슴살'], k:110, c:0, p:23, f:1.5, w:{'개':100}},
+  {n:'두부', a:['두부'], k:85, c:2, p:9, f:5, w:{'모':300,'개':300,'큰술':15}},
+  {n:'순두부', a:['순두부'], k:45, c:2, p:4, f:2, w:{'봉':300,'개':300}},
+  {n:'감자', a:['감자','알감자'], k:70, c:15, p:2, f:0.1, w:{'개':150}},
+  {n:'고구마', a:['고구마','밤고구마','호박고구마'], k:90, c:21, p:1.5, f:0.2, w:{'개':200}},
+  {n:'양파', a:['양파','적양파'], k:40, c:9, p:1.1, f:0.1, w:{'개':200,'큰술':10}},
+  {n:'대파', a:['대파','실파','쪽파','파'], k:30, c:6, p:1.8, f:0.2, w:{'대':30,'줌':30,'컵':40,'쪽':12,'개':30}},
+  {n:'마늘', a:['다진마늘','다진 마늘','통마늘','깐마늘','마늘'], k:130, c:28, p:6, f:0.5, w:{'쪽':5,'큰술':15,'작은술':5}},
+  {n:'당근', a:['당근'], k:39, c:9, p:0.9, f:0.2, w:{'개':150,'대':30}},
+  {n:'애호박', a:['애호박','호박'], k:20, c:4, p:1.2, f:0.2, w:{'개':180}},
+  {n:'단호박', a:['단호박'], k:40, c:9, p:1, f:0.1, w:{'개':500}},
+  {n:'김치', a:['김치','배추김치','포기김치','깍두기'], k:23, c:4, p:1.1, f:0.5, w:{'컵':150,'쪽':25,'포기':800,'그릇':200}},
+  {n:'떡', a:['떡볶이떡','떡국떡','가래떡','밀떡','쌀떡','조랭이떡','떡'], k:230, c:50, p:4, f:0.5, w:{'개':20,'컵':150,'줌':50}},
+  {n:'어묵', a:['어묵','오뎅','사각어묵'], k:130, c:15, p:10, f:3, w:{'장':40,'개':40,'컵':60}},
+  {n:'밀가루', a:['밀가루','중력분','강력분','박력분'], k:364, c:76, p:10, f:1, w:{'컵':120,'큰술':8,'작은술':3}},
+  {n:'감자전분', a:['감자전분','감자 녹말','전분','녹말'], k:350, c:85, p:0.1, f:0.1, w:{'큰술':9,'작은술':3,'컵':120}},
+  {n:'부침가루', a:['부침가루','튀김가루'], k:350, c:74, p:8, f:1.5, w:{'컵':120,'큰술':8}},
+  {n:'빵가루', a:['빵가루','빵 가루'], k:350, c:70, p:12, f:3, w:{'컵':100,'큰술':7}},
+  {n:'라면', a:['라면','봉지라면','라면사리'], k:450, c:60, p:9, f:18, w:{'개':120,'봉지':120,'봉':120}},
+  {n:'파스타', a:['파스타','스파게티','펜네','마카로니','링귀니'], k:370, c:74, p:13, f:1.5, w:{'인분':100,'컵':90}},
+  {n:'소면', a:['소면','국수','중면','칼국수면'], k:350, c:74, p:9, f:1, w:{'인분':100,'줌':100,'개':100}},
+  {n:'당면', a:['당면','잡채면'], k:340, c:85, p:0.2, f:0.1, w:{'줌':50,'인분':50}},
+  {n:'식용유', a:['식용유','카놀라유','포도씨유','올리브오일','올리브유','오일'], k:884, c:0, p:0, f:100, w:{'큰술':12,'작은술':4,'컵':180}},
+  {n:'참기름', a:['참기름','들기름'], k:884, c:0, p:0, f:100, w:{'큰술':12,'작은술':4}},
+  {n:'버터', a:['버터','무염버터','가염버터'], k:717, c:0.1, p:0.9, f:81, w:{'큰술':14,'개':110}},
+  {n:'설탕', a:['황설탕','흑설탕','백설탕','설탕'], k:400, c:100, p:0, f:0, w:{'큰술':12,'작은술':4,'컵':180,'꼬집':1}},
+  {n:'올리고당', a:['올리고당','물엿','조청'], k:290, c:75, p:0, f:0, w:{'큰술':21,'작은술':7}},
+  {n:'알룰로스', a:['알룰로스','알로로스','에리스리톨'], k:0, c:0, p:0, f:0, w:{'큰술':15,'작은술':5}},
+  {n:'꿀', a:['꿀','벌꿀'], k:300, c:82, p:0.3, f:0, w:{'큰술':20,'작은술':7}},
+  {n:'간장', a:['진간장','국간장','양조간장','간장'], k:60, c:8, p:6, f:0, w:{'큰술':15,'작은술':5,'컵':200}},
+  {n:'고추장', a:['고추장','초고추장'], k:220, c:45, p:5, f:1, w:{'큰술':20,'작은술':7}},
+  {n:'고춧가루', a:['고춧가루','고추가루'], k:350, c:60, p:12, f:10, w:{'큰술':6,'작은술':2}},
+  {n:'치즈', a:['모짜렐라치즈','슬라이스치즈','체다치즈','치즈'], k:330, c:2, p:20, f:26, w:{'장':20,'줌':30,'컵':60}},
+  {n:'크림치즈', a:['크림치즈'], k:340, c:4, p:6, f:34, w:{'큰술':15}},
+  {n:'우유', a:['우유','저지방우유'], k:60, c:5, p:3, f:3, w:{'컵':200,'큰술':15,'ml':1}},
+  {n:'두유', a:['두유','아몬드브리즈'], k:45, c:3, p:3, f:2, w:{'컵':200,'팩':190}},
+  {n:'생크림', a:['생크림','휘핑크림'], k:340, c:3, p:2, f:35, w:{'컵':200,'큰술':15}},
+  {n:'요거트', a:['플레인요거트','그릭요거트','요거트','요구르트'], k:60, c:5, p:3.5, f:3, w:{'개':100,'컵':150}},
+  {n:'바나나', a:['바나나'], k:89, c:23, p:1.1, f:0.3, w:{'개':120,'송이':600}},
+  {n:'사과', a:['사과'], k:52, c:14, p:0.3, f:0.2, w:{'개':200}},
+  {n:'배', a:['배즙','배'], k:45, c:12, p:0.5, f:0.1, w:{'개':400,'큰술':15}},
+  {n:'토마토', a:['방울토마토','토마토'], k:18, c:4, p:0.9, f:0.2, w:{'개':150,'알':15}},
+  {n:'물', a:['정수물','물'], k:0, c:0, p:0, f:0, w:{'컵':200,'ml':1}},
+  {n:'소금', a:['천일염','굵은소금','소금'], k:0, c:0, p:0, f:0, w:{'작은술':5,'큰술':15,'꼬집':1}},
+  {n:'후추', a:['후춧가루','후추가루','후추','통후추'], k:250, c:64, p:10, f:3, w:{'작은술':2,'꼬집':0.3}},
+  {n:'베이킹파우더', a:['베이킹파우더','베이킹소다'], k:100, c:50, p:0, f:0, w:{'작은술':3}},
+  {n:'버섯', a:['표고버섯','느타리버섯','양송이버섯','팽이버섯','표고','버섯'], k:30, c:5, p:2, f:0.3, w:{'개':20,'팩':150,'줌':40,'송이':20}},
+  {n:'새송이버섯', a:['새송이버섯','새송이'], k:30, c:5, p:2, f:0.3, w:{'개':50,'송이':50,'팩':150,'줌':40}},
+  {n:'시금치', a:['시금치'], k:23, c:3, p:2.5, f:0.3, w:{'단':300,'줌':60}},
+  {n:'콩나물', a:['콩나물'], k:30, c:3, p:3, f:0.5, w:{'줌':80,'봉':200}},
+  {n:'브로콜리', a:['브로콜리'], k:34, c:7, p:2.8, f:0.4, w:{'개':300,'송이':150}},
+  {n:'오이', a:['오이'], k:15, c:3, p:0.7, f:0.1, w:{'개':150}},
+  {n:'고추', a:['청양고추','홍고추','고추'], k:40, c:8, p:1.5, f:0.5, w:{'개':10,'대':10}},
+  {n:'파프리카', a:['파프리카','피망'], k:30, c:6, p:1, f:0.3, w:{'개':150}},
+  {n:'가지', a:['가지'], k:20, c:5, p:1, f:0.2, w:{'개':150}},
+  {n:'무', a:['무'], k:16, c:4, p:0.6, f:0.1, w:{'개':600,'토막':100}},
+  {n:'양배추', a:['양배추'], k:25, c:5, p:1.3, f:0.1, w:{'개':1000,'통':800,'잎':30,'줌':50}},
+  {n:'배추', a:['알배추','배추'], k:13, c:2.2, p:1.2, f:0.2, w:{'포기':1500,'장':40}},
+  {n:'햄', a:['슬라이스햄','스팸','햄'], k:250, c:10, p:14, f:17, w:{'장':15,'개':20}},
+  {n:'소시지', a:['비엔나소시지','소시지','비엔나'], k:300, c:8, p:13, f:24, w:{'개':20}},
+  {n:'베이컨', a:['베이컨'], k:400, c:1, p:37, f:28, w:{'장':15}},
+  {n:'만두', a:['냉동만두','비비고만두','군만두','만두'], k:250, c:28, p:10, f:11, w:{'개':25,'봉지':600}},
+  {n:'식빵', a:['통밀식빵','식빵','호밀빵','빵'], k:280, c:52, p:9, f:3, w:{'장':30,'개':30}},
+  {n:'새우', a:['칵테일새우','새우'], k:100, c:0, p:20, f:1, w:{'마리':10,'개':10,'줌':50}},
+  {n:'오징어', a:['오징어'], k:85, c:3, p:17, f:1, w:{'마리':200,'개':200}},
+  {n:'고등어', a:['고등어'], k:200, c:0, p:20, f:12, w:{'마리':300,'토막':80}},
+  {n:'참치캔', a:['참치캔','참치'], k:130, c:0, p:25, f:3, w:{'캔':150}},
+  {n:'미역', a:['미역'], k:20, c:3, p:1.5, f:0.3, w:{'줌':5,'봉':30}},
+  {n:'다시마', a:['다시마'], k:140, c:30, p:8, f:1, w:{'장':10,'토막':5}},
+  {n:'멸치', a:['국멸치','멸치'], k:280, c:1, p:40, f:10, w:{'줌':10,'마리':1}},
+  {n:'케이첩', a:['토마토케첩','케첩','케찹'], k:110, c:25, p:1, f:0, w:{'큰술':17}},
+  {n:'마요네즈', a:['마요네즈','마요'], k:700, c:1, p:1, f:77, w:{'큰술':14}},
+  {n:'굴소스', a:['굴소스','굴 소스'], k:100, c:15, p:5, f:0, w:{'큰술':18,'작은술':6}},
+  {n:'미림', a:['맛술','요리술','미림','미림맛술'], k:250, c:43, p:0.3, f:0, w:{'큰술':15,'작은술':5,'컵':200}},
+  {n:'액젓', a:['멸치액젓','까나리액젓','액젓'], k:60, c:10, p:8, f:0, w:{'큰술':15}},
+  {n:'다시다', a:['쇠고기다시다','쇠고기 다시다','다시다','미원'], k:230, c:20, p:22, f:4, w:{'큰술':9,'작은술':3,'숟가락':9}},
+  {n:'쌀', a:['쌀','백미','현미'], k:350, c:77, p:6, f:1, w:{'컵':150,'공기':210}},
+  {n:'오트밀', a:['오트밀','귀리'], k:380, c:66, p:13, f:7, w:{'컵':90,'큰술':6}},
+  {n:'옥수수', a:['옥수수','콘'], k:90, c:19, p:3, f:1, w:{'개':200}},
+  {n:'깻잎', a:['깻잎'], k:30, c:4, p:3, f:0.5, w:{'장':2,'줌':10}},
+  {n:'상추', a:['상추'], k:15, c:2, p:1, f:0.2, w:{'장':10,'줌':30}}
+];
+
+var UNIT_G = {
+  'g':1,'그램':1,'kg':1000,'킬로그램':1000,'ml':1,'밀리리터':1,'l':1000,'리터':1000,
+  '큰술':15,'숟가락':15,'스푼':15,'tbsp':15,'ts':15,
+  '작은술':5,'티스푼':5,'tsp':5,
+  '컵':200,'종이컵':180,'개':100,'알':50,'대':30,'줄':30,'쪽':5,'장':30,'모':300,
+  '공기':210,'인분':200,'줌':30,'주먹':60,'마리':300,'봉지':100,'봉':100,'캔':150,
+  '팩':200,'조각':30,'통':120,'근':600,'꼬집':1,'방울':8,'접시':150,'그릇':250,
+  '포기':800,'단':300,'송이':20,'마디':10,'톨':3,'잎':2,'토막':100
+};
+
+var ALIAS_LIST = [];
+FOODS.forEach(function(food){
+  food.a.forEach(function(al){ ALIAS_LIST.push({al:al, f:food}); });
+});
+ALIAS_LIST.sort(function(x,y){ return y.al.length - x.al.length; });
+
+function escRe(s){ return String(s).replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
+
+function aliasHit(text, al){
+  if(al.length <= 1){
+    // 한 글자 재료(파, 물, 쌀)는 낱말로 있을 때만 인정
+    var re = new RegExp('(^|[\\s,·\\(\\[\\-])' + escRe(al) + '(?=[\\s\\d\\(\\[\\-]|$)');
+    return re.test(text);
+  }
+  return text.indexOf(al) !== -1;
+}
+
+function findFood(text){
+  for(var i=0;i<ALIAS_LIST.length;i++){
+    if(aliasHit(text, ALIAS_LIST[i].al)) return ALIAS_LIST[i].f;
+  }
+  return null;
+}
+
+function normalizeUnit(u){
+  if(!u) return '';
+  var raw = String(u).trim();
+  if(raw === 'T' || raw === 'Ts' || raw === 'TBSP') return '큰술';
+  if(raw === 't' || raw === 'ts') return '작은술';
+  var low = raw.toLowerCase();
+  var map = {
+    'g':'g','그램':'g','kg':'kg','킬로그램':'kg','ml':'ml','밀리리터':'ml','l':'l','리터':'l',
+    '큰술':'큰술','숟가락':'큰술','스푼':'큰술','tbsp':'큰술','ts':'큰술',
+    '작은술':'작은술','티스푼':'작은술','tsp':'작은술',
+    '컵':'컵','종이컵':'컵','개':'개','알':'알','대':'대','줄':'줄','쪽':'쪽','장':'장','모':'모',
+    '공기':'공기','인분':'인분','줌':'줌','주먹':'줌','마리':'마리','봉지':'봉지','봉':'봉지',
+    '캔':'캔','팩':'팩','조각':'조각','통':'통','근':'근','꼬집':'꼬집','방울':'방울',
+    '접시':'접시','그릇':'그릇','포기':'포기','단':'단','송이':'송이','마디':'마디','톨':'톨',
+    '잎':'잎','토막':'토막'
+  };
+  return map[low] || low;
+}
+
+function extractAmount(text){
+  var s = String(text||'');
+  var koMap = {'한':1,'두':2,'세':3,'네':4,'다섯':5,'여섯':6,'일곱':7,'여덟':8,'아홉':9,'열':10,'반':0.5};
+  var mKo = s.match(/(한|두|세|네|다섯|여섯|일곱|여덟|아홉|열|반)\s*(개|알|대|쪽|장|모|공기|컵|큰술|작은술|마리|줌|봉지|캔|팩|조각|통|근|송이|토막)/);
+  if(mKo) return {qty:koMap[mKo[1]], unit:mKo[2]};
+
+  var re = /(\d+(?:\.\d+)?)\s*(?:\/\s*(\d+(?:\.\d+)?))?\s*(?:[~∼\-]\s*(\d+(?:\.\d+)?)\s*(?:\/\s*(\d+(?:\.\d+)?))?)?\s*([가-힣A-Za-z]+)?/;
+  var m = s.match(re);
+  if(!m) return null;
+  var n1 = parseFloat(m[1]);
+  var d1 = m[2] ? parseFloat(m[2]) : 1;
+  if(!isFinite(n1) || !isFinite(d1) || d1 === 0) return null;
+  var qty = n1 / d1;
+  if(m[3]){
+    var n2 = parseFloat(m[3]);
+    var d2 = m[4] ? parseFloat(m[4]) : 1;
+    if(isFinite(n2) && isFinite(d2) && d2 !== 0) qty = (qty + n2/d2) / 2;
+  }
+  var unit = m[5] ? normalizeUnit(m[5]) : null;
+  if(unit && !(unit in UNIT_G)) unit = null;
+  return {qty:qty, unit:unit};
+}
+
+/* 재료 한 줄 → 영양 */
+function ingredientNutrition(raw){
+  var text = String(raw==null?'':raw).trim();
+  if(!text) return null;
+  var clean = text.replace(/\([^)]*\)/g, ' ').replace(/\s+/g,' ').trim();
+  var food = findFood(clean);
+  var amt = extractAmount(clean);
+  if(!food){
+    return {text:text, matched:false, grams:0, kcal:0, c:0, p:0, f:0};
+  }
+  var grams;
+  if(!amt){
+    grams = 3;                      /* '약간', '조금' 정도로 계산 */
+  } else {
+    var u = amt.unit;
+    var w = (u && food.w && food.w[u]) ||
+            (u && UNIT_G[u]) ||
+            (food.w && food.w['개']) ||
+            UNIT_G['개'];
+    grams = amt.qty * w;
+  }
+  if(!isFinite(grams) || grams < 0) grams = 0;
+  var k = grams / 100;
+  return {
+    text:text, matched:true, grams:Math.round(grams),
+    kcal: food.k * k, c: food.c * k, p: food.p * k, f: food.f * k
+  };
+}
+
+/* 레시피 → 1인분 영양 */
+function nutritionOf(r){
+  if(!r) return {kcal:0,c:0,p:0,f:0,manual:false,matched:0,unknown:0,servings:2};
+  if(r.nut && Number(r.nut.kcal) > 0){
+    return {
+      kcal: Math.round(Number(r.nut.kcal)||0),
+      c: r1(r.nut.c), p: r1(r.nut.p), f: r1(r.nut.f),
+      manual:true, matched:0, unknown:0,
+      servings: Number(r.servings)||2
+    };
+  }
+  var kcal=0, c=0, p=0, f=0, matched=0, unknown=0;
+  (r.ingredients||[]).forEach(function(line){
+    var n = ingredientNutrition(line);
+    if(!n) return;
+    if(n.matched){ matched++; kcal+=n.kcal; c+=n.c; p+=n.p; f+=n.f; }
+    else unknown++;
+  });
+  var serv = Number(r.servings) > 0 ? Number(r.servings) : 2;
+  return {
+    kcal: Math.round(kcal/serv),
+    c: r1(c/serv), p: r1(p/serv), f: r1(f/serv),
+    totalKcal: Math.round(kcal),
+    manual:false, matched:matched, unknown:unknown, servings:serv
+  };
+}
+
+function macroPercents(n){
+  var kc = Math.max(0, n.c)*4;
+  var kp = Math.max(0, n.p)*4;
+  var kf = Math.max(0, n.f)*9;
+  var sum = kc+kp+kf;
+  if(sum <= 0) return {c:0,p:0,f:0};
+  return {
+    c: Math.round(kc/sum*100),
+    p: Math.round(kp/sum*100),
+    f: Math.max(0, 100 - Math.round(kc/sum*100) - Math.round(kp/sum*100))
+  };
+}
+
+function nutComment(kcal){
+  if(!kcal) return '재료를 적으면 계산해 드려요';
+  if(kcal >= 600) return '든든한 한 끼!';
+  if(kcal >= 380) return '딱 좋은 한 끼';
+  if(kcal >= 150) return '가볍게 한 접시';
+  return '산뜻한 곁들임';
+}
+
+/* =========================================================
+   유튜브
+   ========================================================= */
+function youtubeId(url){
+  if(!url) return '';
+  var u = String(url).trim();
+  var m = u.match(/(?:youtube\.com\/(?:watch\?(?:[^#]*&)?v=|shorts\/|embed\/|live\/|v\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : '';
+}
+
+/* =========================================================
+   시드 레시피
+   ========================================================= */
+var SEEDS = [
+  {
+    title:'즉석 빨간 냉삼볶음',
+    url:'',
+    category:'한식·반찬', time:'15분', servings:3, favorite:false,
+    ingredients:['냉동 삼겹살 600g','고춧가루 3숟가락','간장 2숟가락','미림 2숟가락','설탕 2숟가락','올리고당 2숟가락','쇠고기 다시다 1/2숟가락','다진 마늘 1/2숟가락','후추 적당량'],
+    steps:[
+      '달군 프라이팬에 냉동 삼겹살을 넣고 볶는다.',
+      '양념 재료(고춧가루, 간장, 미림, 설탕, 다시다, 다진 마늘)를 넣으면서 다시 볶는다.',
+      '고기에 양념이 빨갛게 배면 올리고당과 후추를 넣고 버무려 마무리한다.'
+    ],
+    memo:''
+  },
+  {
+    title:'계란말이',
+    url:'',
+    category:'아이들 반찬', time:'10분', servings:2, favorite:false,
+    ingredients:['달걀 3개','쪽파 4대','당근 1/6개','소금 1/2작은술','설탕 1/2작은술','식용유 1큰술'],
+    steps:[
+      '쪽파는 송송 썰고 당근은 최대한 곱게 다져요.',
+      '달걀을 풀어 다진 채소와 소금·설탕을 넣고 고루 섞어요.',
+      '약불로 달군 팬에 기름을 두르고, 계란물 1/3만 부어 얇게 펴요.',
+      '겉면이 익으면 한쪽으로 밀어 말고, 남은 계란물을 나눠 부으며 3번 말아요.',
+      '옆면까지 익혀 모양을 잡고, 한 김 식힌 뒤 썰어요.'
+    ],
+    memo:'설탕 반 작은술이 비린 맛을 잡아 줘요. 냉장실에서 식힌 뒤 썰면 단면이 예뻐요.'
+  },
+  {
+    title:'간장 불고기',
+    url:'https://www.10000recipe.com/recipe/6880874',
+    category:'아이들 반찬', time:'25분', servings:2, favorite:false,
+    ingredients:['돼지고기 불고기용 300g','양파 1개','당근 1/4개','대파 1대','청양고추 1/2개','간장 5큰술','올리고당 3큰술','설탕 1/2큰술','다진마늘 1큰술','후춧가루 약간'],
+    steps:[
+      '양파·당근은 채 썰고, 대파는 어슷하게, 청양고추는 송송 썰어요.',
+      '간장·올리고당·설탕·다진마늘·후추를 섞어 양념장을 만들어요.',
+      '팬에 고기를 먼저 펴서 볶다가 당근을 넣어 함께 볶아요.',
+      '고기가 거의 익으면 양념장을 붓고 국물이 살짝 졸 때까지 볶아요.',
+      '양파·대파·청양고추를 넣고 숨이 죽을 때까지 2~3분 더 볶아 마무리해요.'
+    ],
+    memo:'아이들 먹을 땐 청양고추를 빼고, 양념에 배즙 2큰술을 넣으면 더 부드러워요.'
+  },
+  {
+    title:'떡볶이',
+    url:'',
+    category:'면·분식', time:'15분', servings:2, favorite:true,
+    ingredients:['밀떡 300g','어묵 2장','양배추 100g','대파 1대','삶은 달걀 2개','고추장 2큰술','고춧가루 1큰술','설탕 1.5큰술','간장 1큰술','물 2컵'],
+    steps:[
+      '밀떡은 가볍게 헹구고, 어묵은 삼각형으로, 양배추와 대파는 먹기 좋게 썰어요.',
+      '냄비에 물 2컵을 붓고 고추장·고춧가루·설탕·간장을 풀어 끓여요.',
+      '국물이 끓으면 떡과 어묵, 양배추를 넣고 중불에서 5분 끓여요.',
+      '국물이 걸쭉해지면 대파와 삶은 달걀을 넣고 2분만 더 끓여요.',
+      '떡이 부드러워지면 불을 끄고, 그릇에 담아 통깨를 뿌려요.'
+    ],
+    memo:'아이들 먹을 땐 고춧가루를 빼고 고추장만 1큰술 넣어도 충분히 맛있어요.'
+  },
+  {
+    title:'바나나 팬케이크',
+    url:'https://www.youtube.com/watch?v=tKLFKQxeaOU',
+    category:'간식·디저트', time:'10분', servings:2, favorite:false,
+    ingredients:['바나나 1개','달걀 1개','밀가루 3큰술','우유 3큰술','베이킹파우더 1/2작은술','버터 1큰술','꿀 1큰술'],
+    steps:[
+      '바나나를 포크로 곱게 으깨요.',
+      '으깬 바나나에 달걀·우유를 넣고 섞어요.',
+      '밀가루와 베이킹파우더를 넣고 가볍게 섞어 반죽을 만들어요.',
+      '약불로 달군 팬에 버터를 살짝 두르고 반죽을 한 국자씩 부어요.',
+      '표면에 기포가 올라오면 뒤집어 노릇하게 익히고, 꿀을 뿌려 마무리해요.'
+    ],
+    memo:'바나나가 검은 반점으로 익었을 때 만들면 설탕 없이도 충분히 달아요.'
+  },
+  {
+    title:'치킨 맛 나는 새송이 치킨',
+    url:'https://youtube.com/shorts/GCvZRzJ3xgI',
+    category:'한식·반찬', time:'20분', servings:2, favorite:false,
+    ingredients:['새송이버섯 3개','감자전분 2큰술','올리브오일 1큰술','간장 1.5큰술','굴소스 0.5큰술','알룰로스 1큰술','물 2큰술','맛술 1큰술','다진마늘 0.5큰술','고춧가루 0.5작은술','버터 10g','후추 약간'],
+    steps:[
+      '새송이버섯은 끓는 물에 5분 삶아 건져 채반에서 식힌다.',
+      '통으로 돌려깎기하듯 썰어 넓게 펼친 뒤 격자 모양으로 칼집을 낸다.',
+      '물기를 깨끗이 닦고 감자전분을 얇게 뿌려 올리브오일 두른 팬에 앞뒤로 노릇하게 굽는다.',
+      '팬 기름을 닦고 간장·굴소스·알룰로스·물·맛술·다진마늘·고춧가루·버터를 넣어 중약불에 살짝 졸인다.',
+      '구운 새송이를 넣고 눅눅해지지 않게 빠르게 뒤집어 양념을 입히면 완성!'
+    ],
+    memo:'치밥으로 먹어도 좋고 맥주 안주로도 최고!'
+  }
+];
+
+/* =========================================================
+   상태 & 저장
+   ========================================================= */
+var state = { recipes: [], q:'', cat:'전체', favOnly:false };
+var editingId = null;
+var openId = null;
+var pendingDelete = null;
+var pendingChild = null;
+var lastFocus = null;
+
+function num(v){ var n = Number(v); return isFinite(n) ? n : 0; }
+
+function normalizeRecipe(raw){
+  if(!raw || typeof raw !== 'object') return null;
+  var title = String(raw.title==null?'':raw.title).trim();
+  if(!title) return null;
+
+  var ingRaw = raw.ingredients;
+  if(!Array.isArray(ingRaw)){
+    ingRaw = String(raw.ingredients==null?'':raw.ingredients).split(/[\n,、]/);
+  }
+  var stepsRaw = raw.steps;
+  if(!Array.isArray(stepsRaw)){
+    stepsRaw = raw.summarySteps;
+    if(!Array.isArray(stepsRaw)) stepsRaw = String(raw.steps==null?'':raw.steps).split(/\n/);
+  }
+
+  var ingredients = ingRaw.map(function(s){ return String(s==null?'':s).trim(); }).filter(Boolean);
+  var steps = stepsRaw.map(function(s){ return String(s==null?'':s).trim(); }).filter(Boolean);
+
+  var checked = [];
+  if(Array.isArray(raw.checked)){
+    raw.checked.forEach(function(v){
+      var n = parseInt(v,10);
+      if(isFinite(n) && n >= 0 && n < ingredients.length && checked.indexOf(n) === -1) checked.push(n);
+    });
+  }
+
+  var nut = null;
+  if(raw.nut && num(raw.nut.kcal) > 0){
+    nut = { kcal:num(raw.nut.kcal), c:num(raw.nut.c), p:num(raw.nut.p), f:num(raw.nut.f) };
+  }
+
+  var created = num(raw.createdAt) || Date.now();
+
+  return {
+    id: raw.id ? String(raw.id) : uid(),
+    title: title,
+    url: String(raw.url==null?'':raw.url).trim(),
+    category: CAT_IDS.indexOf(raw.category) !== -1 ? raw.category : '기타',
+    time: String(raw.time==null?'':raw.time).trim(),
+    servings: num(raw.servings) > 0 ? Math.min(50, Math.round(num(raw.servings))) : 2,
+    favorite: !!raw.favorite,
+    ingredients: ingredients,
+    steps: steps,
+    memo: String(raw.memo==null?'':raw.memo).trim(),
+    checked: checked,
+    nut: nut,
+    createdAt: created,
+    updatedAt: num(raw.updatedAt) || created
+  };
+}
+
+/* 저장 데이터 정리: 예전 시드에 붙어 있던 출처 링크를 비우고, 새 시드 레시피를 더한다 */
+var STORE_VERSION = 4;
+var storeMigrated = false;
+
+function seedUrlSet(){
+  var keep = {};
+  SEEDS.forEach(function(s){ if(s.url) keep[s.url] = 1; });
+  return keep;
+}
+
+/* 시드에서 나온 레시피에 남아 있는, 지금 쓰지 않는 출처 링크는 비운다 */
+function purgeLegacySeedLinks(list){
+  var keep = seedUrlSet();
+  (list||[]).forEach(function(r){
+    if(r && /^seed-\d+$/.test(r.id) && r.url && !keep[r.url]){
+      r.url = '';
+      storeMigrated = true;
+    }
+  });
+  return list;
+}
+
+/* 버전이 오르면서 새로 더해 준 기본 레시피 (그 버전부터 생긴 것만 저장본에 채운다) */
+var SEED_ADDITIONS = [
+  {since:3, seedIndex:0},   /* v3: 즉석 빨간 냉삼볶음 */
+  {since:4, seedIndex:5}    /* v4: 치킨 맛 나는 새송이 치킨 */
+];
+
+/* 지난 버전 저장본에도 새 기본 레시피가 보이게 한다 (제목으로 확인해 중복은 건너뛴다) */
+function ensureStarterRecipe(list, version){
+  var v = num(version) || 0;
+  var stamp = Date.now() + 3000;
+  SEED_ADDITIONS.forEach(function(add){
+    var created = stamp; stamp -= 1000;
+    if(add.since <= v) return;            /* 그 버전 저장본에는 이미 들어 있다 */
+    var seed = SEEDS[add.seedIndex];
+    if(!seed) return;
+    for(var i=0;i<list.length;i++){
+      if(list[i] && list[i].title === seed.title) return;   /* 이미 가지고 있으면 더하지 않는다 */
+    }
+    var copy = {};
+    for(var k in seed){ if(Object.prototype.hasOwnProperty.call(seed,k)) copy[k] = seed[k]; }
+    copy.id = uid();
+    copy.createdAt = created;
+    copy.updatedAt = created;
+    var fresh = normalizeRecipe(copy);
+    if(!fresh) return;
+    list.unshift(fresh);
+    storeMigrated = true;
+  });
+  return list;
+}
+
+function migrateStored(list, version){
+  if(num(version) >= STORE_VERSION) return list;
+  purgeLegacySeedLinks(list);
+  ensureStarterRecipe(list, num(version));
+  return list;
+}
+
+function loadRecipes(){
+  var raw = null;
+  try { raw = localStorage.getItem(STORE_KEY); } catch(e){ raw = null; }
+  if(raw){
+    try {
+      var data = JSON.parse(raw);
+      var list = Array.isArray(data) ? data : (data && data.recipes);
+      if(Array.isArray(list)){
+        var version = Array.isArray(data) ? 0 : num(data.version);
+        return migrateStored(list.map(normalizeRecipe).filter(Boolean), version);
+      }
+    } catch(e){ /* 손상된 저장값은 시드로 복구 */ }
+  }
+  var base = Date.now();
+  return SEEDS.map(function(s, i){
+    var copy = {};
+    for(var k in s){ if(Object.prototype.hasOwnProperty.call(s,k)) copy[k] = s[k]; }
+    copy.id = 'seed-'+i;
+    copy.createdAt = base - i*60000;
+    copy.updatedAt = copy.createdAt;
+    return normalizeRecipe(copy);
+  }).filter(Boolean);
+}
+
+function saveRecipes(){
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify({
+      app:'민정님의 레시피북', version:STORE_VERSION, savedAt:new Date().toISOString(), recipes:state.recipes
+    }));
+    return true;
+  } catch(e){
+    toast('저장 공간이 부족해 저장하지 못했어요');
+    return false;
+  }
+}
+
+/* =========================================================
+   렌더링
+   ========================================================= */
+function getRecipe(id){
+  for(var i=0;i<state.recipes.length;i++){ if(state.recipes[i].id === id) return state.recipes[i]; }
+  return null;
+}
+function haystack(r){
+  return [r.title, r.memo, r.category, r.time].concat(r.ingredients, r.steps).join(' ').toLowerCase();
+}
+function searchFiltered(){
+  var q = state.q.trim().toLowerCase();
+  return state.recipes.filter(function(r){
+    if(state.favOnly && !r.favorite) return false;
+    if(!q) return true;
+    return haystack(r).indexOf(q) !== -1;
+  });
+}
+function visibleRecipes(){
+  return searchFiltered().filter(function(r){
+    return state.cat === '전체' || r.category === state.cat;
+  }).sort(function(a,b){ return b.createdAt - a.createdAt; });
+}
+
+function renderChips(){
+  var base = searchFiltered();
+  var counts = { '전체': base.length };
+  CAT_IDS.forEach(function(id){ counts[id] = 0; });
+  base.forEach(function(r){
+    if(counts[r.category] == null) counts[r.category] = 0;
+    counts[r.category]++;
+  });
+
+  var html = ['전체'].concat(CAT_IDS).map(function(id){
+    var on = state.cat === id ? ' on' : '';
+    var n = counts[id] || 0;
+    var label = id === '전체' ? '전체' : id;
+    return '<button type="button" class="chip'+on+'" data-cat="'+esc(id)+'">'+esc(label)+
+      '<span class="n">'+n+'</span></button>';
+  }).join('');
+  html += '<button type="button" class="chip star'+(state.favOnly?' on':'')+'" data-favfilter="1" aria-pressed="'+(state.favOnly?'true':'false')+'">★ 즐겨찾기</button>';
+  $('#chips').innerHTML = html;
+}
+
+function thumbHTML(r, big){
+  var yt = youtubeId(r.url);
+  var inner = CAT_INDEX[r.category] != null ? 'cat-'+CAT_INDEX[r.category] : 'cat-'+CAT_INDEX['기타'];
+  var emoji = CAT_EMOJI[r.category] || '🍽️';
+  var html = '<div class="'+(big?'d-hero ':'thumb ')+inner+'">'+
+      '<span class="thumb-emoji" aria-hidden="true">'+emoji+'</span>';
+  if(yt){
+    html += '<img class="thumb-img" alt="" loading="lazy" src="https://img.youtube.com/vi/'+esc(yt)+'/hqdefault.jpg" onerror="this.remove()">';
+    html += '<span class="play" aria-hidden="true">▶'+(big?'':' 영상')+'</span>';
+  }
+  return html + '</div>';
+}
+
+function cardHTML(r){
+  var nut = nutritionOf(r);
+  var yt = youtubeId(r.url);
+  var inner = CAT_INDEX[r.category] != null ? 'cat-'+CAT_INDEX[r.category] : 'cat-'+CAT_INDEX['기타'];
+  var emoji = CAT_EMOJI[r.category] || '🍽️';
+  return '<article class="card" data-id="'+esc(r.id)+'" tabindex="0" role="button" aria-label="'+esc(r.title)+' 레시피 열기">'+
+    '<div class="thumb '+inner+'">'+
+      '<span class="thumb-emoji" aria-hidden="true">'+emoji+'</span>'+
+      (yt ? '<img class="thumb-img" alt="" loading="lazy" src="https://img.youtube.com/vi/'+esc(yt)+'/hqdefault.jpg" onerror="this.remove()">' : '')+
+      (yt ? '<span class="play" aria-hidden="true">▶ 영상</span>' : '')+
+      '<button type="button" class="favbtn'+(r.favorite?' on':'')+'" data-fav="'+esc(r.id)+'" aria-label="'+(r.favorite?'즐겨찾기 해제':'즐겨찾기 추가')+'" aria-pressed="'+(r.favorite?'true':'false')+'">'+(r.favorite?'★':'☆')+'</button>'+
+    '</div>'+
+    '<div class="card-body">'+
+      '<h3 class="card-title">'+esc(r.title)+'</h3>'+
+      '<div class="card-meta">'+
+        '<span class="cat-pill">'+esc(r.category)+'</span>'+
+        (r.time ? '<span class="meta-t">⏱ '+esc(r.time)+'</span>' : '')+
+      '</div>'+
+      '<div class="card-nut">'+(nut.kcal > 0 ? '🔥 약 '+fmtNum(nut.kcal)+' kcal' : '🥄 영양 정보 없음')+'</div>'+
+    '</div>'+
+  '</article>';
+}
+
+function render(){
+  $('#statTotal').textContent = state.recipes.length;
+  $('#statFav').textContent = state.recipes.filter(function(r){ return r.favorite; }).length;
+  renderChips();
+  var toolbar = $('.toolbar');
+  if(toolbar) toolbar.hidden = state.recipes.length === 0;
+  $('#fab').hidden = state.recipes.length === 0;
+
+  var list = visibleRecipes();
+  var grid = $('#grid');
+  var empty = $('#empty');
+
+  grid.innerHTML = list.map(cardHTML).join('');
+
+  if(list.length === 0){
+    grid.hidden = true;
+    empty.hidden = false;
+    if(state.recipes.length === 0){
+      $('#emptyTitle').textContent = '아직 저장한 레시피가 없어요';
+      $('#emptyText').textContent = '유튜브에서 본 그 레시피, 링크랑 같이 담아 두세요.';
+      $('#emptyBtn').textContent = '＋ 첫 레시피 담기';
+      $('#emptyBtn').dataset.mode = 'add';
+    } else {
+      $('#emptyTitle').textContent = '조건에 맞는 레시피가 없어요';
+      $('#emptyText').textContent = '검색어를 바꾸거나 필터를 풀어 보세요.';
+      $('#emptyBtn').textContent = '↺ 필터 초기화';
+      $('#emptyBtn').dataset.mode = 'reset';
+    }
+  } else {
+    grid.hidden = false;
+    empty.hidden = true;
+  }
+
+  $('#searchClear').hidden = state.q.length === 0;
+}
+
+/* =========================================================
+   상세 화면
+   ========================================================= */
+function detailHTML(r){
+  var nut = nutritionOf(r);
+  var yt = youtubeId(r.url);
+  var pct = macroPercents(nut);
+  var checkedCount = r.checked.length;
+  var total = r.ingredients.length;
+  var prog = total ? Math.round(checkedCount/total*100) : 0;
+
+  var missCore = coreIngredients(r).filter(function(it){ return !fridgeSel[it.key]; });
+  var shopLabel = (Object.keys(fridgeSel).length && missCore.length)
+    ? ('🛒 냉장고에 없는 재료 '+missCore.length+'개 담기')
+    : '🛒 재료 전체 장보기 담기';
+
+  var ingHTML = r.ingredients.map(function(line, i){
+    var on = r.checked.indexOf(i) !== -1;
+    return '<li class="ing'+(on?' done':'')+'" data-i="'+i+'" role="checkbox" aria-checked="'+(on?'true':'false')+'" tabindex="0">'+
+      '<span class="box" aria-hidden="true">'+(on?'✓':'')+'</span>'+
+      '<span class="ing-name">'+esc(line)+'</span>'+
+      '<button type="button" class="ing-shop" data-ingadd="'+i+'" aria-label="'+esc(line)+' 장보기에 담기">🛒</button></li>';
+  }).join('');
+
+  var stepsHTML = r.steps.map(function(s){ return '<li>'+esc(s)+'</li>'; }).join('');
+
+  var linkBtn = r.url
+    ? '<a class="btn btn-primary" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">'+
+      (yt ? '▶ 영상 보러가기' : '🔗 링크 열기')+'</a>'
+    : '<span class="btn btn-soft" style="flex:1 1 auto;cursor:default">🔗 저장된 링크 없음</span>';
+
+  var nutInner;
+  if(nut.kcal > 0){
+    var coverage = '';
+    if(!nut.manual && nut.unknown > 0){
+      coverage = '<p class="nut-warn">재료 '+total+'개 중 '+nut.matched+'개만 반영했어요</p>';
+    }
+    nutInner =
+      '<div class="nut-head">'+
+        '<div class="nut-headtext">'+
+          '<p class="nut-eyebrow">1인분 기준</p>'+
+          '<p class="nut-kcal">약 <strong>'+fmtNum(nut.kcal)+'</strong> kcal</p>'+
+          '<span class="nut-say">'+esc(nutComment(nut.kcal))+'</span>'+
+        '</div>'+
+        '<svg class="mascot nut-mascot" viewBox="0 0 220 222" aria-hidden="true"><use href="#chefCat"/></svg>'+
+      '</div>'+
+      '<div class="macro-bar" role="img" aria-label="탄수화물 '+pct.c+'퍼센트, 단백질 '+pct.p+'퍼센트, 지방 '+pct.f+'퍼센트">'+
+        '<span class="m-carb" style="width:'+pct.c+'%"></span>'+
+        '<span class="m-pro" style="width:'+pct.p+'%"></span>'+
+        '<span class="m-fat" style="width:'+pct.f+'%"></span>'+
+      '</div>'+
+      '<ul class="macro-legend">'+
+        '<li><i class="m-carb" style="background:#FFC93C"></i>탄수화물 <b>'+fmtMacro(nut.c)+'g</b></li>'+
+        '<li><i class="m-pro" style="background:#FF8A3D"></i>단백질 <b>'+fmtMacro(nut.p)+'g</b></li>'+
+        '<li><i class="m-fat" style="background:#F0422E"></i>지방 <b>'+fmtMacro(nut.f)+'g</b></li>'+
+      '</ul>'+
+      '<p class="nut-note">'+(nut.manual ? '직접 입력한 값이에요.' : '재료와 인분으로 계산한 대략 추정치예요.')+
+        ' 총 '+nut.servings+'인분 · 실제 조리법에 따라 달라질 수 있어요.</p>'+ coverage;
+  } else {
+    nutInner =
+      '<div class="nut-head">'+
+        '<div class="nut-headtext">'+
+          '<p class="nut-eyebrow">1인분 기준</p>'+
+          '<p class="nut-kcal">영양 정보가 아직 없어요</p>'+
+          '<span class="nut-say">재료를 적으면 계산해 드려요</span>'+
+        '</div>'+
+        '<svg class="mascot nut-mascot" viewBox="0 0 220 222" aria-hidden="true"><use href="#chefCat"/></svg>'+
+      '</div>'+
+      '<p class="nut-note">수정에서 재료에 양을 함께 적으면 칼로리와 탄단지를 계산해 드려요.</p>';
+  }
+
+  return thumbHTML(r, true) +
+    '<button type="button" class="d-close" data-act="close" aria-label="닫기">←</button>'+
+    '<div class="d-scroll">'+
+      '<div class="d-tags">'+
+        '<span class="cat-pill">'+esc(r.category)+'</span>'+
+        (r.time ? '<span class="tag">⏱ '+esc(r.time)+'</span>' : '')+
+        '<span class="tag">🍚 '+r.servings+'인분</span>'+
+      '</div>'+
+      '<h2 class="d-title">'+esc(r.title)+'</h2>'+
+      '<div class="d-actions">'+
+        linkBtn+
+        '<button type="button" class="btn btn-soft" data-act="edit">✏️ 수정</button>'+
+        '<button type="button" class="btn btn-danger" data-act="del">🗑 삭제</button>'+
+      '</div>'+
+      '<section class="nut-card" aria-label="영양 추정">'+nutInner+'</section>'+
+      (total ? '<section class="d-sec">'+
+        '<h3>🧺 재료 <span class="ing-progress" id="ingProgress">'+checkedCount+'/'+total+' 준비</span></h3>'+
+        '<div class="prog"><i id="ingBar" style="width:'+prog+'%"></i></div>'+
+        '<button type="button" class="btn btn-soft d-shop" data-act="shop-add">'+shopLabel+'</button>'+
+        '<ul class="ing-list" id="ingList">'+ingHTML+'</ul>'+
+      '</section>' : '')+
+      (r.steps.length ? '<section class="d-sec"><h3>📝 요약 순서</h3><ol class="steps">'+stepsHTML+'</ol></section>' : '')+
+      (r.memo ? '<section class="memo"><span aria-hidden="true">💡</span><p>'+esc(r.memo)+'</p></section>' : '')+
+      '<p class="d-foot">'+(r.updatedAt ? '최근 수정 '+new Date(r.updatedAt).toLocaleDateString('ko-KR') : '')+'</p>'+
+    '</div>';
+}
+
+function openDetail(id){
+  var r = getRecipe(id);
+  if(!r) return;
+  openId = id;
+  lastFocus = document.activeElement;
+  $('#detailSheet').innerHTML = detailHTML(r);
+  $('#detailOverlay').classList.add('show');
+  document.body.classList.add('lock');
+}
+
+function closeDetail(){
+  $('#detailOverlay').classList.remove('show');
+  openId = null;
+  if(!isAnyOverlayOpen()) document.body.classList.remove('lock');
+}
+
+function refreshDetail(){
+  if(!openId) return;
+  var r = getRecipe(openId);
+  if(!r){ closeDetail(); return; }
+  $('#detailSheet').innerHTML = detailHTML(r);
+}
+
+function isAnyOverlayOpen(){
+  return $('#detailOverlay').classList.contains('show') ||
+         $('#formOverlay').classList.contains('show') ||
+         $('#confirmOverlay').classList.contains('show') ||
+         $('#fridgeOverlay').classList.contains('show') ||
+         $('#shopOverlay').classList.contains('show') ||
+         $('#schoolOverlay').classList.contains('show');
+}
+
+/* =========================================================
+   즐겨찾기 / 재료 체크
+   ========================================================= */
+function toggleFav(id){
+  var r = getRecipe(id);
+  if(!r) return;
+  r.favorite = !r.favorite;
+  r.updatedAt = Date.now();
+  saveRecipes();
+  render();
+  if(openId === id) refreshDetail();
+  toast(r.favorite ? '★ 즐겨찾기에 담았어요' : '즐겨찾기에서 뺐어요');
+}
+
+function toggleIngredient(index){
+  if(!openId) return;
+  var r = getRecipe(openId);
+  if(!r) return;
+  var pos = r.checked.indexOf(index);
+  if(pos === -1) r.checked.push(index); else r.checked.splice(pos,1);
+  saveRecipes();
+
+  var li = $('#ingList .ing[data-i="'+index+'"]');
+  if(li){
+    var on = r.checked.indexOf(index) !== -1;
+    li.classList.toggle('done', on);
+    li.setAttribute('aria-checked', on ? 'true' : 'false');
+    var box = li.querySelector('.box');
+    if(box) box.textContent = on ? '✓' : '';
+  }
+  var total = r.ingredients.length;
+  var progEl = $('#ingProgress'), bar = $('#ingBar');
+  if(progEl) progEl.textContent = r.checked.length+'/'+total+' 준비';
+  if(bar) bar.style.width = (total ? Math.round(r.checked.length/total*100) : 0)+'%';
+}
+
+/* =========================================================
+   추가 / 수정 폼
+   ========================================================= */
+var formCat = CAT_IDS[0];
+
+function buildCatPicker(){
+  $('#fCats').innerHTML = CATS.map(function(c){
+    return '<button type="button" class="cat-opt'+(c.id===formCat?' on':'')+'" data-formcat="'+esc(c.id)+'">'+
+      c.emoji+' '+esc(c.id)+'</button>';
+  }).join('');
+}
+
+function setFormCat(id){
+  formCat = CAT_IDS.indexOf(id) !== -1 ? id : '기타';
+  $$('#fCats .cat-opt').forEach(function(b){
+    b.classList.toggle('on', b.dataset.formcat === formCat);
+  });
+}
+
+function openForm(id){
+  editingId = id || null;
+  var r = id ? getRecipe(id) : null;
+  $('#formHeading').textContent = r ? '레시피 수정' : '레시피 추가';
+  $('#fTitle').value = r ? r.title : '';
+  $('#fUrl').value = r ? r.url : '';
+  $('#fTime').value = r ? r.time : '';
+  $('#fServings').value = r ? r.servings : 2;
+  $('#fIng').value = r ? r.ingredients.join('\n') : '';
+  $('#fSteps').value = r ? r.steps.join('\n') : '';
+  $('#fMemo').value = r ? r.memo : '';
+  if($('#pasteBox')) $('#pasteBox').open = false;
+  if($('#pasteText')) $('#pasteText').value = '';
+  if($('#spHint')) $('#spHint').innerHTML = '제목·재료·순서를 찾아 아래 칸을 채우고 <b>칼로리까지 계산</b>해요.';
+  setFormCat(r ? r.category : CAT_IDS[0]);
+  $('#fManual').checked = !!(r && r.nut);
+  $('#manualGrid').hidden = !$('#fManual').checked;
+
+  var nut = r ? nutritionOf(r) : {kcal:0,c:0,p:0,f:0};
+  if(r && r.nut){ nut = {kcal:r.nut.kcal, c:r.nut.c, p:r.nut.p, f:r.nut.f}; }
+  $('#fKcal').value = nut.kcal ? Math.round(nut.kcal) : '';
+  $('#fCarb').value = nut.c ? r1(nut.c) : '';
+  $('#fProt').value = nut.p ? r1(nut.p) : '';
+  $('#fFat').value = nut.f ? r1(nut.f) : '';
+
+  updateLiveNut();
+  lastFocus = document.activeElement;
+  $('#formOverlay').classList.add('show');
+  document.body.classList.add('lock');
+  setTimeout(function(){ try{ $('#fTitle').focus(); }catch(e){} }, 260);
+}
+
+function closeForm(){
+  $('#formOverlay').classList.remove('show');
+  editingId = null;
+  if(!isAnyOverlayOpen()) document.body.classList.remove('lock');
+}
+
+function parseIngredientText(v){
+  return String(v||'').split(/[\n,、]/).map(function(s){ return s.trim(); }).filter(Boolean);
+}
+function parseStepText(v){
+  return String(v||'').split(/\n/).map(function(s){
+    return s.replace(/^\s*(?:\d+\s*[.)]\s*|[①-⑳]\s*|[-•·]\s*)/,'').trim();
+  }).filter(Boolean);
+}
+
+/* =========================================================
+   ✨ 붙여넣은 댓글·설명 자동 정리
+   ========================================================= */
+var SP_NOISE = /(구독|좋아요|알림\s*설정|댓글|공유|조회수|더보기|채널|https?:|www\.)/;
+var SP_UNIT = /(\d+(?:\.\d+)?|한|두|세|네|다섯|여섯|반)\s*(g|kg|ml|mL|L|리터|개|알|대|쪽|장|모|공기|컵|큰술|작은술|스푼|숟가락|tbsp|tsp|T|t|줌|봉지|봉|캔|팩|마리|근|송이|토막|잎|줄|방울|접시|그릇|포기|단|톨|마디|꼬집)/;
+var SP_COOK = /(넣|볶|끓|썰|섞|익|올리|뿌리|말아|말고|붓|부어|달구|달궈|달군|졸이|데치|구워|굽|튀기|비비|무치|담아|담고|완성|마무리|간을|간하|식혀|재우|삶|풀어|풀고|두르|펴|다지|다져|잘라|돌돌|찍어|감아|끼워|빼|담그|담가|불리|불려|씻|헹구|으깨|걸러|뒤집|뒤적|휘저|켜|꺼내|갈아)/;
+var SP_TIP = /^(?:tip|tips|팁|꿀팁|참고|주의|요령|노하우)\s*[.:：)\-]\s*(.*)$/i;
+var SP_CIRCLED = '①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳';
+
+function spCleanLine(raw){
+  return String(raw==null?'':raw)
+    .replace(/https?:\/\/\S+/g,' ')
+    .replace(/(^|\s)[@#]\S+/g,' ')
+    .replace(/^\s*\d{1,2}:\d{2}(?::\d{2})?\s*/,'')
+    .replace(/^\s*(?:step\s*\d+\s*[:.\-)]?|[\-–—•·*▶▷▸●○■□◆◇★☆>»~=+]+)\s*/i,'')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+
+function spHeader(text){
+  var s = String(text||'').trim()
+    .replace(/^[\s*#\-–—◆◇■□●○★☆\[\]【】()]+/,'')
+    .replace(/[\s*#\-–—◆◇■□●○★☆\[\]【】():：]+$/,'');
+  if(!s) return null;
+  var m = s.match(/^([가-힣A-Za-z ]{1,14})\s*[:：]\s*(.*)$/);
+  var key = m ? m[1] : s;
+  var rest = m ? m[2] : '';
+  var norm = key.replace(/\s+/g,'');
+  if(/^(재료|재료준비|재료들|양념|양념장|양념재료|소스|준비물|재료및양념|재료와양념)$/.test(norm)) return {kind:'ing', rest:rest};
+  if(/^(만드는법|만들기|만드는방법|만드는순서|조리법|조리과정|조리순서|조리방법|순서|요리법|레시피|만들기순서)$/.test(norm)) return {kind:'step', rest:rest};
+  return null;
+}
+
+function spNumbered(line){
+  var s = String(line||'');
+  var m = s.match(/^(\d{1,2})\s*[.)]\s*(.+)$/);
+  if(m) return {n:+m[1], text:m[2]};
+  var c = s.match(/^([①-⑳])\s*(.*)$/);
+  if(c) return {n:SP_CIRCLED.indexOf(c[1])+1, text:c[2]};
+  var e = s.match(/^(?:step|조리\s*순서|순서)\s*(\d{1,2})\s*[:.\-)]?\s*(.*)$/i);
+  if(e) return {n:+e[1], text:e[2]};
+  return null;
+}
+
+function spTrimTail(text){
+  var chars = Array.from ? Array.from(String(text||'').trim()) : String(text||'').trim().split('');
+  while(chars.length){
+    var cp = chars[chars.length-1].codePointAt(0);
+    var isEmoji = cp >= 0x1F000 || (cp >= 0x2600 && cp <= 0x27BF) || (cp >= 0x2B00 && cp <= 0x2BFF) || cp === 0xFE0F || cp === 0x20E3;
+    if(!isEmoji) break;
+    chars.pop();
+    while(chars.length && /\s/.test(chars[chars.length-1])) chars.pop();
+  }
+  return chars.join('');
+}
+
+function spIsIngredient(line){
+  if(SP_COOK.test(line)) return false;
+  if(SP_UNIT.test(line) && findFood(line)) return true;
+  if(/(약간|조금|적당량|적당|한\s*줌|반\s*개)/.test(line) && findFood(line)) return true;
+  return false;
+}
+
+function spIsStep(line){
+  if(!line || line.length < 6) return false;
+  if(!SP_COOK.test(line)) return false;
+  return /(요|다|죠|니다|세요|까|네요)[\s.!?~]*$/.test(line);
+}
+
+/* 붙여넣은 글 → {title, ingredients, steps, servings, time} */
+function parseSmartText(text){
+  var out = {title:'', ingredients:[], steps:[], servings:0, time:'', memo:''};
+  var tips = [];
+  var src = String(text==null?'':text).replace(/\r/g,'');
+  if(!src.trim()) return out;
+
+  var lines = src.split('\n').map(spCleanLine);
+
+  /* 제목: 섹션 머리글이 나오기 전의 첫 줄 */
+  var pool = [];
+  for(var i=0;i<lines.length && pool.length<3;i++){
+    var ln = lines[i];
+    if(!ln || SP_NOISE.test(ln)) continue;
+    var num0 = spNumbered(ln);
+    var b0 = num0 ? num0.text : ln;
+    if(spHeader(b0) || num0) break;
+    pool.push(b0);
+  }
+  for(var p=0;p<pool.length;p++){
+    var t = spTrimTail(pool[p].replace(/\s*[:;][)DpP]+$/,'').replace(/~/g,'').replace(/\s+\d{1,2}\s*인분\s*$/,''));
+    if(!t) continue;
+    if(spIsIngredient(t)) continue;
+    if(/^(약\s*)?\d{1,3}\s*(인분|분|시간)$/.test(t)) continue;
+    out.title = t.slice(0,60);
+    break;
+  }
+
+  var mode = '';
+  lines.forEach(function(line){
+    if(!line || SP_NOISE.test(line)) return;
+    var tip = line.match(SP_TIP);
+    if(tip && tip[1]){ tips.push(tip[1].replace(/\s+/g,' ').trim()); return; }
+    var numbered = spNumbered(line);
+    var body = numbered ? numbered.text : line;
+    var head = spHeader(body);
+    if(head){
+      mode = head.kind;
+      if(head.rest) take(head.rest, mode, null);
+      return;
+    }
+    take(body, mode, numbered);
+  });
+
+  function take(body, curMode, numbered){
+    var b = String(body||'').replace(/\s+/g,' ').trim();
+    if(!b) return;
+
+    if(!out.servings){
+      var sv = b.match(/(\d{1,2})\s*인분/);
+      if(sv) out.servings = Math.max(1, Math.min(20, parseInt(sv[1],10)));
+    }
+    if(!out.time && b.length <= 24 && !SP_COOK.test(b) && !/(요|다|죠|니다|세요|까)[\s.!?~]*$/.test(b)){
+      var tm = b.match(/(\d{1,3}\s*(?:시간|분))/);
+      if(tm) out.time = tm[1].replace(/\s+/g,'');
+    }
+
+    if(numbered){
+      if(curMode === 'ing' || spIsIngredient(b)){ addIngredients(b); return; }
+      var st = cleanStep(b);
+      if(st) out.steps.push(st);
+      return;
+    }
+    if(curMode === 'ing'){ addIngredients(b); return; }
+    if(spIsStep(b)){ out.steps.push(cleanStep(b)); return; }
+    if(spIsIngredient(b)){ addIngredients(b); return; }
+  }
+
+  function addIngredients(body){
+    var each = /씩/.test(body);
+    var amtAll = body.match(/(\d+(?:\.\d+)?(?:\s*\/\s*\d+)?)\s*(숟가락|스푼|큰술|작은술|컵|g|kg|ml|개|대|장|쪽|모|줌|봉지|캔|팩)/);
+    body.split(/[,、]/).forEach(function(part){
+      var v = String(part||'')
+        .replace(/씩/g,'')
+        .replace(/^[\-–—•·*\s]+/,'')
+        .replace(/[.。]+$/,'')
+        .replace(/\s+/g,' ')
+        .trim();
+      if(!v || v.length > 40) return;
+      if(!findFood(v) && !SP_UNIT.test(v)) return;
+      if(each && amtAll && !/\d/.test(v)) v = v + ' ' + amtAll[0].replace(/\s+/g,' ');
+      if(out.ingredients.indexOf(v) === -1) out.ingredients.push(v);
+    });
+  }
+
+  function cleanStep(s){
+    return String(s||'')
+      .replace(/^[\-–—•·*\s]+/,'')
+      .replace(/\s+/g,' ')
+      .replace(/\s*[~]+$/,'')
+      .trim();
+  }
+
+  if(tips.length) out.memo = tips.join(' / ');
+  return out;
+}
+
+function applySmartParse(){
+  var box = $('#pasteText');
+  var text = box ? box.value : '';
+  if(!String(text||'').trim()){ toast('붙여넣은 글이 없어요'); if(box){ try{ box.focus(); }catch(e){} } return; }
+  var p = parseSmartText(text);
+  var filled = [];
+
+  if(p.title && !$('#fTitle').value.trim()){
+    $('#fTitle').value = p.title;
+    filled.push('제목');
+  }
+  if(p.ingredients.length){
+    var ing = parseIngredientText($('#fIng').value);
+    var addedIng = 0;
+    p.ingredients.forEach(function(x){ if(ing.indexOf(x) === -1){ ing.push(x); addedIng++; } });
+    if(addedIng){ $('#fIng').value = ing.join('\n'); filled.push('재료 '+addedIng+'개'); }
+  }
+  if(p.steps.length){
+    var st = parseStepText($('#fSteps').value);
+    var addedSt = 0;
+    p.steps.forEach(function(x){ if(st.indexOf(x) === -1){ st.push(x); addedSt++; } });
+    if(addedSt){ $('#fSteps').value = st.join('\n'); filled.push('순서 '+addedSt+'단계'); }
+  }
+  if(p.servings && num($('#fServings').value) !== p.servings){
+    $('#fServings').value = p.servings;
+    filled.push(p.servings+'인분');
+  }
+  if(p.time && !$('#fTime').value.trim()){
+    $('#fTime').value = p.time;
+    filled.push('조리시간 '+p.time);
+  }
+  if(p.memo && !$('#fMemo').value.trim()){
+    $('#fMemo').value = p.memo;
+    filled.push('메모');
+  }
+
+  updateLiveNut();
+
+  if(!filled.length){
+    if($('#spHint')) $('#spHint').textContent = '정리할 내용을 찾지 못했어요. 재료나 순서를 한 줄씩 넣어 다시 해보세요.';
+    toast('정리할 내용을 찾지 못했어요');
+    return;
+  }
+  if($('#spHint')) $('#spHint').textContent = '✨ '+filled.join(' · ')+' 채웠어요. 아래에서 확인해 보세요.';
+  toast('✨ '+filled.join(' · ')+' 채웠어요');
+  box.value = '';
+  if($('#pasteBox')) $('#pasteBox').open = false;
+  try{ $('#fIng').scrollIntoView({block:'center'}); }catch(e){}
+}
+
+function draftFromForm(){
+  var servings = Math.max(1, Math.min(50, Math.round(num($('#fServings').value) || 2)));
+  return {
+    title: $('#fTitle').value.trim(),
+    url: $('#fUrl').value.trim(),
+    category: formCat,
+    time: $('#fTime').value.trim(),
+    servings: servings,
+    ingredients: parseIngredientText($('#fIng').value),
+    steps: parseStepText($('#fSteps').value),
+    memo: $('#fMemo').value.trim()
+  };
+}
+
+function updateLiveNut(){
+  var d = draftFromForm();
+  var n = nutritionOf({ ingredients:d.ingredients, servings:d.servings, nut:null });
+  var manual = $('#fManual').checked;
+  var unknown = n.unknown || 0;
+  var html = '<div class="nl-row"><span>1인분 약 <b>'+fmtNum(n.kcal)+'</b> kcal</span></div>'+
+    '<div class="nl-sub">탄수화물 '+fmtMacro(n.c)+'g · 단백질 '+fmtMacro(n.p)+'g · 지방 '+fmtMacro(n.f)+'g</div>';
+  if(!d.ingredients.length){
+    html += '<div class="nl-sub">재료를 적으면 자동으로 계산돼요.</div>';
+  } else if(unknown > 0){
+    html += '<div class="nl-sub">재료 '+d.ingredients.length+'개 중 '+(d.ingredients.length-unknown)+'개 반영 · 모르는 재료는 빼고 계산했어요.</div>';
+  } else {
+    html += '<div class="nl-sub">재료 '+d.ingredients.length+'개를 모두 반영한 대략 추정치예요.</div>';
+  }
+  if(manual) html += '<div class="nl-sub"><b style="font-size:12px">직접 입력 사용 중</b> — 아래 값을 저장해요.</div>';
+  $('#nutLive').innerHTML = html;
+}
+
+function submitForm(e){
+  e.preventDefault();
+  var d = draftFromForm();
+  if(!d.title){
+    toast('요리 이름을 적어 주세요');
+    try{ $('#fTitle').focus(); }catch(err){}
+    return;
+  }
+  var manual = $('#fManual').checked;
+  var nut = null;
+  if(manual){
+    var kcal = num($('#fKcal').value);
+    if(kcal > 0){
+      nut = { kcal: Math.round(kcal), c:num($('#fCarb').value), p:num($('#fProt').value), f:num($('#fFat').value) };
+    }
+  }
+
+  if(editingId){
+    var r = getRecipe(editingId);
+    if(!r){ toast('레시피를 찾지 못했어요'); closeForm(); return; }
+    r.title = d.title; r.url = d.url; r.category = d.category; r.time = d.time;
+    r.servings = d.servings; r.ingredients = d.ingredients; r.steps = d.steps;
+    r.memo = d.memo; r.nut = nut; r.updatedAt = Date.now();
+    r.checked = r.checked.filter(function(i){ return i < r.ingredients.length; });
+    saveRecipes();
+    closeForm();
+    render();
+    if(openId === r.id) refreshDetail();
+    toast('레시피를 고쳤어요');
+  } else {
+    var fresh = normalizeRecipe({
+      id: uid(), title:d.title, url:d.url, category:d.category, time:d.time,
+      servings:d.servings, ingredients:d.ingredients, steps:d.steps, memo:d.memo,
+      nut:nut, favorite:false, checked:[], createdAt:Date.now(), updatedAt:Date.now()
+    });
+    state.recipes.push(fresh);
+    saveRecipes();
+    closeForm();
+    state.cat = '전체';
+    state.q = '';
+    $('#search').value = '';
+    state.favOnly = false;
+    render();
+    toast('레시피를 담았어요 🍳');
+    setTimeout(function(){ openDetail(fresh.id); }, 120);
+  }
+}
+
+/* =========================================================
+   삭제
+   ========================================================= */
+function askDelete(id){
+  var r = getRecipe(id);
+  if(!r) return;
+  pendingDelete = id;
+  pendingChild = null;
+  $('#confirmTitle').textContent = '이 레시피를 지울까요?';
+  $('#confirmText').innerHTML = '<b>'+esc(r.title)+'</b><br>지우면 되돌릴 수 없어요.';
+  $('#confirmOverlay').classList.add('show');
+  document.body.classList.add('lock');
+}
+function askDeleteChild(id){
+  var i = childIndex(id);
+  if(i < 0) return;
+  var k = school.children[i];
+  pendingDelete = null;
+  pendingChild = id;
+  $('#confirmTitle').textContent = '이 아이를 지울까요?';
+  $('#confirmText').innerHTML = '<b>'+esc(childName(k, i))+'</b>의 하교 시간과 메모가 사라져요.';
+  $('#confirmOverlay').classList.add('show');
+  document.body.classList.add('lock');
+}
+function closeConfirm(){
+  $('#confirmOverlay').classList.remove('show');
+  pendingDelete = null;
+  pendingChild = null;
+  if(!isAnyOverlayOpen()) document.body.classList.remove('lock');
+}
+function doDelete(){
+  if(pendingChild){
+    var cid = pendingChild;
+    closeConfirm();
+    removeSchoolChild(cid);
+    return;
+  }
+  if(!pendingDelete) return;
+  var id = pendingDelete;
+  var r = getRecipe(id);
+  state.recipes = state.recipes.filter(function(x){ return x.id !== id; });
+  saveRecipes();
+  closeConfirm();
+  if(openId === id) closeDetail();
+  render();
+  toast((r ? '“'+r.title+'” ' : '')+'레시피를 지웠어요');
+}
+
+/* =========================================================
+   백업 / 불러오기
+   ========================================================= */
+function exportJSON(){
+  var payload = {
+    app: '민정님의 레시피북',
+    version: STORE_VERSION,
+    exportedAt: new Date().toISOString(),
+    recipes: state.recipes,
+    shopping: shopItems,
+    school: schoolExportData()
+  };
+  try {
+    var blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = '레시피북-백업-'+todayStr()+'.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 3000);
+    toast('레시피 '+state.recipes.length+'개를 백업 파일로 내보냈어요');
+  } catch(e){
+    toast('백업 파일을 만들지 못했어요');
+  }
+}
+
+function importText(text){
+  var data;
+  try { data = JSON.parse(text); }
+  catch(e){ toast('백업 파일을 읽지 못했어요 (JSON 형식 확인)'); return; }
+  var list = Array.isArray(data) ? data : (data && data.recipes);
+  if(!Array.isArray(list)){ toast('레시피 목록을 찾지 못했어요'); return; }
+
+  var incoming = purgeLegacySeedLinks(list.map(normalizeRecipe).filter(Boolean));
+  var shopAdded = Array.isArray(data.shopping) ? importShop(data.shopping) : 0;
+  var schoolMerged = importSchoolData(data.school);
+  if(!incoming.length && !shopAdded && !schoolMerged){ toast('불러올 레시피가 없어요'); return; }
+
+  var index = {};
+  state.recipes.forEach(function(r, i){ index[r.id] = i; });
+  var added = 0, updated = 0;
+  incoming.forEach(function(r){
+    if(Object.prototype.hasOwnProperty.call(index, r.id)){
+      state.recipes[index[r.id]] = r;
+      updated++;
+    } else {
+      state.recipes.push(r);
+      index[r.id] = state.recipes.length - 1;
+      added++;
+    }
+  });
+  saveRecipes();
+  render();
+  if(openId) refreshDetail();
+  toast('레시피 '+added+'개 추가 · '+updated+'개 업데이트했어요' + (shopAdded ? ' · 장보기 '+shopAdded+'개' : '') + (schoolMerged ? ' · 하교 시간 '+schoolMerged+'명' : ''));
+}
+
+/* =========================================================
+   🧊 냉장고 파먹기 — 재료 → 메뉴 추천
+   ========================================================= */
+/* 양념·기본 재료: 핵심 재료를 셀 때 뺀다 */
+var PANTRY = {
+  '물':1,'소금':1,'후추':1,'설탕':1,'간장':1,'식용유':1,'참기름':1,'고추장':1,'고춧가루':1,
+  '마늘':1,'올리고당':1,'알룰로스':1,'꿀':1,'미림':1,'액젓':1,'다시다':1,'굴소스':1,'케첩':1,
+  '마요네즈':1,'베이킹파우더':1,'감자전분':1,'부침가루':1,'빵가루':1,'버터':1
+};
+
+var FOOD_EMOJI = {
+  '달걀':'🥚','쌀밥':'🍚','잡곡밥':'🍚','소고기':'🥩','돼지고기':'🍖','삼겹살':'🥓','닭고기':'🍗',
+  '닭가슴살':'🍗','두부':'🤍','순두부':'🤍','감자':'🥔','고구마':'🍠','양파':'🧅','대파':'🌿',
+  '당근':'🥕','애호박':'🥒','단호박':'🎃','김치':'🥬','떡':'🍡','어묵':'🍢','라면':'🍜',
+  '파스타':'🍝','소면':'🍜','당면':'🍜','버섯':'🍄','새송이버섯':'🍄','시금치':'🥬','콩나물':'🌱',
+  '브로콜리':'🥦','오이':'🥒','고추':'🌶️','파프리카':'🫑','가지':'🍆','무':'🥬','양배추':'🥬',
+  '배추':'🥬','햄':'🥓','소시지':'🌭','베이컨':'🥓','만두':'🥟','식빵':'🍞','새우':'🦐',
+  '오징어':'🦑','고등어':'🐟','참치캔':'🐟','미역':'🌊','다시마':'🌊','멸치':'🐟','치즈':'🧀',
+  '우유':'🥛','바나나':'🍌','사과':'🍎','배':'🍐','토마토':'🍅','옥수수':'🌽','깻잎':'🌿',
+  '상추':'🥬','밀가루':'🌾','부침가루':'🌾','빵가루':'🍞','감자전분':'🥔','쇠고기':'🥩'
+};
+
+/* 냉장고 단골 재료 칩 */
+var F_STAPLES = [
+  {key:'달걀', label:'계란', emoji:'🥚'},
+  {key:'삼겹살', label:'삼겹살', emoji:'🥓'},
+  {key:'새송이버섯', label:'새송이버섯', emoji:'🍄'},
+  {key:'김치', label:'김치', emoji:'🥬'},
+  {key:'대파', label:'대파', emoji:'🌿'},
+  {key:'양파', label:'양파', emoji:'🧅'},
+  {key:'두부', label:'두부', emoji:'🤍'},
+  {key:'떡', label:'떡', emoji:'🍡'},
+  {key:'어묵', label:'어묵', emoji:'🍢'},
+  {key:'소고기', label:'소고기', emoji:'🥩'},
+  {key:'돼지고기', label:'돼지고기', emoji:'🍖'},
+  {key:'닭고기', label:'닭고기', emoji:'🍗'},
+  {key:'감자', label:'감자', emoji:'🥔'},
+  {key:'애호박', label:'애호박', emoji:'🥒'},
+  {key:'바나나', label:'바나나', emoji:'🍌'},
+  {key:'우유', label:'우유', emoji:'🥛'}
+];
+
+function dm(label, foods){ return {label:label, foods: foods || [label]}; }
+
+/* 집밥 메뉴 사전 (30가지) */
+var DISHES = [
+  {name:'김치볶음밥', emoji:'🍚', kcal:480, desc:'김치와 계란만 있으면 10분 완성', mains:[dm('김치'), dm('계란',['달걀']), dm('대파')]},
+  {name:'계란찜', emoji:'🥚', kcal:150, desc:'부드러워서 아이 반찬으로 딱', mains:[dm('계란',['달걀']), dm('대파')]},
+  {name:'두부김치', emoji:'🍲', kcal:320, desc:'두부와 김치로 든든한 밥도둑', mains:[dm('두부'), dm('김치'), dm('돼지고기')]},
+  {name:'감자채볶음', emoji:'🥔', kcal:180, desc:'채 썬 감자를 아삭하게 볶아요', mains:[dm('감자'), dm('양파')]},
+  {name:'애호박전', emoji:'🥒', kcal:220, desc:'애호박 하나로 간단한 반찬', mains:[dm('애호박'), dm('계란',['달걀'])]},
+  {name:'돼지고기 김치찌개', emoji:'🍲', kcal:380, desc:'김치가 익을수록 깊은 맛', mains:[dm('돼지고기'), dm('김치'), dm('두부')]},
+  {name:'계란국', emoji:'🥣', kcal:90, desc:'계란 하나로 뚝딱 끓이는 국', mains:[dm('계란',['달걀']), dm('대파')]},
+  {name:'버섯전골', emoji:'🍄', kcal:260, desc:'버섯과 두부로 담백하게', mains:[dm('버섯',['버섯','새송이버섯']), dm('두부'), dm('대파')]},
+  {name:'프렌치토스트', emoji:'🍞', kcal:320, desc:'식빵·계란·우유로 달콤한 아침', mains:[dm('식빵'), dm('계란',['달걀']), dm('우유')]},
+  {name:'스팸마요덮밥', emoji:'🍱', kcal:560, desc:'아이들이 좋아하는 한 그릇', mains:[dm('스팸',['햄']), dm('계란',['달걀'])]},
+  {name:'참치김치찌개', emoji:'🍲', kcal:300, desc:'참치캔으로 더 간단하게', mains:[dm('참치캔'), dm('김치'), dm('두부')]},
+  {name:'참치마요덮밥', emoji:'🍱', kcal:520, desc:'참치캔 하나로 만드는 한 그릇', mains:[dm('참치캔'), dm('양파')]},
+  {name:'고구마맛탕', emoji:'🍠', kcal:300, desc:'달콤한 겉바속촉 간식', mains:[dm('고구마')]},
+  {name:'감자조림', emoji:'🥔', kcal:200, desc:'아이도 좋아하는 달큰한 반찬', mains:[dm('감자'), dm('양파')]},
+  {name:'어묵볶음', emoji:'🍢', kcal:240, desc:'어묵과 양파로 간단 반찬', mains:[dm('어묵'), dm('양파')]},
+  {name:'떡국', emoji:'🥣', kcal:450, desc:'떡과 계란, 대파로 뚝딱 한 그릇', mains:[dm('떡'), dm('계란',['달걀']), dm('대파')]},
+  {name:'간장떡볶이', emoji:'🍢', kcal:420, desc:'맵지 않아 아이도 잘 먹어요', mains:[dm('떡'), dm('어묵'), dm('양파')]},
+  {name:'두부조림', emoji:'🍳', kcal:210, desc:'두부 한 모로 밥도둑 반찬', mains:[dm('두부'), dm('대파')]},
+  {name:'소고기무국', emoji:'🍲', kcal:250, desc:'무와 소고기로 시원한 국', mains:[dm('소고기'), dm('무')]},
+  {name:'닭볶음탕', emoji:'🍗', kcal:480, desc:'닭고기와 감자로 든든하게', mains:[dm('닭고기'), dm('감자'), dm('양파')]},
+  {name:'삼겹살 김치볶음', emoji:'🥘', kcal:520, desc:'삼겹살과 김치로 밥도둑 한 접시', mains:[dm('삼겹살'), dm('김치')]},
+  {name:'김치전', emoji:'🥞', kcal:300, desc:'김치만 있으면 바삭한 부침개', mains:[dm('김치')]},
+  {name:'새송이 버섯구이', emoji:'🍄', kcal:150, desc:'새송이버섯만으로 고기 맛', mains:[dm('새송이버섯')]},
+  {name:'바나나 우유 스무디', emoji:'🥤', kcal:180, desc:'바나나와 우유로 간단 간식', mains:[dm('바나나'), dm('우유')]},
+  {name:'콩나물국', emoji:'🥣', kcal:80, desc:'콩나물과 대파로 시원하게', mains:[dm('콩나물'), dm('대파')]},
+  {name:'미역국', emoji:'🥣', kcal:150, desc:'미역과 소고기로 정갈한 국', mains:[dm('미역'), dm('소고기')]},
+  {name:'오이무침', emoji:'🥗', kcal:90, desc:'오이 하나로 아삭한 반찬', mains:[dm('오이')]},
+  {name:'두부버섯볶음', emoji:'🍄', kcal:200, desc:'두부와 버섯으로 담백하게', mains:[dm('두부'), dm('버섯',['버섯','새송이버섯'])]},
+  {name:'소시지야채볶음', emoji:'🌭', kcal:320, desc:'소시지와 양파로 아이 반찬', mains:[dm('소시지'), dm('양파'), dm('파프리카')]},
+  {name:'토마토달걀볶음', emoji:'🍅', kcal:220, desc:'토마토와 계란으로 든든하게', mains:[dm('토마토'), dm('계란',['달걀'])]}
+];
+
+/* 냉장고 선택 상태: key(재료 이름) → 화면에 보여 줄 이름 */
+var fridgeSel = {};
+var fridgeOpen = false;
+var chipExpand = false;
+var dishExpand = false;
+
+/* 레시피 재료 → 핵심 재료(양념 제외, 중복 제거) */
+function coreIngredients(r){
+  var out = [], seen = {};
+  (r && r.ingredients ? r.ingredients : []).forEach(function(line){
+    var raw = String(line==null?'':line);
+    var f = findFood(raw);
+    var key, label;
+    if(f){
+      key = f.n;
+      if(PANTRY[key]) return;
+    } else {
+      key = raw.split(/\d/)[0].replace(/[()\[\],·]/g,' ').replace(/\s+/g,' ').trim();
+      if(!key || key.length > 14) return;
+      if(PANTRY[key]) return;
+    }
+    label = key;
+    if(seen[key]) return;
+    seen[key] = 1;
+    out.push({key:key, label:label, line:raw});
+  });
+  return out;
+}
+
+function fridgeCount(){ return Object.keys(fridgeSel).length; }
+
+function addFridgeText(raw){
+  var added = 0;
+  String(raw==null?'':raw).split(/[,，、\n\/]/).forEach(function(part){
+    var t = String(part).replace(/^[\s·•\-]+/,'').replace(/[\s·•\-]+$/,'').trim();
+    if(!t) return;
+    var f = findFood(t);
+    var key = f ? f.n : t;
+    if(fridgeSel[key]) return;
+    fridgeSel[key] = f ? (/\d/.test(t) ? f.n : t) : t;
+    added++;
+  });
+  return added;
+}
+
+function fridgeChipAll(){
+  var list = [], seen = {};
+  F_STAPLES.forEach(function(c){
+    if(seen[c.key]) return;
+    seen[c.key] = 1;
+    list.push({key:c.key, label:c.label, emoji:c.emoji});
+  });
+  var counts = {};
+  state.recipes.forEach(function(r){
+    coreIngredients(r).forEach(function(it){
+      if(seen[it.key]) return;
+      counts[it.key] = (counts[it.key] || 0) + 1;
+    });
+  });
+  Object.keys(counts).sort(function(a,b){ return (counts[b]-counts[a]) || a.localeCompare(b); }).forEach(function(k){
+    if(list.length >= 26) return;
+    seen[k] = 1;
+    list.push({key:k, label:k, emoji:FOOD_EMOJI[k]||'🥕'});
+  });
+  Object.keys(fridgeSel).forEach(function(k){
+    if(seen[k]) return;
+    seen[k] = 1;
+    list.push({key:k, label:fridgeSel[k], emoji:FOOD_EMOJI[k]||'🥕'});
+  });
+  return list;
+}
+
+function fridgeRecipes(){
+  var out = [];
+  state.recipes.forEach(function(r){
+    var core = coreIngredients(r);
+    if(!core.length) return;
+    var have = [], miss = [];
+    core.forEach(function(it){ (fridgeSel[it.key] ? have : miss).push(it); });
+    if(!have.length) return;
+    out.push({r:r, core:core, have:have, miss:miss, pct:Math.round(have.length/core.length*100)});
+  });
+  out.sort(function(a,b){
+    if(b.pct !== a.pct) return b.pct - a.pct;
+    if(b.have.length !== a.have.length) return b.have.length - a.have.length;
+    return b.r.createdAt - a.r.createdAt;
+  });
+  return out;
+}
+
+function fridgeDishes(){
+  var out = [];
+  DISHES.forEach(function(d){
+    var have = [], miss = [];
+    d.mains.forEach(function(m){
+      var hit = m.foods.some(function(f){ return !!fridgeSel[f]; });
+      (hit ? have : miss).push(m);
+    });
+    if(!have.length) return;
+    out.push({dish:d, have:have, miss:miss, pct:Math.round(have.length/d.mains.length*100)});
+  });
+  out.sort(function(a,b){ return (b.pct-a.pct) || (b.have.length-a.have.length); });
+  return out;
+}
+
+function frPill(it, have){
+  return '<span class="fr-pill '+(have?'ok':'no')+'">'+esc(it.label)+(have?' ✅':' 🛒')+'</span>';
+}
+
+function recipeRecHTML(item){
+  var r = item.r;
+  var cat = CAT_INDEX[r.category] != null ? 'cat-'+CAT_INDEX[r.category] : 'cat-'+CAT_INDEX['기타'];
+  var badge = item.pct >= 100
+    ? '<span class="fr-pct full">핵심 재료 100% 있어요!</span>'
+    : '<span class="fr-pct">핵심 재료 '+item.pct+'%</span>';
+  var pills = item.core.map(function(it){ return frPill(it, !!fridgeSel[it.key]); }).join('');
+  var foot = item.miss.length
+    ? '<button type="button" class="fr-add" data-recadd="'+esc(r.id)+'">🛒 부족 '+item.miss.length+'개 담기</button>'
+    : '<span class="fr-full">재료 다 있어요! 🎉</span>';
+  return '<div class="fr-card" data-rec="'+esc(r.id)+'" role="button" tabindex="0" aria-label="'+esc(r.title)+' 레시피 열기">'+
+    '<div class="fr-thumb '+cat+'" aria-hidden="true">'+esc(CAT_EMOJI[r.category]||'🍽️')+'</div>'+
+    '<div class="fr-body">'+
+      '<div class="fr-top"><h4 class="fr-title">'+esc(r.title)+'</h4></div>'+
+      badge+
+      '<div class="fr-pills">'+pills+'</div>'+
+      '<div class="fr-foot"><span class="fr-meta">'+(r.time ? '⏱ '+esc(r.time)+' · ' : '')+r.servings+'인분</span>'+foot+'</div>'+
+    '</div>'+
+  '</div>';
+}
+
+function dishRecHTML(item){
+  var d = item.dish;
+  var pills = d.mains.map(function(m){ return frPill(m, item.have.indexOf(m) !== -1); }).join('');
+  var add = item.miss.length
+    ? '<button type="button" class="fd-add" data-dishadd="'+esc(d.name)+'" aria-label="'+esc(d.name)+' 부족한 재료 장보기에 담기">🛒</button>'
+    : '';
+  return '<div class="fd" data-dish="'+esc(d.name)+'">'+
+    '<span class="fd-emoji" aria-hidden="true">'+d.emoji+'</span>'+
+    '<div class="fd-body">'+
+      '<div class="fd-top"><b class="fd-name">'+esc(d.name)+'</b><span class="fd-kcal">약 '+fmtNum(d.kcal)+'kcal</span></div>'+
+      '<p class="fd-desc">'+esc(d.desc)+'</p>'+
+      '<div class="fr-pills">'+pills+'</div>'+
+    '</div>'+ add +
+  '</div>';
+}
+
+function renderFridgeResults(){
+  var recList = $('#frRecipeList'), dishList = $('#frDishList'), more = $('#frDishMore');
+  var n = fridgeCount();
+  if(!n){
+    $('#frRecipeCount').textContent = '0';
+    $('#frDishCount').textContent = '0';
+    recList.innerHTML = '<p class="fr-note">냉장고 재료를 고르면 <b>내 레시피북</b>에서 만들 수 있는 요리를 찾아 드려요.</p>';
+    dishList.innerHTML = '<p class="fr-note">재료를 하나만 골라도 바로 메뉴를 찾아 드려요. 예: <b>계란 · 김치 · 두부</b></p>';
+    if(more) more.hidden = true;
+    return;
+  }
+  var recs = fridgeRecipes();
+  var dishes = fridgeDishes();
+  $('#frRecipeCount').textContent = recs.length;
+  $('#frDishCount').textContent = dishes.length;
+
+  recList.innerHTML = recs.length
+    ? recs.map(recipeRecHTML).join('')
+    : '<p class="fr-note">이 재료로 만들 수 있는 저장 레시피는 아직 없어요. 아래 집밥 메뉴를 봐 주세요!</p>';
+
+  var limit = dishExpand ? dishes.length : Math.min(6, dishes.length);
+  dishList.innerHTML = dishes.length
+    ? dishes.slice(0, limit).map(dishRecHTML).join('')
+    : '<p class="fr-note">이 재료로 만들 수 있는 메뉴를 찾지 못했어요. 다른 재료도 골라 보세요.</p>';
+  if(more){
+    more.hidden = dishes.length <= limit;
+    more.textContent = dishExpand ? '접기' : '＋ 메뉴 더 보기 ('+(dishes.length-limit)+')';
+  }
+}
+
+function renderFridge(){
+  var keys = Object.keys(fridgeSel);
+  $('#fridgeCount').textContent = keys.length+'개';
+
+  var selHTML = keys.map(function(k){
+    return '<button type="button" class="fsel" data-fsel="'+esc(k)+'">'+esc(fridgeSel[k])+'<i aria-hidden="true">✕</i></button>';
+  }).join('');
+  if(keys.length) selHTML += '<button type="button" class="fsel-go" data-fjump="1">메뉴 보기 ↓</button>';
+  $('#fridgeSelWrap').innerHTML = selHTML;
+  $('#fridgeSelWrap').hidden = keys.length === 0;
+
+  var all = fridgeChipAll();
+  var LIMIT = 18;
+  var shown = chipExpand ? all : all.slice(0, LIMIT);
+  $('#fridgeChips').innerHTML = shown.map(function(c){
+    var on = !!fridgeSel[c.key];
+    return '<button type="button" class="fchip'+(on?' on':'')+'" data-fchip="'+esc(c.key)+'" data-flabel="'+esc(c.label)+'" aria-pressed="'+(on?'true':'false')+'">'+
+      '<span aria-hidden="true">'+c.emoji+'</span>'+esc(c.label)+'</button>';
+  }).join('');
+  var more = $('#fridgeChipMore');
+  more.hidden = all.length <= LIMIT;
+  more.textContent = chipExpand ? '접기' : '＋ 재료 더 보기 ('+(all.length-LIMIT)+')';
+
+  $('#fridgeSay').innerHTML = keys.length
+    ? ('냉장고 <b>'+keys.length+'가지</b> 재료로 만들 수 있는 메뉴를 모았어요!')
+    : '냉장고에 있는 재료를 눌러 주세요. 메뉴를 찾아 드릴게요!';
+  $('#fridgeHeadSub').textContent = keys.length ? keys.map(function(k){ return fridgeSel[k]; }).join(' · ') : '냉장고에 있는 재료로 메뉴를 찾아 드려요';
+
+  renderFridgeResults();
+}
+
+function openFridge(){
+  fridgeOpen = true;
+  lastFocus = document.activeElement;
+  renderFridge();
+  $('#fridgeOverlay').classList.add('show');
+  document.body.classList.add('lock');
+}
+
+function closeFridge(){
+  fridgeOpen = false;
+  $('#fridgeOverlay').classList.remove('show');
+  if(!isAnyOverlayOpen()) document.body.classList.remove('lock');
+}
+
+function toggleFridgeChip(key, label){
+  if(fridgeSel[key]) delete fridgeSel[key];
+  else fridgeSel[key] = label || key;
+  chipExpand = false; dishExpand = false;
+  renderFridge();
+}
+
+function applyFridgeInput(){
+  var inp = $('#fridgeInput');
+  if(!inp) return;
+  var v = inp.value;
+  if(!String(v).trim()){ toast('냉장고 재료를 적어 주세요'); inp.focus(); return; }
+  var n = addFridgeText(v);
+  inp.value = '';
+  chipExpand = false; dishExpand = false;
+  renderFridge();
+  toast(n ? ('냉장고에 '+n+'가지 재료를 더했어요') : '이미 고른 재료예요');
+  var list = $('#frRecipeList');
+  if(list && n){ try{ list.scrollIntoView({block:'start', behavior:'smooth'}); }catch(e){} }
+}
+
+function addMissingFromRecipe(id){
+  var r = getRecipe(id);
+  if(!r) return;
+  var miss = coreIngredients(r).filter(function(it){ return !fridgeSel[it.key]; });
+  toastShop(addShopItems(miss.map(function(it){ return it.line; }), 'recipe:'+id));
+}
+
+function addMissingFromDish(name){
+  var dish = null;
+  DISHES.forEach(function(d){ if(d.name === name) dish = d; });
+  if(!dish) return;
+  var miss = [];
+  dish.mains.forEach(function(m){
+    var hit = m.foods.some(function(f){ return !!fridgeSel[f]; });
+    if(!hit) miss.push(m.label);
+  });
+  toastShop(addShopItems(miss, 'dish:'+name));
+}
+
+/* 상세 화면에서 장보기로 담기: 냉장고에 있는 재료는 빼고 */
+function addRecipeShopping(id){
+  var r = getRecipe(id);
+  if(!r) return;
+  var miss = coreIngredients(r).filter(function(it){ return !fridgeSel[it.key]; });
+  var texts = (fridgeCount() && miss.length) ? miss.map(function(it){ return it.line; }) : r.ingredients.slice();
+  toastShop(addShopItems(texts, 'recipe:'+id));
+}
+
+/* =========================================================
+   🛒 장보기
+   ========================================================= */
+var SHOP_KEY = 'minjeong-recipebook-shopping-v1';
+var shopItems = [];
+var shopOpen = false;
+
+function shopKey(text){ return String(text==null?'':text).replace(/\s+/g,' ').trim().toLowerCase(); }
+
+/* 같은 재료인지 보는 이름: '대파 1대'와 '대파'는 같은 것으로 본다 */
+function shopBase(text){
+  var f = findFood(text);
+  if(f) return f.n;
+  return shopKey(text).split(' ')[0];
+}
+
+function normalizeShopItem(raw){
+  if(raw && typeof raw === 'object'){
+    var t = String(raw.text==null?'':raw.text).replace(/\s+/g,' ').trim();
+    if(!t) return null;
+    return {id: raw.id ? String(raw.id) : uid(), text:t, done: !!raw.done,
+            createdAt: num(raw.createdAt) || Date.now(), from: String(raw.from==null?'':raw.from)};
+  }
+  var s = String(raw==null?'':raw).replace(/\s+/g,' ').trim();
+  if(!s) return null;
+  return {id: uid(), text:s, done:false, createdAt: Date.now(), from:''};
+}
+
+function loadShop(){
+  var raw = null;
+  try { raw = localStorage.getItem(SHOP_KEY); } catch(e){ raw = null; }
+  if(!raw) return [];
+  try {
+    var data = JSON.parse(raw);
+    var list = Array.isArray(data) ? data : (data && data.items);
+    if(!Array.isArray(list)) return [];
+    return list.map(normalizeShopItem).filter(Boolean);
+  } catch(e){ return []; }
+}
+
+function saveShop(){
+  try {
+    localStorage.setItem(SHOP_KEY, JSON.stringify({
+      app:'민정님의 레시피북', version:1, savedAt:new Date().toISOString(), items:shopItems
+    }));
+    return true;
+  } catch(e){
+    toast('장보기를 저장하지 못했어요');
+    return false;
+  }
+}
+
+function addShopItems(texts, source){
+  var added = 0, dup = 0;
+  (texts||[]).forEach(function(t){
+    var text = String(t==null?'':t).replace(/\s+/g,' ').trim();
+    if(!text) return;
+    var k = shopKey(text);
+    var base = shopBase(text);
+    var exists = shopItems.some(function(it){
+      if(it.done) return false;
+      return shopKey(it.text) === k || (base && shopBase(it.text) === base);
+    });
+    if(exists){ dup++; return; }
+    shopItems.push({id:uid(), text:text, done:false, createdAt:Date.now(), from:source||''});
+    added++;
+  });
+  if(added) saveShop();
+  renderShopBadge();
+  if(shopOpen) renderShop();
+  return {added:added, dup:dup};
+}
+
+function toastShop(res){
+  if(res.added && res.dup) toast('🛒 '+res.added+'개 담았어요 · 이미 있던 '+res.dup+'개는 건너뛰었어요');
+  else if(res.added) toast('🛒 '+res.added+'개를 장보기에 담았어요');
+  else if(res.dup) toast('이미 장보기에 있어요');
+  else toast('담을 재료가 없어요');
+}
+
+function renderShopBadge(){
+  var open = shopItems.filter(function(i){ return !i.done; }).length;
+  var done = shopItems.length - open;
+  var b = $('#shopBadge');
+  if(b){ b.textContent = String(open); b.hidden = open === 0; }
+  var q = $('#shopQuickSub');
+  if(q) q.textContent = open ? ('살 것 '+open+'개') : (done ? '다 샀어요!' : '살 것 적어 두기');
+  var s = $('#shopSub');
+  if(s) s.textContent = shopItems.length
+    ? ('살 것 '+open+'개'+(done ? ' · 산 것 '+done+'개' : ''))
+    : '장볼 것을 적어 두세요';
+}
+
+function renderShop(){
+  var open = shopItems.filter(function(i){ return !i.done; }).length;
+  var done = shopItems.length - open;
+  var list = shopItems.slice().sort(function(a,b){
+    if(a.done !== b.done) return a.done ? 1 : -1;
+    return b.createdAt - a.createdAt;
+  });
+  $('#shopList').innerHTML = list.map(function(it){
+    return '<li class="shop-item'+(it.done?' done':'')+'" data-shopid="'+esc(it.id)+'">'+
+      '<button type="button" class="shop-check" data-shoptoggle="'+esc(it.id)+'" role="checkbox" aria-checked="'+(it.done?'true':'false')+'" aria-label="'+esc(it.text)+' 담기 완료">'+(it.done?'✓':'')+'</button>'+
+      '<span class="shop-text">'+esc(it.text)+'</span>'+
+      '<button type="button" class="shop-del" data-shopdel="'+esc(it.id)+'" aria-label="'+esc(it.text)+' 지우기">✕</button>'+
+    '</li>';
+  }).join('');
+  $('#shopEmpty').hidden = shopItems.length > 0;
+  var cd = $('#shopClearDone');
+  cd.disabled = done === 0;
+  cd.textContent = done ? ('🧹 완료된 항목 비우기 ('+done+')') : '🧹 완료된 항목 비우기';
+  renderShopBadge();
+}
+
+function openShop(){
+  shopOpen = true;
+  lastFocus = document.activeElement;
+  renderShop();
+  $('#shopOverlay').classList.add('show');
+  document.body.classList.add('lock');
+}
+
+function closeShop(){
+  shopOpen = false;
+  $('#shopOverlay').classList.remove('show');
+  if(!isAnyOverlayOpen()) document.body.classList.remove('lock');
+}
+
+function submitShopInput(){
+  var inp = $('#shopInput');
+  if(!inp) return;
+  var v = inp.value.trim();
+  if(!v){ inp.focus(); return; }
+  var parts = v.split(/[,\n、]/).map(function(s){ return s.trim(); }).filter(Boolean);
+  var res = addShopItems(parts, 'manual');
+  inp.value = '';
+  if(res.added) toast('🛒 '+res.added+'개를 담았어요');
+  else if(res.dup) toast('이미 장보기에 있어요');
+  if(shopOpen) renderShop();
+  inp.focus();
+}
+
+function shopToggle(id){
+  var it = null;
+  shopItems.forEach(function(x){ if(x.id === id) it = x; });
+  if(!it) return;
+  it.done = !it.done;
+  saveShop();
+  renderShop();
+}
+
+function shopDelete(id){
+  var before = shopItems.length;
+  shopItems = shopItems.filter(function(x){ return x.id !== id; });
+  if(shopItems.length === before) return;
+  saveShop();
+  renderShop();
+  toast('장보기에서 지웠어요');
+}
+
+function shopClearDone(){
+  var n = shopItems.filter(function(i){ return i.done; }).length;
+  if(!n) return;
+  shopItems = shopItems.filter(function(i){ return !i.done; });
+  saveShop();
+  renderShop();
+  toast('산 것 '+n+'개를 비웠어요');
+}
+
+function importShop(list){
+  var added = 0;
+  (list||[]).forEach(function(raw){
+    var text = typeof raw === 'string' ? raw : String(raw && raw.text != null ? raw.text : '');
+    text = text.replace(/\s+/g,' ').trim();
+    if(!text) return;
+    var id = (raw && typeof raw === 'object' && raw.id) ? String(raw.id) : uid();
+    var k = shopKey(text);
+    var exists = shopItems.some(function(it){ return it.id === id || shopKey(it.text) === k; });
+    if(exists) return;
+    shopItems.push({
+      id:id, text:text, done: !!(raw && typeof raw === 'object' && raw.done),
+      createdAt: (raw && typeof raw === 'object' ? num(raw.createdAt) : 0) || Date.now(),
+      from: (raw && typeof raw === 'object' ? String(raw.from==null?'':raw.from) : 'import')
+    });
+    added++;
+  });
+  if(added){ saveShop(); renderShopBadge(); if(shopOpen) renderShop(); }
+  return added;
+}
+
+/* =========================================================
+   🎒 아이들 하교 시간 + 하교 10분 전 알림
+   ========================================================= */
+var SCHOOL_KEY = 'minjeong-recipebook-school-v1';
+var SCHOOL_FIRE_KEY = 'minjeong-recipebook-school-fired-v1';
+var SCHOOL_DAYS = ['월','화','수','목','금','토','일'];
+var SCHOOL_WEEK = SCHOOL_DAYS.slice(0, 5);
+var SCHOOL_LEADS = [5, 10, 15, 20, 30];
+
+/* 기본값: 민정님이 알려 준 실제 하교 시간 (저장된 값이 있으면 덮어쓰지 않는다) */
+function seedSchool(){
+  return {
+    children: [
+      { id:'kid-1', name:'첫째', age:12, alert:true, days:{
+        '월':{time:'17:00',memo:''}, '화':{time:'14:40',memo:''}, '수':{time:'13:50',memo:''},
+        '목':{time:'14:40',memo:''}, '금':{time:'17:00',memo:''}, '토':{time:'',memo:''}, '일':{time:'',memo:''}
+      }},
+      { id:'kid-2', name:'둘째', age:8, alert:true, days:{
+        '월':{time:'16:10',memo:''}, '화':{time:'16:10',memo:''}, '수':{time:'13:50',memo:''},
+        '목':{time:'16:10',memo:''}, '금':{time:'13:00',memo:''}, '토':{time:'',memo:''}, '일':{time:'',memo:''}
+      }}
+    ],
+    alert: {on:true, lead:10, sound:true, weekend:false, hintDismissed:false}
+  };
+}
+
+var school = seedSchool();
+var schoolFired = {};
+var schoolAlertLog = [];
+var schoolOpen = false;
+var schoolLastMinute = '';
+var schoolTickId = null;
+
+function pad2(n){ return (n<10?'0':'')+n; }
+function normTime(v){
+  var m = /^(\d{1,2})[:.]?(\d{2})$/.exec(String(v==null?'':v).trim());
+  if(!m) return '';
+  var h = parseInt(m[1],10), mi = parseInt(m[2],10);
+  if(!(h>=0 && h<24 && mi>=0 && mi<60)) return '';
+  return pad2(h)+':'+pad2(mi);
+}
+function minutesOf(t){
+  var m = /^(\d{2}):(\d{2})$/.exec(String(t||''));
+  return m ? (parseInt(m[1],10)*60 + parseInt(m[2],10)) : null;
+}
+function dayKeyOf(d){ return SCHOOL_DAYS[(d.getDay()+6)%7]; }
+function dateKeyOf(d){ return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate()); }
+
+function normChild(raw, idx){
+  if(!raw || typeof raw !== 'object') return null;
+  var days = {};
+  SCHOOL_DAYS.forEach(function(d){
+    var src = (raw.days && raw.days[d]) ? raw.days[d] : {};
+    var t = normTime(typeof src === 'object' ? src.time : src);
+    var memo = String((typeof src === 'object' && src.memo != null) ? src.memo : '').replace(/\s+/g,' ').trim().slice(0,30);
+    days[d] = {time:t, memo:memo};
+  });
+  var name = String(raw.name==null?'':raw.name).replace(/\s+/g,' ').trim().slice(0,12);
+  return {
+    id: raw.id ? String(raw.id) : ('kid-'+Date.now().toString(36)+(idx||0)),
+    name: name, age: num(raw.age) || 0, alert: raw.alert === false ? false : true, days: days
+  };
+}
+
+function normAlert(raw){
+  var a = (raw && typeof raw === 'object') ? raw : {};
+  return {
+    on: a.on === false ? false : true,
+    lead: SCHOOL_LEADS.indexOf(num(a.lead)) >= 0 ? num(a.lead) : 10,
+    sound: a.sound === false ? false : true,
+    weekend: !!a.weekend,
+    hintDismissed: !!a.hintDismissed
+  };
+}
+
+function loadSchool(){
+  var raw = null;
+  try { raw = localStorage.getItem(SCHOOL_KEY); } catch(e){ raw = null; }
+  if(raw){
+    try {
+      var data = JSON.parse(raw);
+      if(data && Array.isArray(data.children)){
+        return {children: data.children.map(normChild).filter(Boolean), alert: normAlert(data.alert)};
+      }
+    } catch(e){ /* 망가진 저장값은 기본값으로 */ }
+  }
+  return seedSchool();
+}
+
+function saveSchool(){
+  try {
+    localStorage.setItem(SCHOOL_KEY, JSON.stringify({
+      app:'민정님의 레시피북', version:1, savedAt:new Date().toISOString(),
+      children:school.children, alert:school.alert
+    }));
+    return true;
+  } catch(e){
+    toast('하교 시간을 저장하지 못했어요');
+    return false;
+  }
+}
+
+function loadFired(){
+  var raw = null;
+  try { raw = localStorage.getItem(SCHOOL_FIRE_KEY); } catch(e){ raw = null; }
+  if(!raw) return {};
+  try {
+    var d = JSON.parse(raw);
+    if(d && typeof d === 'object' && !Array.isArray(d)) return d;
+  } catch(e){}
+  return {};
+}
+function firedFor(dateKey){
+  var m = schoolFired[dateKey];
+  return (m && typeof m === 'object') ? m : {};
+}
+function markFired(dateKey, childId, time){
+  if(!schoolFired[dateKey] || typeof schoolFired[dateKey] !== 'object') schoolFired[dateKey] = {};
+  schoolFired[dateKey][childId] = time;
+  var keys = Object.keys(schoolFired).sort();
+  while(keys.length > 7){ delete schoolFired[keys.shift()]; }   /* 날짜가 바뀌면 새로 시작 */
+  try { localStorage.setItem(SCHOOL_FIRE_KEY, JSON.stringify(schoolFired)); } catch(e){}
+}
+
+function childName(k, i){ return (k && k.name) ? k.name : ('아이 ' + ((i||0)+1)); }
+function childIndex(id){
+  for(var i=0;i<school.children.length;i++){ if(school.children[i].id === id) return i; }
+  return -1;
+}
+function todayTimeOf(k, now){
+  var dk = dayKeyOf(now || new Date());
+  var day = k.days[dk];
+  return day ? day.time : '';
+}
+
+/* 오늘 하교 시간 한 줄씩 */
+function schoolTodayRows(now){
+  now = now || new Date();
+  var dk = dayKeyOf(now);
+  var nowMin = now.getHours()*60 + now.getMinutes() + now.getSeconds()/60;
+  return school.children.map(function(k, i){
+    var day = k.days[dk] || {time:'', memo:''};
+    var m = minutesOf(day.time);
+    var left = (m == null) ? null : Math.round(m - nowMin);
+    return {id:k.id, name:childName(k, i), day:dk, time:day.time, memo:day.memo, mins:m, left:left,
+            alert:k.alert !== false};
+  });
+}
+
+function leftText(m){
+  if(m >= 60){
+    var h = Math.floor(m/60), r = m % 60;
+    return h + '시간' + (r ? (' ' + r + '분') : '') + ' 남았어요';
+  }
+  return m + '분 남았어요';
+}
+
+function renderSchoolToday(){
+  var el = $('#schoolToday');
+  if(!el) return;
+  var now = new Date();
+  var dk = dayKeyOf(now);
+  var dayEl = $('#scDay');
+  if(dayEl) dayEl.textContent = '오늘 ' + (now.getMonth()+1) + '월 ' + now.getDate() + '일 ' + dk + '요일';
+  if(!school.children.length){
+    el.innerHTML = '<li class="sc-today-empty">아직 적어 둔 아이가 없어요.</li>';
+    return;
+  }
+  el.innerHTML = school.children.map(function(k, i){
+    var day = k.days[dk] || {time:'', memo:''};
+    var m = minutesOf(day.time);
+    var name = esc(childName(k, i));
+    var memo = day.memo ? '<span class="memo">'+esc(day.memo)+'</span>' : '';
+    if(m == null){
+      return '<li><span class="who">'+name+'</span><span class="t">-</span>'+
+        '<span class="cd done">오늘은 하교 없음</span>'+memo+'</li>';
+    }
+    var nowMin = now.getHours()*60 + now.getMinutes() + now.getSeconds()/60;
+    var left = Math.round(m - nowMin);
+    var cls = left <= 0 ? 'done' : (left <= (school.alert.lead || 10) ? 'soon' : '');
+    var txt = left <= 0 ? '하교했어요' : (left <= 1 ? '곧 하교' : leftText(left));
+    return '<li><span class="who">'+name+'</span><span class="t">'+esc(day.time)+'</span>'+
+      '<span class="cd '+cls+'">'+esc(txt)+'</span>'+memo+'</li>';
+  }).join('');
+}
+
+function renderSchoolQuick(){
+  var sub = $('#schoolQuickSub');
+  if(!sub) return;
+  if(!school.children.length){ sub.textContent = '아이들 하교 시간 적어 두기'; return; }
+  var now = new Date(), dk = dayKeyOf(now);
+  var parts = school.children.map(function(k, i){
+    var t = (k.days[dk] && k.days[dk].time) || '';
+    return childName(k, i) + ' ' + (t || '쉼');
+  });
+  sub.textContent = '오늘 ' + dk + '요일 · ' + parts.join(' · ');
+}
+
+function notifState(){
+  try {
+    if(typeof Notification === 'undefined' || !Notification) return 'unsupported';
+    return Notification.permission || 'default';
+  } catch(e){ return 'unsupported'; }
+}
+
+function renderSchool(){
+  if(!$('#schoolKids')) return;
+  var now = new Date();
+  var dk = dayKeyOf(now);
+  var a = school.alert;
+
+  $('#schoolAlertOn').checked = a.on !== false;
+  $('#schoolAlertLbl').textContent = '하교 ' + a.lead + '분 전 알림';
+  $('#schoolLead').value = String(a.lead);
+  var noteLead = $('#scNoteLead');
+  if(noteLead) noteLead.textContent = a.lead + '분';
+
+  var sb = $('#schoolSound');
+  if(sb){ sb.classList.toggle('on', a.sound !== false); sb.setAttribute('aria-pressed', a.sound !== false ? 'true' : 'false');
+          sb.textContent = a.sound !== false ? '🔔 소리 켜짐' : '🔕 소리 꺼짐'; }
+  var wb = $('#schoolWeekend');
+  if(wb){ wb.classList.toggle('on', !!a.weekend); wb.setAttribute('aria-pressed', a.weekend ? 'true' : 'false');
+          wb.textContent = a.weekend ? '주말 접기' : '주말도 적기'; }
+  var nb = $('#schoolNotif');
+  if(nb) nb.hidden = !(notifState() === 'default' && !a.hintDismissed);
+
+  renderSchoolToday();
+  renderSchoolQuick();
+
+  var days = a.weekend ? SCHOOL_DAYS : SCHOOL_WEEK;
+  var html = school.children.map(function(k, i){
+    var rows = days.map(function(d){
+      var day = k.days[d] || {time:'', memo:''};
+      var lbl = '<span class="sc-dl' + (d === dk ? ' today' : '') + ((d === '토' || d === '일') ? ' weekend' : '') + '">' + d + '</span>';
+      return '<div class="sc-row">' + lbl +
+        '<input type="time" step="60" value="' + esc(day.time) + '" data-childtime="' + esc(k.id) + '|' + d + '" aria-label="' + esc(childName(k,i)) + ' ' + d + '요일 하교 시간">' +
+        '<input type="text" value="' + esc(day.memo) + '" maxlength="30" placeholder="' + (d === '월' ? '메모 (예: 학원 차량)' : '메모') + '" data-childmemo="' + esc(k.id) + '|' + d + '" aria-label="' + esc(childName(k,i)) + ' ' + d + '요일 메모">' +
+      '</div>';
+    }).join('');
+    var on = k.alert !== false;
+    return '<article class="sc-kid" data-childcard="' + esc(k.id) + '">' +
+      '<div class="sc-kid-head">' +
+        '<span class="sc-kid-emoji" aria-hidden="true">🎒</span>' +
+        '<input class="sc-name" type="text" value="' + esc(k.name) + '" maxlength="12" data-childname="' + esc(k.id) + '" placeholder="' + esc('아이 ' + (i+1)) + '" aria-label="아이 이름">' +
+        (k.age ? '<span class="sc-age">' + k.age + '살</span>' : '') +
+        '<button type="button" class="sc-bell' + (on ? ' on' : '') + '" data-childbell="' + esc(k.id) + '" aria-pressed="' + (on ? 'true' : 'false') + '" aria-label="' + esc(childName(k,i)) + ' 하교 알림 ' + (on ? '끄기' : '켜기') + '" title="이 아이 알림 ' + (on ? '끄기' : '켜기') + '">' + (on ? '🔔' : '🔕') + '</button>' +
+        '<button type="button" class="sc-del" data-childdel="' + esc(k.id) + '" aria-label="' + esc(childName(k,i)) + ' 지우기">✕</button>' +
+      '</div>' +
+      '<div class="sc-days">' + rows + '</div>' +
+    '</article>';
+  }).join('');
+  if(!school.children.length){
+    html = '<p class="sc-empty">아직 적어 둔 아이가 없어요.<br><b>＋ 아이 추가</b>를 눌러 하교 시간을 적어 보세요.</p>';
+  }
+  $('#schoolKids').innerHTML = html;
+  var sub = $('#schoolSub');
+  if(sub) sub.textContent = a.on === false ? '알림이 꺼져 있어요 · 하교 시간은 그대로 보여요'
+    : ('오늘 ' + dk + '요일 · ' + a.lead + '분 전에 팝업으로 알려 드려요');
+}
+
+function openSchool(){
+  schoolOpen = true;
+  lastFocus = document.activeElement;
+  schoolLastMinute = '';
+  renderSchool();
+  $('#schoolOverlay').classList.add('show');
+  document.body.classList.add('lock');
+}
+function closeSchool(){
+  schoolOpen = false;
+  $('#schoolOverlay').classList.remove('show');
+  if(!isAnyOverlayOpen()) document.body.classList.remove('lock');
+}
+
+function setChildDay(id, day, patch){
+  var i = childIndex(id);
+  if(i < 0 || SCHOOL_DAYS.indexOf(day) < 0) return false;
+  var k = school.children[i];
+  if(!k.days[day]) k.days[day] = {time:'', memo:''};
+  if(patch.time != null) k.days[day].time = normTime(patch.time);
+  if(patch.memo != null) k.days[day].memo = String(patch.memo).replace(/\s+/g,' ').trim().slice(0,30);
+  saveSchool();
+  renderSchoolToday();
+  renderSchoolQuick();
+  return true;
+}
+
+function addSchoolChild(){
+  var id = 'kid-' + Date.now().toString(36) + Math.floor(Math.random()*1000);
+  var days = {};
+  SCHOOL_DAYS.forEach(function(d){ days[d] = {time:'', memo:''}; });
+  school.children.push({id:id, name:'', age:0, alert:true, days:days});
+  saveSchool();
+  renderSchool();
+  var inp = $$('[data-childname]');
+  if(inp.length){ try{ inp[inp.length-1].focus(); }catch(e){} }
+  toast('아이를 한 명 더 추가했어요. 이름과 시간을 적어 주세요');
+}
+
+function removeSchoolChild(id){
+  var i = childIndex(id);
+  if(i < 0) return;
+  var name = childName(school.children[i], i);
+  school.children.splice(i, 1);
+  saveSchool();
+  renderSchool();
+  toast('“' + name + '” 하교 시간을 지웠어요');
+}
+
+function toggleChildBell(id){
+  var i = childIndex(id);
+  if(i < 0) return;
+  school.children[i].alert = school.children[i].alert === false;
+  saveSchool();
+  renderSchool();
+  toast(school.children[i].alert === false
+    ? (childName(school.children[i], i) + ' 알림을 껐어요')
+    : (childName(school.children[i], i) + ' 알림을 켰어요'));
+}
+
+/* ---------- 10분 전 팝업 ---------- */
+var schoolAudio = null;
+function unlockSchoolAudio(){
+  try {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC) return;
+    if(!schoolAudio) schoolAudio = new AC();
+    if(schoolAudio.state === 'suspended') schoolAudio.resume();
+  } catch(e){}
+}
+function schoolChime(){
+  if(school.alert.sound === false) return;
+  try {
+    unlockSchoolAudio();
+    if(!schoolAudio) return;
+    var t0 = schoolAudio.currentTime;
+    [[880,0],[1174.66,0.15],[1567.98,0.3]].forEach(function(p){
+      var o = schoolAudio.createOscillator(), g = schoolAudio.createGain();
+      o.type = 'sine'; o.frequency.value = p[0];
+      g.gain.setValueAtTime(0.0001, t0 + p[1]);
+      g.gain.exponentialRampToValueAtTime(0.15, t0 + p[1] + 0.04);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + p[1] + 0.40);
+      o.connect(g); g.connect(schoolAudio.destination);
+      o.start(t0 + p[1]); o.stop(t0 + p[1] + 0.44);
+    });
+  } catch(e){ /* 소리를 못 내는 환경이면 조용히 넘어간다 */ }
+}
+
+function checkSchoolAlerts(now){
+  now = now || new Date();
+  if(school.alert.on === false) return [];
+  var lead = school.alert.lead || 10;
+  var dk = dayKeyOf(now);
+  var fired = firedFor(dateKeyOf(now));
+  var nowMin = now.getHours()*60 + now.getMinutes() + now.getSeconds()/60;
+  var due = [];
+  school.children.forEach(function(k, i){
+    if(k.alert === false) return;
+    var day = k.days[dk];
+    var t = day ? day.time : '';
+    var m = minutesOf(t);
+    if(m == null) return;
+    var left = m - nowMin;
+    if(left > 0 && left <= lead && fired[k.id] !== t){
+      due.push({id:k.id, name:childName(k, i), time:t, left:left});
+    }
+  });
+  return due;
+}
+
+function fireSchoolAlert(due, now){
+  if(!due || !due.length) return;
+  now = now || new Date();
+  var dkey = dateKeyOf(now);
+  due.forEach(function(d){
+    markFired(dkey, d.id, d.time);
+    schoolAlertLog.push({date:dkey, id:d.id, time:d.time, at:now.getHours()+':'+pad2(now.getMinutes())});
+    if(schoolAlertLog.length > 50) schoolAlertLog.shift();
+  });
+  var names = due.map(function(d){ return d.name; });
+  var mins = due.map(function(d){ return Math.max(1, Math.round(d.left)); });
+  var same = mins.every(function(m){ return m === mins[0]; });
+  var when = same ? (mins[0] + '분 전이에요!') : '곧 하교예요!';
+  var title = '🎒 ' + names.join('·') + ' 하교 ' + when;
+  var body = due.map(function(d){ return d.name + ' ' + d.time + ' 하교'; }).join(' · ');
+
+  var box = $('#schoolAlert');
+  if(box){
+    $('#schoolAlertTitle').textContent = title;
+    $('#schoolAlertBody').textContent = body + (same ? '' : ' · 곧 도착 시간이에요');
+    box.classList.add('show');
+  }
+  schoolChime();
+
+  if(notifState() === 'granted'){
+    try { new Notification(title, {body:body, tag:'school-dismissal', silent:true}); } catch(e){}
+  }
+  renderSchoolToday();
+}
+
+function hideSchoolAlert(){ $('#schoolAlert').classList.remove('show'); }
+
+function schoolTick(){
+  var now = new Date();
+  var mk = dateKeyOf(now) + ' ' + now.getHours() + ':' + now.getMinutes();
+  if(mk !== schoolLastMinute){
+    schoolLastMinute = mk;
+    renderSchoolToday();
+    renderSchoolQuick();
+  }
+  var due = checkSchoolAlerts(now);
+  if(due.length) fireSchoolAlert(due, now);
+}
+
+function startSchoolClock(){
+  if(schoolTickId) return;
+  schoolTickId = setInterval(schoolTick, 1000);
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) schoolTick(); });
+  schoolTick();
+}
+
+/* 백업에 넣고 빼기 */
+function schoolExportData(){
+  return {children:school.children, alert:school.alert};
+}
+function importSchoolData(raw){
+  if(!raw || typeof raw !== 'object' || !Array.isArray(raw.children)) return 0;
+  var changed = 0;
+  raw.children.forEach(function(c, i){
+    var nc = normChild(c, i);
+    if(!nc) return;
+    var idx = childIndex(nc.id);
+    if(idx >= 0) school.children[idx] = nc; else school.children.push(nc);
+    changed++;
+  });
+  if(raw.alert && typeof raw.alert === 'object'){
+    var a = raw.alert;
+    if(typeof a.on === 'boolean') school.alert.on = a.on;
+    if(SCHOOL_LEADS.indexOf(num(a.lead)) >= 0) school.alert.lead = num(a.lead);
+    if(typeof a.sound === 'boolean') school.alert.sound = a.sound;
+    if(typeof a.weekend === 'boolean') school.alert.weekend = a.weekend;
+  }
+  if(changed){ saveSchool(); renderSchool(); renderSchoolQuick(); }
+  return changed;
+}
+
+/* =========================================================
+   토스트
+   ========================================================= */
+var toastTimer = null;
+function toast(msg){
+  var el = $('#toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 2600);
+}
+
+/* =========================================================
+   이벤트
+   ========================================================= */
+function bind(){
+  $('#search').addEventListener('input', function(e){
+    state.q = e.target.value || '';
+    render();
+  });
+  $('#searchClear').addEventListener('click', function(){
+    state.q = ''; $('#search').value = ''; render(); $('#search').focus();
+  });
+
+  $('#fab').addEventListener('click', function(){ openForm(null); });
+
+  $('#btnFridge').addEventListener('click', openFridge);
+  $('#btnShop').addEventListener('click', openShop);
+  $('#btnSchool').addEventListener('click', function(){ unlockSchoolAudio(); openSchool(); });
+  $('#schoolAddChild').addEventListener('click', addSchoolChild);
+  $('#schoolAlertClose').addEventListener('click', hideSchoolAlert);
+  $('#schoolAlertOn').addEventListener('change', function(){
+    school.alert.on = this.checked;
+    saveSchool();
+    renderSchool();
+    toast(this.checked ? '하교 알림을 켰어요' : '하교 알림을 껐어요');
+  });
+  $('#schoolLead').addEventListener('change', function(){
+    var v = num(this.value);
+    school.alert.lead = SCHOOL_LEADS.indexOf(v) >= 0 ? v : 10;
+    saveSchool();
+    renderSchool();
+    toast('하교 ' + school.alert.lead + '분 전에 알려 드릴게요');
+  });
+  $('#schoolSound').addEventListener('click', function(){
+    school.alert.sound = (school.alert.sound === false);
+    saveSchool();
+    renderSchool();
+    if(school.alert.sound){ unlockSchoolAudio(); schoolChime(); }
+    toast(school.alert.sound ? '알림 소리를 켰어요' : '알림 소리를 껐어요');
+  });
+  $('#schoolWeekend').addEventListener('click', function(){
+    school.alert.weekend = !school.alert.weekend;
+    saveSchool();
+    renderSchool();
+  });
+  $('#schoolNotif').addEventListener('click', function(){
+    school.alert.hintDismissed = true;
+    saveSchool();
+    try {
+      if(typeof Notification === 'undefined'){ renderSchool(); toast('이 브라우저에서는 휴대폰 알림을 쓸 수 없어요'); return; }
+      Notification.requestPermission().then(function(perm){
+        renderSchool();
+        toast(perm === 'granted' ? '휴대폰 알림도 함께 보내 드릴게요' : '앱 안 팝업으로만 알려 드릴게요');
+      }, function(){ renderSchool(); });
+    } catch(e){ renderSchool(); }
+  });
+
+  /* 하교 시간 입력(이름·시간·메모) */
+  document.addEventListener('change', function(e){
+    var t = e.target;
+    if(!t || !t.dataset) return;
+    if(t.dataset.childtime){
+      var p = String(t.dataset.childtime).split('|');
+      setChildDay(p[0], p[1], {time:t.value});
+      return;
+    }
+    if(t.dataset.childmemo){
+      var p2 = String(t.dataset.childmemo).split('|');
+      setChildDay(p2[0], p2[1], {memo:t.value});
+      return;
+    }
+    if(t.dataset.childname){
+      var idx = childIndex(t.dataset.childname);
+      if(idx >= 0){
+        school.children[idx].name = String(t.value||'').replace(/\s+/g,' ').trim().slice(0,12);
+        saveSchool();
+        renderSchoolQuick();
+        renderSchoolToday();
+      }
+    }
+  });
+  /* 타이핑 중에도 잃지 않도록 잠시 뒤 저장 */
+  var schoolTypeTimer = null;
+  document.addEventListener('input', function(e){
+    var t = e.target;
+    if(!t || !t.dataset) return;
+    if(!(t.dataset.childmemo || t.dataset.childname)) return;
+    clearTimeout(schoolTypeTimer);
+    schoolTypeTimer = setTimeout(function(){
+      if(t.dataset.childmemo){
+        var p = String(t.dataset.childmemo).split('|');
+        setChildDay(p[0], p[1], {memo:t.value});
+      } else if(t.dataset.childname){
+        var idx = childIndex(t.dataset.childname);
+        if(idx >= 0){
+          school.children[idx].name = String(t.value||'').replace(/\s+/g,' ').trim().slice(0,12);
+          saveSchool();
+          renderSchoolQuick();
+          renderSchoolToday();
+        }
+      }
+    }, 500);
+  });
+  $('#fridgeForm').addEventListener('submit', function(e){ e.preventDefault(); applyFridgeInput(); });
+  $('#fridgeClear').addEventListener('click', function(){
+    if(!fridgeCount()){ toast('고른 재료가 없어요'); return; }
+    fridgeSel = {};
+    chipExpand = false; dishExpand = false;
+    renderFridge();
+    toast('냉장고 재료를 비웠어요');
+  });
+  $('#fridgeChipMore').addEventListener('click', function(){ chipExpand = !chipExpand; renderFridge(); });
+  $('#frDishMore').addEventListener('click', function(){ dishExpand = !dishExpand; renderFridgeResults(); });
+  $('#shopForm').addEventListener('submit', function(e){ e.preventDefault(); submitShopInput(); });
+  $('#shopClearDone').addEventListener('click', shopClearDone);
+  $('#emptyBtn').addEventListener('click', function(){
+    if(this.dataset.mode === 'reset'){
+      state.q = ''; $('#search').value = '';
+      state.cat = '전체'; state.favOnly = false;
+      render();
+    } else {
+      openForm(null);
+    }
+  });
+
+  $('#btnExport').addEventListener('click', exportJSON);
+  $('#btnImport').addEventListener('click', function(){ $('#fileImport').click(); });
+  $('#fileImport').addEventListener('change', function(e){
+    var f = e.target.files && e.target.files[0];
+    if(!f) return;
+    var reader = new FileReader();
+    reader.onload = function(){ importText(String(reader.result || '')); };
+    reader.onerror = function(){ toast('파일을 읽지 못했어요'); };
+    reader.readAsText(f);
+    e.target.value = '';
+  });
+
+  /* 전역 클릭 위임 */
+  document.addEventListener('click', function(e){
+    var t = e.target;
+
+    var fchip = t.closest && t.closest('[data-fchip]');
+    if(fchip){ toggleFridgeChip(fchip.dataset.fchip, fchip.dataset.flabel); return; }
+
+    var cdel = t.closest && t.closest('[data-childdel]');
+    if(cdel){ askDeleteChild(cdel.dataset.childdel); return; }
+
+    var cbell = t.closest && t.closest('[data-childbell]');
+    if(cbell){ toggleChildBell(cbell.dataset.childbell); return; }
+
+    var fsel = t.closest && t.closest('[data-fsel]');
+    if(fsel){ delete fridgeSel[fsel.dataset.fsel]; chipExpand = false; dishExpand = false; renderFridge(); return; }
+
+    var fjump = t.closest && t.closest('[data-fjump]');
+    if(fjump){ var recTop = $('#frRecipeList'); if(recTop){ try{ recTop.scrollIntoView({block:'start', behavior:'smooth'}); }catch(err){} } return; }
+
+    var recAdd = t.closest && t.closest('[data-recadd]');
+    if(recAdd){ addMissingFromRecipe(recAdd.dataset.recadd); return; }
+
+    var recCard = t.closest && t.closest('[data-rec]');
+    if(recCard){ var rid = recCard.dataset.rec; closeFridge(); openDetail(rid); return; }
+
+    var dishAdd = t.closest && t.closest('[data-dishadd]');
+    if(dishAdd){ addMissingFromDish(dishAdd.dataset.dishadd); return; }
+
+    var shopToggleBtn = t.closest && t.closest('[data-shoptoggle]');
+    if(shopToggleBtn){ shopToggle(shopToggleBtn.dataset.shoptoggle); return; }
+
+    var shopDelBtn = t.closest && t.closest('[data-shopdel]');
+    if(shopDelBtn){ shopDelete(shopDelBtn.dataset.shopdel); return; }
+
+    var ingAdd = t.closest && t.closest('[data-ingadd]');
+    if(ingAdd && openId){
+      var rr = getRecipe(openId);
+      var idx = parseInt(ingAdd.dataset.ingadd, 10);
+      if(rr && rr.ingredients[idx]) toastShop(addShopItems([rr.ingredients[idx]], 'recipe:'+rr.id));
+      return;
+    }
+
+    var formCatBtn = t.closest && t.closest('[data-formcat]');
+    if(formCatBtn){ setFormCat(formCatBtn.dataset.formcat); return; }
+
+    var chip = t.closest && t.closest('.chip');
+    if(chip){
+      if(chip.dataset.favfilter){ state.favOnly = !state.favOnly; }
+      else { state.cat = chip.dataset.cat; }
+      render();
+      return;
+    }
+
+    var favBtn = t.closest && t.closest('[data-fav]');
+    if(favBtn){ e.stopPropagation(); toggleFav(favBtn.dataset.fav); return; }
+
+    var act = t.closest && t.closest('[data-act]');
+    if(act){
+      var a = act.dataset.act;
+      if(a === 'close') closeDetail();
+      else if(a === 'edit'){ if(openId) openForm(openId); }
+      else if(a === 'del'){ if(openId) askDelete(openId); }
+      else if(a === 'shop-add'){ if(openId) addRecipeShopping(openId); }
+      return;
+    }
+
+    var closeBtn = t.closest && t.closest('[data-close]');
+    if(closeBtn){
+      var which = closeBtn.dataset.close;
+      if(which === 'fridge') closeFridge();
+      else if(which === 'shop') closeShop();
+      else if(which === 'school') closeSchool();
+      else closeForm();
+      return;
+    }
+
+    var ing = t.closest && t.closest('.ing');
+    if(ing && openId){
+      toggleIngredient(parseInt(ing.dataset.i, 10));
+      return;
+    }
+
+    var card = t.closest && t.closest('.card');
+    if(card){ openDetail(card.dataset.id); return; }
+
+    if(t === $('#detailOverlay')) closeDetail();
+    if(t === $('#formOverlay')) closeForm();
+    if(t === $('#fridgeOverlay')) closeFridge();
+    if(t === $('#shopOverlay')) closeShop();
+    if(t === $('#schoolOverlay')) closeSchool();
+  });
+
+  /* 키보드 */
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){
+      if($('#confirmOverlay').classList.contains('show')) closeConfirm();
+      else if($('#formOverlay').classList.contains('show')) closeForm();
+      else if($('#detailOverlay').classList.contains('show')) closeDetail();
+      else if($('#shopOverlay').classList.contains('show')) closeShop();
+      else if($('#schoolOverlay').classList.contains('show')) closeSchool();
+      else if($('#fridgeOverlay').classList.contains('show')) closeFridge();
+      return;
+    }
+    if(e.key === 'Enter' || e.key === ' '){
+      var el = document.activeElement;
+      if(el && el.classList && el.classList.contains('card')){
+        e.preventDefault();
+        openDetail(el.dataset.id);
+      } else if(el && el.classList && el.classList.contains('fr-card')){
+        e.preventDefault();
+        var frId = el.dataset.rec; closeFridge(); openDetail(frId);
+      } else if(el && el.classList.contains && el.classList.contains('ing') && openId){
+        e.preventDefault();
+        toggleIngredient(parseInt(el.dataset.i, 10));
+      }
+    }
+  });
+
+  $('#recipeForm').addEventListener('submit', submitForm);
+  if($('#btnSmartParse')) $('#btnSmartParse').addEventListener('click', applySmartParse);
+  if($('#btnPasteClear')) $('#btnPasteClear').addEventListener('click', function(){
+    $('#pasteText').value = '';
+    $('#spHint').innerHTML = '제목·재료·순서를 찾아 아래 칸을 채우고 <b>칼로리까지 계산</b>해요.';
+    try{ $('#pasteText').focus(); }catch(e){}
+  });
+  ['#fIng','#fServings','#fManual'].forEach(function(sel){
+    $(sel).addEventListener('input', updateLiveNut);
+    $(sel).addEventListener('change', function(){
+      if(sel === '#fManual'){
+        $('#manualGrid').hidden = !$('#fManual').checked;
+        if($('#fManual').checked){
+          var d = draftFromForm();
+          var n = nutritionOf({ingredients:d.ingredients, servings:d.servings, nut:null});
+          if(!num($('#fKcal').value)) $('#fKcal').value = n.kcal || '';
+          if(!num($('#fCarb').value)) $('#fCarb').value = n.c || '';
+          if(!num($('#fProt').value)) $('#fProt').value = n.p || '';
+          if(!num($('#fFat').value)) $('#fFat').value = n.f || '';
+        }
+        updateLiveNut();
+      }
+    });
+  });
+
+  $('#confirmNo').addEventListener('click', closeConfirm);
+  $('#confirmYes').addEventListener('click', doDelete);
+  $('#confirmOverlay').addEventListener('click', function(e){ if(e.target === this) closeConfirm(); });
+}
+
+/* =========================================================
+   시작
+   ========================================================= */
+function init(){
+  state.recipes = loadRecipes();
+  shopItems = loadShop();
+  school = loadSchool();
+  schoolFired = loadFired();
+  formCat = CAT_IDS[0];
+  buildCatPicker();
+  bind();
+  render();
+  renderShopBadge();
+  renderSchool();
+  startSchoolClock();
+  if(storeMigrated){ try{ saveRecipes(); }catch(e){} }
+  try { if(!localStorage.getItem(STORE_KEY)) saveRecipes(); } catch(e){ /* 저장소를 못 쓰는 환경 */ }
+  try { if(!localStorage.getItem(SCHOOL_KEY)) saveSchool(); } catch(e){ /* 저장소를 못 쓰는 환경 */ }
+
+  window.RecipeBook = {
+    get state(){ return state; },
+    nutritionOf: nutritionOf,
+    ingredientNutrition: ingredientNutrition,
+    macroPercents: macroPercents,
+    youtubeId: youtubeId,
+    parseIngredientText: parseIngredientText,
+    parseSmartText: parseSmartText,
+    save: saveRecipes,
+    openDetail: openDetail,
+    openForm: openForm,
+    openFridge: openFridge,
+    openShop: openShop,
+    coreIngredients: coreIngredients,
+    fridgeRecipes: fridgeRecipes,
+    fridgeDishes: fridgeDishes,
+    addShopItems: addShopItems,
+    get shop(){ return shopItems; },
+    get fridge(){ return fridgeSel; },
+    get school(){ return school; },
+    get schoolAlerts(){ return schoolAlertLog; },
+    schoolToday: function(){ return schoolTodayRows(new Date()); },
+    checkSchoolAlerts: function(){ return checkSchoolAlerts(new Date()); },
+    openSchool: openSchool,
+    closeSchool: closeSchool,
+    setChildDay: setChildDay,
+    hideSchoolAlert: hideSchoolAlert
+  };
+}
+
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+else init();
+
+})();
+</script>
+</body>
+</html>

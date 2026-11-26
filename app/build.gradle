@@ -1,0 +1,71 @@
+plugins {
+    id 'com.android.application'
+}
+
+// 서명 키스토어: CI 에서는 GitHub Actions secret 을 base64 로 풀어 KEYSTORE_PATH 로 넘겨준다.
+// 로컬에서는 keystore/release.p12 를 그대로 쓴다. 없으면 서명 없이 빌드된다.
+def keystoreFile = file(System.getenv("KEYSTORE_PATH") ?: "${rootDir}/keystore/release.p12")
+def hasKeystore = keystoreFile.exists()
+def storePass = System.getenv("KEYSTORE_PASSWORD") ?: ""
+def keyPass = (System.getenv("KEY_PASSWORD") ?: "").trim() ? System.getenv("KEY_PASSWORD") : storePass
+def keyAliasName = (System.getenv("KEY_ALIAS") ?: "").trim() ? System.getenv("KEY_ALIAS").trim() : "minjeong-recipe-book"
+
+android {
+    namespace 'com.minjeong.recipebook'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.minjeong.recipebook"
+        minSdk 23
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+        resourceConfigurations += ["ko", "en"]
+    }
+
+    signingConfigs {
+        if (hasKeystore) {
+            release {
+                storeFile keystoreFile
+                storePassword storePass
+                keyAlias keyAliasName
+                keyPassword keyPass
+                storeType "PKCS12"
+                v1SigningEnabled true
+                v2SigningEnabled true
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            shrinkResources false
+            if (hasKeystore) {
+                signingConfig signingConfigs.release
+            }
+        }
+        debug {
+            // 같은 서명을 쓰면 debug/release 데이터가 섞이므로 기본값 그대로 둔다.
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    lint {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
+    dependenciesInfo {
+        includeInApk false
+        includeInBundle false
+    }
+}
+
+dependencies {
+    // 외부 라이브러리 없음: 앱 크기를 줄이고 빌드를 빠르고 단순하게 유지한다.
+}
