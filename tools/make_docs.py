@@ -72,7 +72,7 @@ MANIFEST = """{
 """
 
 SW_JS = """/* 민정님의 레시피북 — 네트워크 우선(online) · 캐시 대체(offline) */
-var CACHE = 'minjeong-recipebook-pwa-2026-11-26-1';
+var CACHE = 'minjeong-recipebook-pwa-2026-11-26-2';
 var ASSETS = ['./', './index.html', './manifest.json', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', function(e){
@@ -98,8 +98,9 @@ self.addEventListener('fetch', function(e){
   try { url = new URL(req.url); } catch(err){ return; }
   if(url.origin !== self.location.origin) return;   /* 유튜브 썸네일 등 바깥 요청은 그대로 */
 
+  var isNav = req.mode === 'navigate';
   e.respondWith(
-    fetch(req).then(function(res){
+    fetch(req, isNav ? {cache: 'no-store'} : undefined).then(function(res){
       if(res && res.ok){
         var copy = res.clone();
         caches.open(CACHE).then(function(c){ c.put(req, copy).catch(function(){}); });
