@@ -907,7 +907,7 @@ input[type=search]::-webkit-search-cancel-button{display:none}
   <svg class="sa-mascot" viewBox="0 0 220 222" aria-hidden="true"><use href="#chefCat"/></svg>
   <div class="sa-body">
     <p class="sa-title" id="schoolAlertTitle">🎒 하교 10분 전이에요!</p>
-    <p class="sa-text" id="schoolAlertBody">첫째 13:50 하교</p>
+    <p class="sa-text" id="schoolAlertBody">아이 하교 시간</p>
   </div>
   <button type="button" class="sa-close" id="schoolAlertClose">확인</button>
 </div>
@@ -2757,17 +2757,19 @@ var SCHOOL_DAYS = ['월','화','수','목','금','토','일'];
 var SCHOOL_WEEK = SCHOOL_DAYS.slice(0, 5);
 var SCHOOL_LEADS = [5, 10, 15, 20, 30];
 
-/* 기본값: 민정님이 알려 준 실제 하교 시간 (저장된 값이 있으면 덮어쓰지 않는다) */
+/* 기본값: 아이 이름만 두고 하교 시간은 비워 둔다 (저장된 값이 있으면 그대로 쓴다) */
 function seedSchool(){
+  /* 공개 기본값: 아이 이름만 두고 하교 시간은 비워 둔다.
+     저장된 값이 있으면 그대로 쓰고, 백업을 불러오면 그 값으로 채워진다. */
   return {
     children: [
-      { id:'kid-1', name:'첫째', age:12, alert:true, days:{
-        '월':{time:'17:00',memo:''}, '화':{time:'14:40',memo:''}, '수':{time:'13:50',memo:''},
-        '목':{time:'14:40',memo:''}, '금':{time:'17:00',memo:''}, '토':{time:'',memo:''}, '일':{time:'',memo:''}
+      { id:'kid-1', name:'첫째', age:0, alert:true, days:{
+        '월':{time:'',memo:''}, '화':{time:'',memo:''}, '수':{time:'',memo:''},
+        '목':{time:'',memo:''}, '금':{time:'',memo:''}, '토':{time:'',memo:''}, '일':{time:'',memo:''}
       }},
-      { id:'kid-2', name:'둘째', age:8, alert:true, days:{
-        '월':{time:'16:10',memo:''}, '화':{time:'16:10',memo:''}, '수':{time:'13:50',memo:''},
-        '목':{time:'16:10',memo:''}, '금':{time:'13:00',memo:''}, '토':{time:'',memo:''}, '일':{time:'',memo:''}
+      { id:'kid-2', name:'둘째', age:0, alert:true, days:{
+        '월':{time:'',memo:''}, '화':{time:'',memo:''}, '수':{time:'',memo:''},
+        '목':{time:'',memo:''}, '금':{time:'',memo:''}, '토':{time:'',memo:''}, '일':{time:'',memo:''}
       }}
     ],
     alert: {on:true, lead:10, sound:true, weekend:false, hintDismissed:false}
