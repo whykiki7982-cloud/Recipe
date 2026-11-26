@@ -45,10 +45,14 @@ public class MainActivity extends Activity {
     private static final String BACK_JS =
             "(function(){try{" +
             "var m={confirmOverlay:'closeConfirm',detailOverlay:'closeDetail',formOverlay:'closeForm'," +
-            "fridgeOverlay:'closeFridge',shopOverlay:'closeShop',schoolOverlay:'closeSchool'};" +
+            "fridgeOverlay:'closeFridge',shopOverlay:'closeShop',schoolOverlay:'closeSchool'," +
+            "weightOverlay:'closeWeight',bikeOverlay:'closeBike'};" +
+            "var api=window.RecipeBookClose||{};" +
             "for(var k in m){var el=document.getElementById(k);" +
             "if(el&&el.classList&&el.classList.contains('show')){" +
-            "try{window[m[k]]();}catch(e){}return 'handled';}}" +
+            "var fn=api[k]||window[m[k]];" +
+            "if(typeof fn==='function'){try{fn();}catch(e){}}" +
+            "return 'handled';}}" +
             "}catch(e){}return 'no';})()";
 
     /** 백업 내보내기(blob 다운로드)를 네이티브 저장으로 연결한다. */
