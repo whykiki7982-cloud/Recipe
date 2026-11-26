@@ -1,16 +1,41 @@
 # minjeong-recipe-book (민정 레시피북)
 
-민정님의 레시피북(`recipe-book.html`)을 **안드로이드에 설치할 수 있는 앱(.apk)** 으로 만들어 주는 저장소입니다.
+민정님의 레시피북(`recipe-book.html`)을 **홈 화면에 바로 열리는 앱**으로 만들어 주는 저장소입니다.
 
-휴대폰에서 HTML 파일을 열 때와 달리, 홈 화면 아이콘으로 바로 열리고 `localStorage` 에 저장한 레시피가 앱 데이터로 남습니다.
+- **웹 앱(PWA, `docs/`)** — GitHub Pages 에서 열리고, 홈 화면에 추가하면 앱처럼 뜹니다. 고친 내용이 새로고침만으로 바로 반영됩니다.
+- **안드로이드 앱(APK)** — 같은 HTML 을 WebView 로 감싼 설치 파일(v1.0.0). 필요할 때만 다시 빌드합니다.
+
+두 방식 모두 `localStorage` 에 저장하므로, 앱을 지우거나 브라우저 데이터를 지우면 기록도 함께 사라집니다. 백업(📤 백업 저장)으로 옮길 수 있습니다.
+
+## 웹 앱(PWA) — `docs/`
+
+| 파일 | 설명 |
+| --- | --- |
+| `docs/index.html` | 앱 본문 (`/workspace/recipe-book.html` 에서 생성) |
+| `docs/manifest.json` | 이름·아이콘·테마 색(설치형 앱 설정) |
+| `docs/sw.js` | 서비스 워커 — **온라인이면 서버에서 먼저**, 오프라인이면 캐시로 |
+| `docs/icon-180/192/512.png` | 토마토 푸딩셰프 아이콘 |
+
+- 주소: https://whykiki7982-cloud.github.io/Recipe/
+- 다시 만들기: `python3 tools/make_docs.py` — `recipe-book.html` 을 복사하면서 **공개 페이지에 아이들 실제 하교 시간이 들어가지 않도록 빈 기본값**으로 바꾸고, manifest·아이콘·서비스 워커를 붙입니다.
+
+### 켜는 방법 (2단계)
+
+1. 저장소를 **Public** 으로 바꿉니다 — Settings → General → 맨 아래 Danger Zone → Change visibility. (GitHub Free 에서 Pages 를 쓰려면 공개 저장소여야 합니다.)
+2. Settings → **Pages** → Build and deployment → Source **Deploy from a branch** → Branch **main**, Folder **/docs** → Save.
+
+1~2분 뒤 위 주소가 열립니다. 휴대폰 브라우저에서 열고 메뉴의 **홈 화면에 추가**를 누르면 앱처럼 설치됩니다.
+
+> 공개되는 것은 앱 화면과 빈 기본값뿐입니다. 레시피·하교 시간·몸무게 기록은 각 기기 브라우저에만 저장되고 서버로 올라가지 않습니다. 서명 키(`keystore/`)는 `.gitignore` 로 저장소에 없습니다.
 
 ## 구조
 
 ```
-app/src/main/assets/index.html      ← 앱에 들어가는 레시피북 (워크스페이스의 recipe-book.html 을 복사)
+docs/                               ← GitHub Pages(PWA) 배포 폴더
+app/src/main/assets/index.html      ← APK 에 들어가는 레시피북 (워크스페이스의 recipe-book.html 을 복사)
 app/src/main/java/.../MainActivity.java  ← WebView 껍데기 (localStorage, 뒤로가기, 백업 저장/불러오기)
 app/src/main/res/...                ← 앱 이름, 아이콘(토마토 푸딩셰프)
-.github/workflows/build-apk.yml     ← push 할 때마다 APK 를 자동으로 빌드
+tools/make_docs.py                  ← docs/ 생성 (공개 기본값 + PWA 설정)
 tools/make_icons.py                 ← 런처 아이콘 다시 그리는 스크립트
 ```
 

@@ -1,0 +1,17 @@
+{
+  "name": "민정님의 레시피북",
+  "short_name": "레시피북",
+  "description": "레시피와 장보기, 아이들 하교 시간, 몸무게 기록과 자전거 타이머를 한 곳에",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#E85D3F",
+  "background_color": "#FFF9F3",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
