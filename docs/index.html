@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#E85D3F">
-<meta name="description" content="레시피와 장보기, 아이들 하교 시간, 몸무게 기록과 자전거 타이머를 한 곳에 담은 민정님의 레시피북">
+<meta name="description" content="레시피와 장보기, 아이들 하교 시간, 몸무게 기록, 자전거 타이머와 생리 주기 달력을 한 곳에 담은 민정님의 레시피북">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -657,6 +657,121 @@ input[type=search]::-webkit-search-cancel-button{display:none}
   .w-edit,.w-del{width:25px;height:25px}
 }
 
+/* ---------- 🌸 생리 주기 ---------- */
+.quick-btn.q-cycle{grid-column:1/-1;background:linear-gradient(125deg,#FFEFF4 0%,#FFF8F1 58%,#FFE7EF 100%)}
+.q-cycle .quick-ico{background:#fff}
+.cy-sheet{max-height:93vh}
+.cy-scroll{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:12px 14px calc(20px + env(safe-area-inset-bottom))}
+.cy-hero{padding:11px 12px 10px;border-radius:20px;background:linear-gradient(135deg,#FFF1F6,#FFF8F0 62%,#FFEAF2);border:1.5px solid #FFDDEA}
+.cy-hero-top{display:flex;align-items:center;gap:8px}
+.cy-hero-top .mascot{width:64px;display:block;margin:-6px 0 -8px}
+.cy-hero-body{flex:1 1 auto;min-width:0}
+.cy-hero-lbl{margin:0;font-size:10.5px;font-weight:900;color:#C0567E;letter-spacing:.04em}
+.cy-state{margin:2px 0 0;font-size:19px;font-weight:900;letter-spacing:-.03em;color:#8E2F52;line-height:1.25;word-break:keep-all}
+.cy-state-sub{margin:3px 0 0;font-size:11px;font-weight:800;color:#9A6A7A;line-height:1.45;word-break:keep-all}
+.cy-state-sub b{color:#B04570}
+.cy-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:9px}
+.cy-stat{padding:7px 6px;border-radius:14px;background:#fff;border:1.5px solid #FFE2EC;text-align:center;min-width:0;box-shadow:0 3px 9px rgba(214,110,150,.06)}
+.cy-stat span{display:block;font-size:9.6px;font-weight:900;color:#B08090;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cy-stat b{display:block;margin-top:1px;font-size:14.5px;font-weight:900;letter-spacing:-.03em;color:#8E2F52;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cy-stat i{display:block;font-style:normal;font-size:9px;font-weight:800;color:#B59AA4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cy-cal{margin-top:11px;padding:9px 9px 8px;border-radius:20px;background:#fff;border:1.5px solid var(--line);box-shadow:0 4px 12px rgba(190,100,40,.06)}
+.cy-cal-head{display:flex;align-items:center;gap:5px;margin-bottom:6px}
+.cy-nav{width:30px;height:30px;flex:0 0 auto;border-radius:50%;border:1.5px solid #FFE1BE;background:#fff;color:#8A5530;font:inherit;font-size:11px;font-weight:900;cursor:pointer;display:grid;place-items:center;padding:0}
+.cy-nav:hover{background:#FFF6E8;border-color:#FFC892}
+.cy-cal-title{flex:1 1 auto;margin:0;text-align:center;font-size:13.5px;font-weight:900;letter-spacing:-.02em;color:#5A3218}
+.cy-today{flex:0 0 auto;border:1.5px solid #FFD3E1;background:#FFF7FA;color:#B0507A;font:inherit;font-size:10.5px;font-weight:900;padding:5px 9px;border-radius:999px;cursor:pointer}
+.cy-today:hover{background:#FFEFF5}
+.cy-week,.cy-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}
+.cy-week{margin-bottom:3px}
+.cy-week span{text-align:center;font-size:9.5px;font-weight:900;color:#B0907E}
+.cy-week span.sun{color:#D0607E}
+.cy-day{position:relative;height:35px;border-radius:11px;border:1.5px solid transparent;background:#FFFCF7;color:#6A4A38;font:inherit;font-size:11.5px;font-weight:800;cursor:pointer;display:flex;align-items:flex-start;justify-content:center;padding:4px 0 0;line-height:1}
+.cy-day.blank{background:transparent;border-color:transparent;cursor:default;pointer-events:none}
+.cy-day.sun{color:#C0506E}
+.cy-day.rec{background:linear-gradient(160deg,#FFDCE7,#FFC6D8);border-color:#FFB3CA;color:#8E2F52;font-weight:900}
+.cy-day.pred{border:1.5px dashed #FF9DBB;background:#FFF7FA;color:#B0507A}
+.cy-day.fert{background:#F2EFFF}
+.cy-day.fert::after{content:'';position:absolute;left:50%;bottom:4px;width:4px;height:4px;border-radius:50%;background:#9B8BE8;transform:translateX(-50%)}
+.cy-day.ovu{border:1.5px solid #C6B8FF;background:#EDE8FF}
+.cy-day.pred.ovu{border-style:solid}
+.cy-day.today{box-shadow:inset 0 0 0 2px #FF7AA2}
+.cy-day.sel{box-shadow:inset 0 0 0 2px #8E2F52}
+.cy-day.today.sel{box-shadow:inset 0 0 0 2px #8E2F52,0 0 0 1px #FF7AA2}
+.cy-dot{position:absolute;left:50%;bottom:4px;width:4px;height:4px;border-radius:50%;background:#C2431D;transform:translateX(-50%)}
+.cy-legend{display:flex;flex-wrap:wrap;gap:3px 9px;margin-top:7px;font-size:9.5px;font-weight:800;color:#9A7A88}
+.cy-legend span{display:inline-flex;align-items:center;gap:3px}
+.cy-legend i{width:9px;height:9px;border-radius:3px;display:inline-block}
+.lg-rec{background:linear-gradient(160deg,#FFDCE7,#FFC6D8);border:1px solid #FFB3CA}
+.lg-pred{background:#FFF7FA;border:1.5px dashed #FF9DBB}
+.lg-fert{background:#F2EFFF;border:1px solid #DAD2FF}
+.cy-note{margin:7px 0 0;font-size:9.8px;font-weight:800;color:#A08066;text-align:center;line-height:1.45;word-break:keep-all}
+.cy-note b{color:#B04570}
+.cy-daybox{margin-top:10px;padding:10px 11px;border-radius:18px;border:1.5px solid #FFDDEA;background:#FFF8FB}
+.cy-daybox[hidden]{display:none}
+.cy-day-head{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.cy-day-head h3{margin:0;font-size:13.5px;font-weight:900;letter-spacing:-.02em;color:#5A3218}
+.cy-day-state{margin-left:auto;font-size:9.8px;font-weight:900;color:#B0507A;background:#FFEDF3;border:1px solid #FFD0E0;border-radius:999px;padding:3px 8px;white-space:nowrap}
+.cy-day-acts{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.cy-mini{border:1.5px solid #FFD8E4;background:#fff;color:#8A4A66;font:inherit;font-size:11px;font-weight:900;padding:6px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.cy-mini:hover{background:#FFF3F7;border-color:#FFC0D5}
+.cy-mini.warn{color:#B0602A;border-color:#FFDCC0;background:#FFF9F0}
+.cy-mini:disabled{opacity:.45;cursor:default}
+.cy-sub{margin:9px 0 0;font-size:10.5px;font-weight:900;color:#8A5530}
+.cy-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.cy-chip{height:30px;padding:0 10px;border-radius:999px;border:1.5px solid #FFDAE6;background:#fff;color:#8A4A66;font:inherit;font-size:11.5px;font-weight:800;cursor:pointer;white-space:nowrap;transition:.13s}
+.cy-chip:hover{border-color:#FFBDD4}
+.cy-chip.on{background:linear-gradient(135deg,#FF7CA2,#F2568A);border-color:transparent;color:#fff;box-shadow:0 4px 10px rgba(240,80,130,.22)}
+.cy-form{margin-top:10px;padding:10px 11px;border-radius:18px;border:1.5px solid var(--line);background:#FFFDF7;display:grid;gap:8px}
+.cy-quick{display:flex;gap:6px;flex-wrap:wrap}
+.cy-qbtn{flex:1 1 0;min-width:0;height:40px;border-radius:13px;border:1.5px solid #FFD3E1;background:#FFF7FA;color:#A03E68;font:inherit;font-size:12.5px;font-weight:900;cursor:pointer;white-space:nowrap}
+.cy-qbtn:hover{background:#FFEFF5}
+.cy-qbtn.end{background:#F4F1FF;border-color:#DCD3FF;color:#5B4BA8}
+.cy-row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:7px}
+.cy-field{display:grid;gap:3px;min-width:0}
+.cy-field>span{font-size:11px;font-weight:900;color:#8A5530}
+.cy-field input{width:100%;min-width:0;font:inherit;font-size:13px;font-weight:800;padding:9px 10px;border-radius:11px;border:1.5px solid #F1DCC0;background:#fff;color:var(--ink);outline:0;transition:.14s}
+.cy-field input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,138,43,.14)}
+.cy-field input::placeholder{color:#C4A992;font-weight:700}
+.cy-daybox .cy-field{margin-top:8px}
+.cy-save{width:100%;height:44px;font-size:14.5px}
+.cy-day-save{margin-top:8px}
+.cy-form-hint{margin:-1px 0 0;font-size:10.5px;color:#A08066;line-height:1.4;text-align:center;word-break:keep-all}
+.cy-form-hint.editing{color:#B4602A;font-weight:900}
+.cy-set{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:9px;padding:8px 10px;border-radius:16px;background:#FFF7FA;border:1.5px dashed #FFD3E2}
+.cy-set-lbl{flex:1 1 auto;min-width:0;font-size:11px;font-weight:900;color:#8A4A66}
+.cy-set label{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:900;color:#8A5530;white-space:nowrap}
+.cy-set input{width:48px;font:inherit;font-size:12.5px;font-weight:900;padding:6px 7px;border-radius:10px;border:1.5px solid #F1DCC0;background:#fff;color:var(--ink);outline:0;text-align:center}
+.cy-set input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,138,43,.13)}
+.cy-set-go{border:0;background:linear-gradient(135deg,#FF7CA2,#F2568A);color:#fff;font:inherit;font-size:11px;font-weight:900;padding:7px 11px;border-radius:999px;cursor:pointer;box-shadow:0 4px 10px rgba(240,80,130,.22)}
+.cy-list-head{display:flex;align-items:center;gap:6px;margin:15px 0 7px}
+.cy-list-head h3{margin:0;font-size:14px;font-weight:900;letter-spacing:-.02em}
+.cy-list-head .cnt{margin-left:auto;font-size:11px;font-weight:900;color:#B0507A;background:#FFEDF3;padding:3px 9px;border-radius:999px}
+.cy-list{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.cy-item{display:flex;align-items:center;gap:7px;padding:8px 9px;border-radius:15px;border:1.5px solid var(--line);background:#fff;box-shadow:0 3px 9px rgba(190,100,40,.05)}
+.cy-item.live{border-color:#FFD0E0;background:#FFFAFC}
+.cy-main{flex:1 1 auto;min-width:0}
+.cy-range{margin:0;font-size:12.5px;font-weight:900;letter-spacing:-.01em;color:#5A3218;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.cy-badge{font-size:9.5px;font-weight:900;padding:2px 6px;border-radius:999px;background:#FFEDF3;border:1px solid #FFD0E0;color:#B0507A;white-space:nowrap}
+.cy-note-line{margin:1px 0 0;font-size:10.5px;font-weight:700;color:#A08066;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cy-edit,.cy-del{border:0;width:27px;height:27px;border-radius:50%;font-size:11.5px;font-weight:900;cursor:pointer;flex:0 0 auto;padding:0;display:grid;place-items:center}
+.cy-edit{background:#FFF1DC;color:#A95A22}
+.cy-edit:hover{background:#FFE6C6}
+.cy-del{background:#FFF1F4;color:#B0507A}
+.cy-del:hover{background:#FFE2EA}
+.cy-empty{margin:0;padding:16px 12px;border-radius:16px;border:1.5px dashed #FFD3E2;background:#FFF9FB;font-size:12px;line-height:1.55;color:#8A6A55;text-align:center;word-break:keep-all}
+.cy-empty[hidden]{display:none}
+.cy-empty b{color:#B04570}
+@media (max-width:340px){
+  .cy-row2{grid-template-columns:1fr}
+  .cy-day{height:32px;font-size:11px}
+  .cy-stat b{font-size:13px}
+  .cy-stat span{font-size:9px}
+  .cy-edit,.cy-del{width:25px;height:25px}
+  .cy-state{font-size:17px}
+  .cy-today{padding:5px 7px;font-size:10px}
+}
+
 /* ---------- 🚴 자전거 인터벌 타이머 ---------- */
 .quick-btn.q-bike{grid-column:1/-1;background:linear-gradient(125deg,#FFF0E2 0%,#FFF7E9 58%,#FFE3CD 100%)}
 .q-bike .quick-ico{background:#fff}
@@ -824,6 +939,10 @@ input[type=search]::-webkit-search-cancel-button{display:none}
     <button type="button" class="quick-btn q-bike" id="btnBike" aria-haspopup="dialog">
       <span class="quick-ico" aria-hidden="true">🚴</span>
       <span class="quick-txt"><b>자전거 타이머</b><small id="bikeQuickSub">4분 인터벌 · 1분 교대</small></span>
+    </button>
+    <button type="button" class="quick-btn q-cycle" id="btnCycle" aria-haspopup="dialog">
+      <span class="quick-ico" aria-hidden="true">🌸</span>
+      <span class="quick-txt"><b>생리 주기</b><small id="cycleQuickSub">시작일을 기록해 보세요</small></span>
     </button>
   </nav>
 
@@ -1176,6 +1295,107 @@ input[type=search]::-webkit-search-cancel-button{display:none}
         <div class="bk-progress" id="bikeDots" aria-hidden="true"></div>
         <p class="bk-hint" id="bikeHint">시작 전 <b>3·2·1</b> 카운트다운 뒤 달리기가 시작돼요.<br>타는 동안에는 화면이 꺼지지 않게 잡아 둘게요.</p>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- 🌸 생리 주기 달력 · 기록 -->
+<div class="overlay" id="cycleOverlay">
+  <div class="sheet cy-sheet" id="cycleSheet" role="dialog" aria-modal="true" aria-labelledby="cycleHeading">
+    <div class="f-head">
+      <div class="fh-text">
+        <h2 id="cycleHeading">🌸 생리 주기</h2>
+        <p class="fh-sub" id="cycleSub">기록은 이 휴대폰에만 저장돼요</p>
+      </div>
+      <button type="button" class="home-btn" data-close="cycle" aria-label="홈으로 돌아가기"><span aria-hidden="true">🏠</span> 홈으로</button>
+    </div>
+    <div class="cy-scroll">
+      <section class="cy-hero">
+        <div class="cy-hero-top">
+          <span class="mascot-wrap">
+            <svg class="mascot" viewBox="0 0 220 222" aria-hidden="true"><use href="#chefCat"/></svg>
+            <span class="mascot-tag" aria-hidden="true">🌸</span>
+          </span>
+          <div class="cy-hero-body">
+            <p class="cy-hero-lbl" id="cyStateLbl">첫 기록</p>
+            <p class="cy-state" id="cyState">마지막 생리 시작일을 적어 주세요</p>
+            <p class="cy-state-sub" id="cyStateSub">적어 두면 다음 예정일과 가임기를 달력에 표시해 드려요.</p>
+          </div>
+        </div>
+        <div class="cy-stats">
+          <div class="cy-stat"><span>평균 주기</span><b id="cyAvgCycle">28일</b><i id="cyAvgCycleNote">기본값</i></div>
+          <div class="cy-stat"><span>평균 기간</span><b id="cyAvgPeriod">5일</b><i id="cyAvgPeriodNote">기본값</i></div>
+          <div class="cy-stat"><span>다음 예정일</span><b id="cyNextDate">–</b><i id="cyNextNote">기록하면 알려 드려요</i></div>
+        </div>
+      </section>
+
+      <div class="cy-cal">
+        <div class="cy-cal-head">
+          <button type="button" class="cy-nav" id="cyPrevMonth" aria-label="이전 달">◀</button>
+          <p class="cy-cal-title" id="cyCalTitle">2026년 11월</p>
+          <button type="button" class="cy-nav" id="cyNextMonth" aria-label="다음 달">▶</button>
+          <button type="button" class="cy-today" id="cyTodayBtn">오늘</button>
+        </div>
+        <div class="cy-week" aria-hidden="true"><span class="sun">일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+        <div class="cy-grid" id="cyGrid" role="group" aria-label="생리 주기 달력"></div>
+        <div class="cy-legend">
+          <span><i class="lg-rec" aria-hidden="true"></i>생리 기록</span>
+          <span><i class="lg-pred" aria-hidden="true"></i>생리 예정</span>
+          <span><i class="lg-fert" aria-hidden="true"></i>가임기 · 참고용 예측</span>
+        </div>
+      </div>
+
+      <section class="cy-daybox" id="cyDay" hidden aria-labelledby="cyDayTitle">
+        <div class="cy-day-head">
+          <h3 id="cyDayTitle">오늘</h3>
+          <span class="cy-day-state" id="cyDayState">기록 없음</span>
+        </div>
+        <div class="cy-day-acts">
+          <button type="button" class="cy-mini" id="cyDayStart">이 날 생리 시작</button>
+          <button type="button" class="cy-mini" id="cyDayEnd">이 날 생리 끝</button>
+          <button type="button" class="cy-mini warn" id="cyDayClear">이 날 기록 지우기</button>
+        </div>
+        <p class="cy-sub">양</p>
+        <div class="cy-chips" id="cyDayFlow" role="group" aria-label="이 날 생리 양"></div>
+        <p class="cy-sub">증상</p>
+        <div class="cy-chips" id="cyDaySyms" role="group" aria-label="이 날 증상"></div>
+        <label class="cy-field"><span>메모 (선택)</span><input id="cyDayMemo" type="text" maxlength="60" placeholder="예) 아침에 복통" autocomplete="off" aria-label="이 날 메모"></label>
+        <button type="button" class="btn btn-primary cy-save cy-day-save" id="cyDaySave">이 날 기록 저장</button>
+      </section>
+
+      <form class="cy-form" id="cyForm" novalidate>
+        <div class="cy-quick">
+          <button type="button" class="cy-qbtn" id="cyStartToday">🌸 오늘 생리 시작</button>
+          <button type="button" class="cy-qbtn end" id="cyEndToday">생리 종료</button>
+        </div>
+        <div class="cy-row2">
+          <label class="cy-field"><span>시작일</span><input id="cyStart" type="date" aria-label="생리 시작일"></label>
+          <label class="cy-field"><span>종료일 (선택)</span><input id="cyEnd" type="date" aria-label="생리 종료일"></label>
+        </div>
+        <div>
+          <p class="cy-sub">양</p>
+          <div class="cy-chips" id="cyFlowChips" role="group" aria-label="생리 양"></div>
+        </div>
+        <div>
+          <p class="cy-sub">증상 (여러 개 골라도 돼요)</p>
+          <div class="cy-chips" id="cySymChips" role="group" aria-label="증상"></div>
+        </div>
+        <label class="cy-field"><span>메모 (선택)</span><input id="cyMemo" type="text" maxlength="60" placeholder="예) 둘째 날 많이, 진통제 먹음" autocomplete="off" aria-label="생리 메모"></label>
+        <button type="submit" class="btn btn-primary cy-save" id="cySave">기록 저장</button>
+        <p class="cy-form-hint" id="cyFormHint">시작일만 적어도 돼요. 저장하면 달력에 표시해요.</p>
+      </form>
+
+      <div class="cy-set">
+        <span class="cy-set-lbl">⚙️ 기본 주기 설정</span>
+        <label>주기 <input id="cySetCycle" type="number" min="20" max="45" step="1" inputmode="numeric" aria-label="평균 주기 일수">일</label>
+        <label>기간 <input id="cySetPeriod" type="number" min="1" max="10" step="1" inputmode="numeric" aria-label="평균 생리 기간 일수">일</label>
+        <button type="button" class="cy-set-go" id="cySetSave">저장</button>
+      </div>
+      <p class="cy-note">기록이 2번 이상 쌓이면 평균 주기를 스스로 계산해요. 위 설정은 기록이 적을 때 쓰는 기본값이에요. 가임기 표시는 <b>참고용 예측</b>이라 피임·임신 계획의 근거로는 쓰지 마세요.</p>
+
+      <div class="cy-list-head"><h3>최근 기록</h3><span class="cnt" id="cyCount">0개</span></div>
+      <ul class="cy-list" id="cyList"></ul>
+      <p class="cy-empty" id="cyListEmpty">아직 기록이 없어요. <b>🌸 오늘 생리 시작</b>을 눌러 첫 기록을 남겨 보세요.</p>
     </div>
   </div>
 </div>
@@ -1987,7 +2207,8 @@ function isAnyOverlayOpen(){
          $('#shopOverlay').classList.contains('show') ||
          $('#schoolOverlay').classList.contains('show') ||
          $('#weightOverlay').classList.contains('show') ||
-         $('#bikeOverlay').classList.contains('show');
+         $('#bikeOverlay').classList.contains('show') ||
+         $('#cycleOverlay').classList.contains('show');
 }
 
 /* =========================================================
@@ -2004,7 +2225,8 @@ var SHEET_CLOSERS = {
   shop: function(){ closeShop(); },
   school: function(){ closeSchool(); },
   weight: function(){ closeWeight(); },
-  bike: function(){ closeBike(); }
+  bike: function(){ closeBike(); },
+  cycle: function(){ closeCycle(); }
 };
 var sheetStack = [];        /* 열린 창 (아래→위) */
 var histOwned = 0;          /* history 에 쌓아 둔 우리 칸 수 */
@@ -2490,9 +2712,16 @@ function closeConfirm(){
   pendingDelete = null;
   pendingChild = null;
   pendingWeight = null;
+  pendingCycle = null;
   if(!isAnyOverlayOpen()) document.body.classList.remove('lock');
 }
 function doDelete(){
+  if(pendingCycle){
+    var cs = pendingCycle;
+    closeConfirm();
+    cyRemovePeriod(cs);
+    return;
+  }
   if(pendingWeight){
     var wd = pendingWeight;
     closeConfirm();
@@ -2528,7 +2757,8 @@ function exportJSON(){
     recipes: state.recipes,
     shopping: shopItems,
     school: schoolExportData(),
-    weight: weightExportData()
+    weight: weightExportData(),
+    cycle: cycleExportData()
   };
   try {
     var blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
@@ -2557,7 +2787,8 @@ function importText(text){
   var shopAdded = Array.isArray(data.shopping) ? importShop(data.shopping) : 0;
   var schoolMerged = importSchoolData(data.school);
   var weightMerged = importWeightData(data.weight);
-  if(!incoming.length && !shopAdded && !schoolMerged && !weightMerged){ toast('불러올 레시피가 없어요'); return; }
+  var cycleMerged = importCycleData(data.cycle);
+  if(!incoming.length && !shopAdded && !schoolMerged && !weightMerged && !cycleMerged){ toast('불러올 레시피가 없어요'); return; }
 
   var index = {};
   state.recipes.forEach(function(r, i){ index[r.id] = i; });
@@ -2575,7 +2806,7 @@ function importText(text){
   saveRecipes();
   render();
   if(openId) refreshDetail();
-  toast('레시피 '+added+'개 추가 · '+updated+'개 업데이트했어요' + (shopAdded ? ' · 장보기 '+shopAdded+'개' : '') + (schoolMerged ? ' · 하교 시간 '+schoolMerged+'명' : '') + (weightMerged ? ' · 몸무게 '+weightMerged+'개' : ''));
+  toast('레시피 '+added+'개 추가 · '+updated+'개 업데이트했어요' + (shopAdded ? ' · 장보기 '+shopAdded+'개' : '') + (schoolMerged ? ' · 하교 시간 '+schoolMerged+'명' : '') + (weightMerged ? ' · 몸무게 '+weightMerged+'개' : '') + (cycleMerged ? ' · 생리 주기 '+cycleMerged+'개' : ''));
 }
 
 /* =========================================================
@@ -4074,6 +4305,660 @@ function importWeightData(raw){
 }
 
 /* =========================================================
+   🌸 생리 주기 — 달력 · 기록 · 예측
+   기록은 이 휴대폰(localStorage)에만 저장한다.
+   화면(HTML)에는 어떤 날짜도 적어 두지 않는다.
+   ========================================================= */
+var CYCLE_KEY = 'minjeong-recipebook-cycle-v1';
+var CYCLE_FLOWS = ['적음','보통','많음'];
+var CYCLE_SYMS = ['복통','피곤','두통','기분변화','허리통증','부종','식욕'];
+var CYCLE_LUTEAL = 14;   /* 배란일은 다음 예정일 14일 전으로 어림잡는다 */
+var cycle = { settings:{cycleLen:28, periodLen:5}, periods:[], days:{} };
+var cycleOpen = false;
+var cycleMonthDate = null;   /* 달력에 보이는 달의 1일 */
+var cycleSelDate = '';
+var cyDraft = { flow:'보통', syms:[] };
+var cyEditStart = '';
+var cyDayDraft = { date:'', flow:'', syms:[] };
+var pendingCycle = null;
+
+function cyNormDate(v){ return normWeightDate(v); }
+function cyShort(dateStr){
+  var p = String(dateStr||'').split('-');
+  if(p.length !== 3) return String(dateStr||'');
+  return parseInt(p[1],10) + '월 ' + parseInt(p[2],10) + '일';
+}
+function cyDayLabel(dateStr){
+  var p = String(dateStr||'').split('-');
+  if(p.length !== 3) return String(dateStr||'');
+  var d = new Date(parseInt(p[0],10), parseInt(p[1],10)-1, parseInt(p[2],10));
+  return cyShort(dateStr) + ' (' + SCHOOL_DAYS[(d.getDay()+6)%7] + ')';
+}
+function cyRangeLabel(p){
+  if(!p) return '';
+  if(!p.end) return cyShort(p.start) + ' ~ 진행 중';
+  if(p.end === p.start) return cyShort(p.start);
+  return cyShort(p.start) + ' ~ ' + cyShort(p.end);
+}
+
+function normCyclePeriod(raw){
+  if(!raw || typeof raw !== 'object') return null;
+  var start = cyNormDate(raw.start);
+  if(!start) return null;
+  var end = cyNormDate(raw.end);
+  if(end && dayNum(end) < dayNum(start)) end = '';
+  var flow = CYCLE_FLOWS.indexOf(raw.flow) >= 0 ? raw.flow : '보통';
+  var syms = Array.isArray(raw.symptoms) ? raw.symptoms.filter(function(s){ return CYCLE_SYMS.indexOf(s) >= 0; }).slice(0,7) : [];
+  var memo = String(raw.memo==null?'':raw.memo).replace(/\s+/g,' ').trim().slice(0,60);
+  return { id:'cy-'+start, start:start, end:end, flow:flow, symptoms:syms, memo:memo, updatedAt:num(raw.updatedAt)||0 };
+}
+function normCycleDay(raw){
+  if(!raw || typeof raw !== 'object') return null;
+  var flow = CYCLE_FLOWS.indexOf(raw.flow) >= 0 ? raw.flow : '';
+  var syms = Array.isArray(raw.symptoms) ? raw.symptoms.filter(function(s){ return CYCLE_SYMS.indexOf(s) >= 0; }).slice(0,7) : [];
+  var memo = String(raw.memo==null?'':raw.memo).replace(/\s+/g,' ').trim().slice(0,60);
+  if(!flow && !syms.length && !memo) return null;
+  return { flow:flow, symptoms:syms, memo:memo };
+}
+
+function loadCycle(){
+  var out = { settings:{cycleLen:28, periodLen:5}, periods:[], days:{} };
+  var raw = null;
+  try { raw = localStorage.getItem(CYCLE_KEY); } catch(e){ raw = null; }
+  if(!raw) return out;
+  try {
+    var data = JSON.parse(raw);
+    if(!data || typeof data !== 'object') return out;
+    var s = data.settings || {};
+    var cl = Math.round(num(s.cycleLen)), pl = Math.round(num(s.periodLen));
+    if(cl >= 20 && cl <= 45) out.settings.cycleLen = cl;
+    if(pl >= 1 && pl <= 10) out.settings.periodLen = pl;
+    var list = Array.isArray(data.periods) ? data.periods : (Array.isArray(data) ? data : []);
+    var map = {};
+    list.map(normCyclePeriod).filter(Boolean).forEach(function(p){ map[p.start] = p; });
+    out.periods = Object.keys(map).sort().map(function(k){ return map[k]; });
+    var days = data.days && typeof data.days === 'object' ? data.days : {};
+    Object.keys(days).forEach(function(d){
+      var nd = cyNormDate(d);
+      if(!nd) return;
+      var e = normCycleDay(days[d]);
+      if(e) out.days[nd] = e;
+    });
+    return out;
+  } catch(e){ return out; }
+}
+
+function saveCycle(){
+  try {
+    localStorage.setItem(CYCLE_KEY, JSON.stringify({
+      app:'민정님의 레시피북', version:1, savedAt:new Date().toISOString(),
+      settings: cycle.settings, periods: cycle.periods, days: cycle.days
+    }));
+    return true;
+  } catch(e){
+    toast('생리 주기를 저장하지 못했어요');
+    return false;
+  }
+}
+
+function cyPeriodsSorted(){
+  return cycle.periods.slice().sort(function(a,b){ return a.start < b.start ? -1 : (a.start > b.start ? 1 : 0); });
+}
+function cyPeriodEndDay(p, todayInput){
+  var s = dayNum(p.start);
+  if(p.end) return Math.max(s, dayNum(p.end));
+  return Math.max(s, dayNum(todayInput || todayStr()));
+}
+function cyPeriodFor(dateStr){
+  var d = dayNum(dateStr), hit = null;
+  cycle.periods.forEach(function(p){
+    if(dayNum(p.start) <= d && d <= cyPeriodEndDay(p)) hit = p;
+  });
+  return hit;
+}
+function cyDuration(p, todayInput){
+  if(!p) return 0;
+  var s = dayNum(p.start);
+  var e = p.end ? dayNum(p.end) : dayNum(todayInput || todayStr());
+  return Math.max(1, e - s + 1);
+}
+function cyActivePeriod(todayInput){
+  var list = cyPeriodsSorted();
+  if(!list.length) return null;
+  var last = list[list.length-1];
+  var t = dayNum(todayInput || todayStr());
+  var s = dayNum(last.start), e = cyPeriodEndDay(last, todayInput);
+  if(s <= t && t <= e) return { p:last, dayNo: t - s + 1, ongoing: !last.end };
+  return null;
+}
+function cyAverageCycle(){
+  var starts = cyPeriodsSorted().map(function(p){ return dayNum(p.start); });
+  var gaps = [];
+  for(var i=1;i<starts.length;i++){
+    var g = starts[i] - starts[i-1];
+    if(g >= 15 && g <= 60) gaps.push(g);
+  }
+  if(!gaps.length) return { val: cycle.settings.cycleLen, sampled:false, count:0 };
+  var sum = 0;
+  gaps.forEach(function(g){ sum += g; });
+  return { val: Math.round(sum/gaps.length), sampled:true, count:gaps.length };
+}
+function cyAveragePeriod(){
+  var lens = [];
+  cyPeriodsSorted().forEach(function(p){
+    if(!p.end) return;
+    var d = dayNum(p.end) - dayNum(p.start) + 1;
+    if(d >= 1 && d <= 15) lens.push(d);
+  });
+  if(!lens.length) return { val: cycle.settings.periodLen, sampled:false, count:0 };
+  var sum = 0;
+  lens.forEach(function(l){ sum += l; });
+  return { val: Math.round(sum/lens.length), sampled:true, count:lens.length };
+}
+
+function cyForecast(todayInput){
+  var todayS = todayInput || todayStr();
+  var t = dayNum(todayS);
+  var avg = cyAverageCycle(), per = cyAveragePeriod();
+  var list = cyPeriodsSorted();
+  var out = {
+    today:todayS, cycleLen:avg.val, periodLen:per.val, avgCycle:avg, avgPeriod:per,
+    empty:!list.length, last:list.length ? list[list.length-1] : null,
+    active:cyActivePeriod(todayS), nextDay:null, nextStart:'',
+    ovuDay:null, dayTo:null, overdue:0
+  };
+  if(!out.empty){
+    out.nextDay = dayNum(out.last.start) + avg.val;
+    out.nextStart = dateFromDayNum(out.nextDay);
+    out.ovuDay = out.nextDay - CYCLE_LUTEAL;
+    out.dayTo = out.nextDay - t;
+    out.overdue = out.dayTo < 0 ? -out.dayTo : 0;
+  }
+  return out;
+}
+
+function cyQuickText(){
+  var f = cyForecast();
+  if(f.empty) return '시작일을 기록해 보세요';
+  if(f.active) return '생리 중 · ' + f.active.dayNo + '일째';
+  if(f.overdue > 0) return '예정일 ' + f.overdue + '일 지남';
+  if(f.dayTo === 0) return '오늘 예정';
+  return '다음 예정 D-' + f.dayTo;
+}
+function renderCycleQuick(){
+  var el = $('#cycleQuickSub');
+  if(el) el.textContent = cyQuickText();
+}
+
+function renderCycleState(){
+  var f = cyForecast();
+  var lbl = $('#cyStateLbl'), main = $('#cyState'), sub = $('#cyStateSub');
+  if(!lbl || !main || !sub) return;
+  if(f.empty){
+    lbl.textContent = '첫 기록';
+    main.textContent = '마지막 생리 시작일을 적어 주세요';
+    sub.textContent = '적어 두면 다음 예정일과 가임기를 달력에 표시해 드려요.';
+    return;
+  }
+  if(f.active){
+    lbl.textContent = '오늘';
+    main.textContent = '생리 중 · ' + f.active.dayNo + '일째';
+    sub.textContent = f.active.p.end
+      ? (cyRangeLabel(f.active.p) + ' · ' + cyDuration(f.active.p) + '일 기록')
+      : (cyShort(f.active.p.start) + ' 시작 · 끝난 날을 눌러 종료를 적어 주세요');
+    return;
+  }
+  var diff = f.dayTo;
+  var base = '평균 ' + f.cycleLen + '일 주기로 계산했어요';
+  if(diff > 0){ lbl.textContent = '다음 생리까지'; main.textContent = 'D-' + diff; sub.textContent = cyShort(f.nextStart) + ' 예정 · ' + base; }
+  else if(diff === 0){ lbl.textContent = '다음 생리'; main.textContent = '오늘 예정이에요'; sub.textContent = cyShort(f.nextStart) + ' · ' + base; }
+  else { lbl.textContent = '다음 생리'; main.textContent = '예정일이 ' + f.overdue + '일 지났어요'; sub.textContent = '시작했으면 달력에서 그날을 눌러 기록해 주세요'; }
+}
+
+function renderCycleStats(){
+  var f = cyForecast();
+  var ac = $('#cyAvgCycle'), acn = $('#cyAvgCycleNote');
+  var ap = $('#cyAvgPeriod'), apn = $('#cyAvgPeriodNote');
+  var nx = $('#cyNextDate'), nxn = $('#cyNextNote');
+  if(ac) ac.textContent = f.cycleLen + '일';
+  if(acn) acn.textContent = f.avgCycle.sampled ? ('기록 ' + f.avgCycle.count + '번') : '기본값';
+  if(ap) ap.textContent = f.periodLen + '일';
+  if(apn) apn.textContent = f.avgPeriod.sampled ? ('기록 ' + f.avgPeriod.count + '번') : '기본값';
+  if(nx) nx.textContent = f.nextStart ? cyShort(f.nextStart) : '–';
+  if(nxn) nxn.textContent = f.empty ? '기록하면 알려 드려요'
+    : (f.overdue > 0 ? f.overdue + '일 지남' : (f.dayTo === 0 ? '오늘' : 'D-' + f.dayTo));
+}
+
+function renderCycleCal(){
+  var grid = $('#cyGrid');
+  if(!grid) return;
+  var base = cycleMonthDate || new Date();
+  var y = base.getFullYear(), m = base.getMonth();
+  var title = $('#cyCalTitle');
+  if(title) title.textContent = y + '년 ' + (m+1) + '월';
+  var lead = new Date(y, m, 1).getDay();          /* 일요일부터 */
+  var lastD = new Date(y, m+1, 0).getDate();
+  var baseDay = dayNum(y + '-' + pad2(m+1) + '-01');
+  var todayS = todayStr(), todayD = dayNum(todayS);
+  var f = cyForecast(todayS);
+
+  var recDays = {};
+  cycle.periods.forEach(function(p){
+    var s = dayNum(p.start), e = cyPeriodEndDay(p), guard = 0;
+    for(var d = s; d <= e && guard++ < 400; d++) recDays[d] = true;
+  });
+  var predFrom = f.nextDay === null ? null : Math.max(f.nextDay, todayD);
+  var predTo = f.nextDay === null ? null : f.nextDay + f.periodLen - 1;
+  var fertFrom = f.ovuDay === null ? null : f.ovuDay - 5;
+  var fertTo = f.ovuDay === null ? null : f.ovuDay + 1;
+
+  var html = '';
+  for(var i=0;i<lead;i++) html += '<span class="cy-day blank" aria-hidden="true"></span>';
+  for(var d=1; d<=lastD; d++){
+    var dn = baseDay + d - 1;
+    var ds = dateFromDayNum(dn);
+    var wd = new Date(y, m, d).getDay();
+    var cls = 'cy-day' + (wd === 0 ? ' sun' : '');
+    var isRec = !!recDays[dn];
+    var isPred = predFrom !== null && dn >= predFrom && dn <= predTo && !isRec;
+    var isOvu = f.ovuDay !== null && dn === f.ovuDay && !isRec;
+    var isFert = fertFrom !== null && dn >= fertFrom && dn <= fertTo && !isRec && !isPred;
+    if(isRec) cls += ' rec';
+    if(isPred) cls += ' pred';
+    if(isFert) cls += ' fert';
+    if(isOvu) cls += ' ovu';
+    if(dn === todayD) cls += ' today';
+    if(cycleSelDate === ds) cls += ' sel';
+    var bits = [];
+    if(isRec) bits.push('생리 기록');
+    if(isPred) bits.push('생리 예정');
+    if(isOvu) bits.push('배란 예정');
+    else if(isFert) bits.push('가임기 참고용 예측');
+    var log = cycle.days[ds];
+    if(log) bits.push([log.flow, (log.symptoms||[]).join('·')].filter(Boolean).join(' '));
+    html += '<button type="button" class="' + cls + '" data-cyday="' + ds + '" aria-label="' + esc(cyDayLabel(ds) + (bits.length ? ' ' + bits.join(', ') : '')) + '">' + d + (log ? '<i class="cy-dot" aria-hidden="true"></i>' : '') + '</button>';
+  }
+  grid.innerHTML = html;
+}
+
+function cyDayStateText(ds){
+  var d = cyNormDate(ds);
+  if(!d) return '';
+  var p = cyPeriodFor(d);
+  var f = cyForecast();
+  var dn = dayNum(d);
+  if(p){
+    var bits = ['생리 ' + (dn - dayNum(p.start) + 1) + '일째'];
+    var log = cycle.days[d];
+    if(log && log.flow) bits.push(log.flow);
+    return bits.join(' · ');
+  }
+  if(f.nextDay !== null && dn >= f.nextDay && dn <= f.nextDay + f.periodLen - 1) return '생리 예정';
+  if(f.ovuDay !== null && dn >= f.ovuDay - 5 && dn <= f.ovuDay + 1) return '가임기 · 참고용 예측';
+  if(dn > dayNum(todayStr())) return '아직 오지 않은 날';
+  return '생리 기록 없음';
+}
+
+function renderCycleDay(){
+  var box = $('#cyDay');
+  if(!box) return;
+  var ds = cycleSelDate;
+  if(!ds){ box.hidden = true; return; }
+  var t = $('#cyDayTitle');
+  if(t) t.textContent = cyDayLabel(ds);
+  var st = $('#cyDayState');
+  if(st) st.textContent = cyDayStateText(ds);
+  var flowWrap = $('#cyDayFlow');
+  if(flowWrap){
+    flowWrap.innerHTML = CYCLE_FLOWS.map(function(f){
+      var on = cyDayDraft.flow === f;
+      return '<button type="button" class="cy-chip' + (on ? ' on' : '') + '" data-cydayflow="' + esc(f) + '" aria-pressed="' + (on ? 'true' : 'false') + '">' + esc(f) + '</button>';
+    }).join('');
+  }
+  var symWrap = $('#cyDaySyms');
+  if(symWrap){
+    symWrap.innerHTML = CYCLE_SYMS.map(function(s){
+      var on = cyDayDraft.syms.indexOf(s) >= 0;
+      return '<button type="button" class="cy-chip' + (on ? ' on' : '') + '" data-cydaysym="' + esc(s) + '" aria-pressed="' + (on ? 'true' : 'false') + '">' + esc(s) + '</button>';
+    }).join('');
+  }
+  var startBtn = $('#cyDayStart'), endBtn = $('#cyDayEnd');
+  var cover = cyPeriodFor(ds);
+  if(startBtn) startBtn.disabled = !!(cover && cover.start === ds);
+  if(endBtn) endBtn.disabled = !cover;
+}
+
+function renderCycleForm(){
+  var startEl = $('#cyStart');
+  if(startEl && !cyNormDate(startEl.value)) startEl.value = todayStr();
+  var flowWrap = $('#cyFlowChips');
+  if(flowWrap){
+    flowWrap.innerHTML = CYCLE_FLOWS.map(function(f){
+      var on = cyDraft.flow === f;
+      return '<button type="button" class="cy-chip' + (on ? ' on' : '') + '" data-cyflow="' + esc(f) + '" aria-pressed="' + (on ? 'true' : 'false') + '">' + esc(f) + '</button>';
+    }).join('');
+  }
+  var symWrap = $('#cySymChips');
+  if(symWrap){
+    symWrap.innerHTML = CYCLE_SYMS.map(function(s){
+      var on = cyDraft.syms.indexOf(s) >= 0;
+      return '<button type="button" class="cy-chip' + (on ? ' on' : '') + '" data-cysym="' + esc(s) + '" aria-pressed="' + (on ? 'true' : 'false') + '">' + esc(s) + '</button>';
+    }).join('');
+  }
+  var hint = $('#cyFormHint');
+  if(hint){
+    hint.className = 'cy-form-hint' + (cyEditStart ? ' editing' : '');
+    hint.textContent = cyEditStart
+      ? cyShort(cyEditStart) + ' 기록을 고치는 중이에요. 저장하면 바뀌어요.'
+      : '시작일만 적어도 돼요. 저장하면 달력에 표시해요.';
+  }
+  var setC = $('#cySetCycle'), setP = $('#cySetPeriod');
+  if(setC) setC.value = cycle.settings.cycleLen;
+  if(setP) setP.value = cycle.settings.periodLen;
+}
+
+function renderCycleList(){
+  var ul = $('#cyList'), empty = $('#cyListEmpty'), cnt = $('#cyCount');
+  if(!ul) return;
+  var rows = cyPeriodsSorted().reverse();
+  if(cnt) cnt.textContent = rows.length + '개';
+  if(!rows.length){ ul.innerHTML = ''; if(empty) empty.hidden = false; return; }
+  if(empty) empty.hidden = true;
+  var live = cyActivePeriod();
+  ul.innerHTML = rows.map(function(p, i){
+    var older = rows[i+1] || null;
+    var gap = older ? dayNum(p.start) - dayNum(older.start) : null;
+    var dur = cyDuration(p);
+    var isLive = !!(live && live.p.start === p.start);
+    var meta = [];
+    if(gap !== null && gap > 0) meta.push('주기 ' + gap + '일');
+    meta.push(p.flow || '보통');
+    if(p.symptoms && p.symptoms.length) meta.push(p.symptoms.join('·'));
+    if(p.memo) meta.push(p.memo);
+    return '<li class="cy-item' + (isLive ? ' live' : '') + '">' +
+      '<div class="cy-main">' +
+        '<p class="cy-range">' + esc(cyRangeLabel(p)) + ' <span class="cy-badge">' + (p.end ? dur + '일' : dur + '일째') + '</span></p>' +
+        '<p class="cy-note-line">' + esc(meta.join(' · ')) + '</p>' +
+      '</div>' +
+      '<button type="button" class="cy-edit" data-cyedit="' + esc(p.start) + '" aria-label="' + esc(cyRangeLabel(p)) + ' 기록 고치기" title="고치기">✏️</button>' +
+      '<button type="button" class="cy-del" data-cydel="' + esc(p.start) + '" aria-label="' + esc(cyRangeLabel(p)) + ' 기록 지우기" title="지우기">✕</button>' +
+    '</li>';
+  }).join('');
+}
+
+function renderCycle(){
+  renderCycleState();
+  renderCycleStats();
+  renderCycleCal();
+  renderCycleDay();
+  renderCycleForm();
+  renderCycleList();
+  renderCycleQuick();
+}
+
+/* 앞뒤 기록이 겹치지 않게 다듬는다 */
+function cyNormalize(){
+  cycle.periods = cyPeriodsSorted();
+  for(var i=0;i<cycle.periods.length-1;i++){
+    var p = cycle.periods[i], n = cycle.periods[i+1];
+    var cut = dateFromDayNum(dayNum(n.start) - 1);
+    if(!p.end) p.end = cut;
+    else if(dayNum(p.end) >= dayNum(n.start)) p.end = cut;
+    if(dayNum(p.end) < dayNum(p.start)) p.end = p.start;
+  }
+}
+
+function cyFormMemo(){
+  var el = $('#cyMemo');
+  return String(el ? el.value : '').replace(/\s+/g,' ').trim().slice(0,60);
+}
+function cyResetForm(){
+  cyDraft = { flow:'보통', syms:[] };
+  cyEditStart = '';
+  var s = $('#cyStart'), e = $('#cyEnd'), m = $('#cyMemo');
+  if(s) s.value = todayStr();
+  if(e) e.value = '';
+  if(m) m.value = '';
+  renderCycleForm();
+}
+
+function cyStartOn(ds, opts){
+  opts = opts || {};
+  var d = cyNormDate(ds);
+  if(!d) return null;
+  var cover = cyPeriodFor(d);
+  if(cover && cover.start === d){ toast('이미 시작한 날이에요'); return null; }
+  cycle.periods.forEach(function(p){
+    var s = dayNum(p.start), e = cyPeriodEndDay(p);
+    if(s < dayNum(d) && dayNum(d) <= e) p.end = dateFromDayNum(dayNum(d) - 1);
+  });
+  cycle.periods = cycle.periods.filter(function(p){ return p.start !== d; });
+  cycle.periods.push(normCyclePeriod({
+    start:d, end:'', flow:opts.flow || '보통', symptoms:opts.syms || [], memo:opts.memo || '', updatedAt:Date.now()
+  }));
+  cyNormalize();
+  if(!saveCycle()) return null;
+  renderCycle();
+  toast(cyShort(d) + '부터 생리 시작으로 기록했어요 🌸');
+  return d;
+}
+
+function cyEndOn(ds){
+  var d = cyNormDate(ds);
+  if(!d) return null;
+  var target = null;
+  cyPeriodsSorted().forEach(function(p){
+    if(dayNum(p.start) <= dayNum(d) && (!target || dayNum(p.start) >= dayNum(target.start))) target = p;
+  });
+  if(!target){ toast('먼저 생리 시작한 날을 기록해 주세요'); return null; }
+  target.end = d;
+  if(dayNum(target.end) < dayNum(target.start)) target.end = target.start;
+  cyNormalize();
+  if(!saveCycle()) return null;
+  renderCycle();
+  toast(cyShort(d) + '에 생리가 끝난 것으로 기록했어요');
+  return d;
+}
+
+function cySubmitForm(e){
+  if(e) e.preventDefault();
+  var startEl = $('#cyStart'), endEl = $('#cyEnd');
+  var start = cyNormDate(startEl ? startEl.value : '');
+  var end = cyNormDate(endEl ? endEl.value : '');
+  if(!start){ toast('생리 시작일을 골라 주세요'); return; }
+  if(end && dayNum(end) < dayNum(start)){ toast('끝난 날은 시작한 날보다 뒤여야 해요'); return; }
+  var replace = (cyEditStart && cyEditStart !== start) ? cyEditStart : '';
+  var p = normCyclePeriod({ start:start, end:end, flow:cyDraft.flow, symptoms:cyDraft.syms, memo:cyFormMemo(), updatedAt:Date.now() });
+  if(!p) return;
+  cycle.periods = cycle.periods.filter(function(x){ return x.start !== start && x.start !== replace; });
+  cycle.periods.push(p);
+  cyNormalize();
+  if(!saveCycle()) return;
+  var wasEdit = !!cyEditStart;
+  cyResetForm();
+  renderCycle();
+  toast(wasEdit ? '생리 기록을 고쳤어요' : (cyShort(start) + '부터 생리 기록을 저장했어요 🌸'));
+}
+
+function cyEditPeriod(start){
+  var p = null;
+  cycle.periods.forEach(function(x){ if(x.start === start) p = x; });
+  if(!p) return;
+  cyEditStart = p.start;
+  cyDraft = { flow:p.flow || '보통', syms:(p.symptoms || []).slice() };
+  var s = $('#cyStart'), e = $('#cyEnd'), m = $('#cyMemo');
+  if(s) s.value = p.start;
+  if(e) e.value = p.end || '';
+  if(m) m.value = p.memo || '';
+  renderCycleForm();
+  var form = $('#cyForm');
+  if(form){ try{ form.scrollIntoView({block:'center', behavior:'smooth'}); }catch(err){} }
+  try{ s.focus(); }catch(err){}
+}
+
+function cyAskDelete(start){
+  var p = null;
+  cycle.periods.forEach(function(x){ if(x.start === start) p = x; });
+  if(!p) return;
+  pendingCycle = p.start;
+  pendingDelete = null;
+  pendingChild = null;
+  pendingWeight = null;
+  $('#confirmTitle').textContent = '이 기록을 지울까요?';
+  $('#confirmText').innerHTML = '<b>' + esc(cyRangeLabel(p)) + '</b><br>지우면 되돌릴 수 없어요.';
+  $('#confirmOverlay').classList.add('show');
+  sheetOpen('confirm');
+  document.body.classList.add('lock');
+}
+function cyRemovePeriod(start){
+  cycle.periods = cycle.periods.filter(function(p){ return p.start !== start; });
+  if(!saveCycle()) return;
+  renderCycle();
+  toast('생리 기록을 지웠어요');
+}
+
+function cyOpenDay(ds){
+  var d = cyNormDate(ds);
+  if(!d) return;
+  cycleSelDate = d;
+  var log = cycle.days[d] || null;
+  cyDayDraft = {
+    date:d,
+    flow: log ? (log.flow || '') : '',
+    syms: log && Array.isArray(log.symptoms) ? log.symptoms.slice() : []
+  };
+  var memoEl = $('#cyDayMemo');
+  if(memoEl) memoEl.value = log ? (log.memo || '') : '';
+  renderCycleDay();
+  renderCycleCal();
+  var box = $('#cyDay');
+  if(box){ box.hidden = false; try{ box.scrollIntoView({block:'nearest', behavior:'smooth'}); }catch(e){} }
+}
+
+function cySaveDay(){
+  var ds = cycleSelDate;
+  if(!ds) return;
+  var memoEl = $('#cyDayMemo');
+  var memo = String(memoEl ? memoEl.value : '').replace(/\s+/g,' ').trim().slice(0,60);
+  var entry = normCycleDay({ flow:cyDayDraft.flow, symptoms:cyDayDraft.syms, memo:memo });
+  if(!entry){
+    if(!cycle.days[ds]){ toast('양이나 증상을 골라 주세요'); return; }
+    delete cycle.days[ds];
+    if(!saveCycle()) return;
+    renderCycle();
+    toast(cyShort(ds) + ' 기록을 지웠어요');
+    return;
+  }
+  cycle.days[ds] = entry;
+  if(!saveCycle()) return;
+  renderCycle();
+  toast(cyShort(ds) + ' 기록을 저장했어요');
+}
+
+function cyDayClear(){
+  var ds = cycleSelDate;
+  if(!ds) return;
+  var p = cyPeriodFor(ds);
+  if(p){ cyAskDelete(p.start); return; }
+  if(cycle.days[ds]){
+    delete cycle.days[ds];
+    if(!saveCycle()) return;
+    cyDayDraft = { date:ds, flow:'', syms:[] };
+    var memoEl = $('#cyDayMemo');
+    if(memoEl) memoEl.value = '';
+    renderCycle();
+    toast(cyShort(ds) + ' 기록을 지웠어요');
+    return;
+  }
+  toast('지울 기록이 없어요');
+}
+
+function cySaveSettings(){
+  var cEl = $('#cySetCycle'), pEl = $('#cySetPeriod');
+  var cl = Math.round(num(cEl ? cEl.value : 0));
+  var pl = Math.round(num(pEl ? pEl.value : 0));
+  if(!(cl >= 20 && cl <= 45)){ toast('주기는 20~45일 사이로 적어 주세요'); return; }
+  if(!(pl >= 1 && pl <= 10)){ toast('생리 기간은 1~10일 사이로 적어 주세요'); return; }
+  cycle.settings.cycleLen = cl;
+  cycle.settings.periodLen = pl;
+  if(!saveCycle()) return;
+  renderCycle();
+  toast('주기 설정을 저장했어요');
+}
+
+function cyShiftMonth(delta){
+  var b = cycleMonthDate || new Date();
+  cycleMonthDate = new Date(b.getFullYear(), b.getMonth() + delta, 1);
+  renderCycleCal();
+}
+function cyGoToday(){
+  var now = new Date();
+  cycleMonthDate = new Date(now.getFullYear(), now.getMonth(), 1);
+  renderCycleCal();
+}
+
+function cycleExportData(){
+  return { settings:{ cycleLen:cycle.settings.cycleLen, periodLen:cycle.settings.periodLen }, periods:cycle.periods, days:cycle.days };
+}
+function importCycleData(raw){
+  if(!raw || typeof raw !== 'object') return 0;
+  var changed = 0;
+  var s = raw.settings || {};
+  var cl = Math.round(num(s.cycleLen)), pl = Math.round(num(s.periodLen));
+  if(cl >= 20 && cl <= 45 && cl !== cycle.settings.cycleLen){ cycle.settings.cycleLen = cl; changed++; }
+  if(pl >= 1 && pl <= 10 && pl !== cycle.settings.periodLen){ cycle.settings.periodLen = pl; changed++; }
+  var map = {};
+  cycle.periods.forEach(function(p){ map[p.start] = p; });
+  (Array.isArray(raw.periods) ? raw.periods : []).map(normCyclePeriod).filter(Boolean).forEach(function(p){
+    var old = map[p.start];
+    if(!old || old.end !== p.end || old.flow !== p.flow ||
+       (old.symptoms||[]).join(',') !== (p.symptoms||[]).join(',') || old.memo !== p.memo) changed++;
+    map[p.start] = p;
+  });
+  cycle.periods = Object.keys(map).sort().map(function(k){ return map[k]; });
+  var days = raw.days && typeof raw.days === 'object' ? raw.days : {};
+  Object.keys(days).forEach(function(d){
+    var nd = cyNormDate(d);
+    if(!nd) return;
+    var entry = normCycleDay(days[d]);
+    if(!entry) return;
+    var cur = cycle.days[nd];
+    if(!cur || cur.flow !== entry.flow || (cur.symptoms||[]).join(',') !== entry.symptoms.join(',') || cur.memo !== entry.memo) changed++;
+    cycle.days[nd] = entry;
+  });
+  cyNormalize();
+  if(changed){ saveCycle(); renderCycle(); }
+  return changed;
+}
+
+function openCycle(){
+  cycleOpen = true;
+  lastFocus = document.activeElement;
+  var now = new Date();
+  cycleMonthDate = new Date(now.getFullYear(), now.getMonth(), 1);
+  cycleSelDate = '';
+  cyEditStart = '';
+  cyDraft = { flow:'보통', syms:[] };
+  var s = $('#cyStart'), e = $('#cyEnd'), m = $('#cyMemo'), dm = $('#cyDayMemo'), box = $('#cyDay');
+  if(s) s.value = todayStr();
+  if(e) e.value = '';
+  if(m) m.value = '';
+  if(dm) dm.value = '';
+  if(box) box.hidden = true;
+  renderCycle();
+  $('#cycleOverlay').classList.add('show');
+  sheetOpen('cycle');
+  document.body.classList.add('lock');
+}
+function closeCycle(){
+  cycleOpen = false;
+  cycleSelDate = '';
+  $('#cycleOverlay').classList.remove('show');
+  sheetClosed('cycle');
+  if(!isAnyOverlayOpen()) document.body.classList.remove('lock');
+}
+
+/* =========================================================
    🚴 4분 자전거 인터벌 타이머
    ========================================================= */
 var BIKE_KEY = 'minjeong-recipebook-bike-v1';
@@ -4572,6 +5457,57 @@ function bind(){
   $('#btnSchool').addEventListener('click', function(){ unlockSchoolAudio(); openSchool(); });
   $('#btnWeight').addEventListener('click', openWeight);
   $('#btnBike').addEventListener('click', openBike);
+  $('#btnCycle').addEventListener('click', openCycle);
+  $('#cyPrevMonth').addEventListener('click', function(){ cyShiftMonth(-1); });
+  $('#cyNextMonth').addEventListener('click', function(){ cyShiftMonth(1); });
+  $('#cyTodayBtn').addEventListener('click', cyGoToday);
+  $('#cyForm').addEventListener('submit', cySubmitForm);
+  $('#cyStartToday').addEventListener('click', function(){
+    cyStartOn(todayStr(), { flow:cyDraft.flow, syms:cyDraft.syms.slice(), memo:cyFormMemo() });
+  });
+  $('#cyEndToday').addEventListener('click', function(){
+    if(!cycle.periods.length){ toast('먼저 생리 시작한 날을 기록해 주세요'); return; }
+    cyEndOn(todayStr());
+  });
+  $('#cyDayStart').addEventListener('click', function(){ if(cycleSelDate) cyStartOn(cycleSelDate); });
+  $('#cyDayEnd').addEventListener('click', function(){ if(cycleSelDate) cyEndOn(cycleSelDate); });
+  $('#cyDayClear').addEventListener('click', cyDayClear);
+  $('#cyDaySave').addEventListener('click', cySaveDay);
+  $('#cySetSave').addEventListener('click', cySaveSettings);
+  $('#cycleSheet').addEventListener('click', function(e){
+    var t = e.target;
+    var dayBtn = t.closest && t.closest('[data-cyday]');
+    if(dayBtn){ cyOpenDay(dayBtn.dataset.cyday); return; }
+    var flowBtn = t.closest && t.closest('[data-cyflow]');
+    if(flowBtn){ cyDraft.flow = flowBtn.dataset.cyflow; renderCycleForm(); return; }
+    var symBtn = t.closest && t.closest('[data-cysym]');
+    if(symBtn){
+      var sym = symBtn.dataset.cysym;
+      var i = cyDraft.syms.indexOf(sym);
+      if(i >= 0) cyDraft.syms.splice(i,1); else cyDraft.syms.push(sym);
+      renderCycleForm();
+      return;
+    }
+    var dFlow = t.closest && t.closest('[data-cydayflow]');
+    if(dFlow){
+      var fv = dFlow.dataset.cydayflow;
+      cyDayDraft.flow = cyDayDraft.flow === fv ? '' : fv;
+      renderCycleDay();
+      return;
+    }
+    var dSym = t.closest && t.closest('[data-cydaysym]');
+    if(dSym){
+      var ds2 = dSym.dataset.cydaysym;
+      var j = cyDayDraft.syms.indexOf(ds2);
+      if(j >= 0) cyDayDraft.syms.splice(j,1); else cyDayDraft.syms.push(ds2);
+      renderCycleDay();
+      return;
+    }
+    var editBtn = t.closest && t.closest('[data-cyedit]');
+    if(editBtn){ cyEditPeriod(editBtn.dataset.cyedit); return; }
+    var delBtn = t.closest && t.closest('[data-cydel]');
+    if(delBtn){ cyAskDelete(delBtn.dataset.cydel); return; }
+  });
   $('#bikeStart').addEventListener('click', bikePrimary);
   $('#bikeReset').addEventListener('click', function(){ bikeResetTimer(); });
   $('#bikeSound').addEventListener('click', bikeToggleSound);
@@ -4822,6 +5758,7 @@ function bind(){
       else if(which === 'school') closeSchool();
       else if(which === 'weight') closeWeight();
       else if(which === 'bike') closeBike();
+      else if(which === 'cycle') closeCycle();
       else closeForm();
       return;
     }
@@ -4842,6 +5779,7 @@ function bind(){
     if(t === $('#schoolOverlay')) closeSchool();
     if(t === $('#weightOverlay')) closeWeight();
     if(t === $('#bikeOverlay')) closeBike();
+    if(t === $('#cycleOverlay')) closeCycle();
     if(t === $('#wGraph')) hideWeightTip();
   });
 
@@ -4855,6 +5793,7 @@ function bind(){
       else if($('#schoolOverlay').classList.contains('show')) closeSchool();
       else if($('#weightOverlay').classList.contains('show')) closeWeight();
       else if($('#bikeOverlay').classList.contains('show')) closeBike();
+      else if($('#cycleOverlay').classList.contains('show')) closeCycle();
       else if($('#fridgeOverlay').classList.contains('show')) closeFridge();
       return;
     }
@@ -4912,6 +5851,8 @@ function init(){
   school = loadSchool();
   schoolFired = loadFired();
   weight = loadWeight();
+  cycle = loadCycle();
+  cyNormalize();
   var bikePrefs = loadBikePrefs();
   bikeTimer.mode = bikePrefs.mode;
   bikeTimer.sound = bikePrefs.sound;
@@ -4924,11 +5865,13 @@ function init(){
   renderSchool();
   renderWeight();
   renderBikeTimer();
+  renderCycle();
   startSchoolClock();
   if(storeMigrated){ try{ saveRecipes(); }catch(e){} }
   try { if(!localStorage.getItem(STORE_KEY)) saveRecipes(); } catch(e){ /* 저장소를 못 쓰는 환경 */ }
   try { if(!localStorage.getItem(SCHOOL_KEY)) saveSchool(); } catch(e){ /* 저장소를 못 쓰는 환경 */ }
   try { if(!localStorage.getItem(WEIGHT_KEY)) saveWeight(); } catch(e){ /* 저장소를 못 쓰는 환경 */ }
+  try { if(!localStorage.getItem(CYCLE_KEY)) saveCycle(); } catch(e){ /* 저장소를 못 쓰는 환경 */ }
 
   /* 안드로이드 뒤로가기 버튼이 창을 닫을 수 있게 노출 (MainActivity BACK_JS) */
   window.RecipeBookClose = {
@@ -4939,7 +5882,8 @@ function init(){
     shopOverlay: closeShop,
     schoolOverlay: closeSchool,
     weightOverlay: closeWeight,
-    bikeOverlay: closeBike
+    bikeOverlay: closeBike,
+    cycleOverlay: closeCycle
   };
 
   window.RecipeBook = {
@@ -4995,6 +5939,21 @@ function init(){
     renderBike: renderBikeTimer,
     openBike: openBike,
     closeBike: closeBike,
+    get cycle(){ return cycle; },
+    cycleExport: cycleExportData,
+    importCycle: importCycleData,
+    cycleForecast: function(){ return cyForecast(); },
+    cycleQuickText: cyQuickText,
+    cycleStart: cyStartOn,
+    cycleEnd: cyEndOn,
+    cycleDayLog: function(d){ return cycle.days[d] || null; },
+    cycleOpenDay: cyOpenDay,
+    cycleMonth: function(){ return cycleMonthDate ? (cycleMonthDate.getFullYear() + '-' + pad2(cycleMonthDate.getMonth()+1)) : ''; },
+    cycleShiftMonth: cyShiftMonth,
+    cycleGoToday: cyGoToday,
+    renderCycle: renderCycle,
+    openCycle: openCycle,
+    closeCycle: closeCycle,
     /* 🏠 뒤로가기 = 홈으로: 열린 창 목록(아래→위) */
     get openSheets(){ return sheetStack.slice(); },
     get historyEntries(){ return histOwned; }
