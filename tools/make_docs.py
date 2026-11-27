@@ -33,11 +33,11 @@ NEUTRAL_SEED = """function seedSchool(){
 }"""
 
 HEAD_LINKS = """<meta name="theme-color" content="#E85D3F">
-<meta name="description" content="레시피와 장보기, 아이들 하교 시간, 몸무게 기록, 자전거 타이머와 생리 주기 달력을 한 곳에 담은 민정님의 레시피북">
+<meta name="description" content="레시피와 장보기, 아이들 하교 시간, 몸무게 기록, 자전거 타이머와 생리 주기 달력을 한 곳에 담은 민정이의 하루">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="레시피북">
+<meta name="apple-mobile-web-app-title" content="민정이의 하루">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">"""
@@ -53,8 +53,8 @@ if('serviceWorker' in navigator && (location.protocol === 'https:' || location.p
 </body>"""
 
 MANIFEST = """{
-  "name": "민정님의 레시피북",
-  "short_name": "레시피북",
+  "name": "민정이의 하루",
+  "short_name": "민정이의 하루",
   "description": "레시피와 장보기, 아이들 하교 시간, 몸무게 기록, 자전거 타이머와 생리 주기 달력을 한 곳에",
   "lang": "ko",
   "start_url": "./",
@@ -71,8 +71,8 @@ MANIFEST = """{
 }
 """
 
-SW_JS = """/* 민정님의 레시피북 — 네트워크 우선(online) · 캐시 대체(offline) */
-var CACHE = 'minjeong-recipebook-pwa-2026-11-27-1';
+SW_JS = """/* 민정이의 하루 — 네트워크 우선(online) · 캐시 대체(offline) */
+var CACHE = 'minjeong-recipebook-pwa-2026-11-27-2';
 var ASSETS = ['./', './index.html', './manifest.json', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', function(e){

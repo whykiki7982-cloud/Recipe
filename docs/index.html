@@ -4,15 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#E85D3F">
-<meta name="description" content="레시피와 장보기, 아이들 하교 시간, 몸무게 기록, 자전거 타이머와 생리 주기 달력을 한 곳에 담은 민정님의 레시피북">
+<meta name="description" content="레시피와 장보기, 아이들 하교 시간, 몸무게 기록, 자전거 타이머와 생리 주기 달력을 한 곳에 담은 민정이의 하루">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="레시피북">
+<meta name="apple-mobile-web-app-title" content="민정이의 하루">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<title>📖 민정님의 레시피북</title>
+<title>민정이의 하루</title>
 <style>
 :root{
   --cream:#FFFBF2; --paper:#FFFFFF; --ink:#3A2418; --ink-soft:#8A6A55;
@@ -59,6 +59,8 @@ button{font-family:inherit}
 .hero h1{margin:3px 0 4px;font-size:clamp(20px,5.5vw,28px);line-height:1.24;letter-spacing:-.03em;font-weight:900}
 .hero-sub{margin:0;font-size:12.5px;color:#8A5E3A;font-weight:700}
 .hero-sub b{color:var(--red-deep);font-size:14px}
+.hero-tag{display:flex;flex-wrap:wrap;gap:3px 13px;margin:5px 0 0;font-size:11.5px;font-weight:800;color:#9A6B45;letter-spacing:-.01em;line-height:1.5}
+.hero-tag span{white-space:nowrap}
 .hero-tools{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap;position:relative;z-index:1}
 .tool-btn{
   display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:999px;
@@ -905,9 +907,10 @@ input[type=search]::-webkit-search-cancel-button{display:none}
     <div class="hero-dots" aria-hidden="true"></div>
     <div class="hero-row">
       <div class="hero-text">
-        <p class="eyebrow">나만의 요리 노트</p>
-        <h1>📖 민정님의 레시피북</h1>
+        <p class="eyebrow">요리도 하루 기록도 한 노트에</p>
+        <h1>🌷 민정이의 하루</h1>
         <p class="hero-sub">레시피 <b id="statTotal">0</b>개 · 즐겨찾기 <b id="statFav">0</b>개</p>
+        <p class="hero-tag"><span>🎒 하교</span><span>⚖️ 몸무게</span><span>🚴 자전거</span><span>🌸 생리 주기</span></p>
       </div>
       <svg class="mascot hero-mascot" viewBox="0 0 220 222" aria-hidden="true"><use href="#chefCat"/></svg>
     </div>
@@ -1951,7 +1954,7 @@ function loadRecipes(){
 function saveRecipes(){
   try {
     localStorage.setItem(STORE_KEY, JSON.stringify({
-      app:'민정님의 레시피북', version:STORE_VERSION, savedAt:new Date().toISOString(), recipes:state.recipes
+      app:'민정이의 하루', version:STORE_VERSION, savedAt:new Date().toISOString(), recipes:state.recipes
     }));
     return true;
   } catch(e){
@@ -2751,7 +2754,7 @@ function doDelete(){
    ========================================================= */
 function exportJSON(){
   var payload = {
-    app: '민정님의 레시피북',
+    app: '민정이의 하루',
     version: STORE_VERSION,
     exportedAt: new Date().toISOString(),
     recipes: state.recipes,
@@ -2765,7 +2768,7 @@ function exportJSON(){
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
     a.href = url;
-    a.download = '레시피북-백업-'+todayStr()+'.json';
+    a.download = '민정이의하루-백업-'+todayStr()+'.json';
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -3202,7 +3205,7 @@ function loadShop(){
 function saveShop(){
   try {
     localStorage.setItem(SHOP_KEY, JSON.stringify({
-      app:'민정님의 레시피북', version:1, savedAt:new Date().toISOString(), items:shopItems
+      app:'민정이의 하루', version:1, savedAt:new Date().toISOString(), items:shopItems
     }));
     return true;
   } catch(e){
@@ -3445,7 +3448,7 @@ function loadSchool(){
 function saveSchool(){
   try {
     localStorage.setItem(SCHOOL_KEY, JSON.stringify({
-      app:'민정님의 레시피북', version:1, savedAt:new Date().toISOString(),
+      app:'민정이의 하루', version:1, savedAt:new Date().toISOString(),
       children:school.children, alert:school.alert
     }));
     return true;
@@ -3874,7 +3877,7 @@ function loadWeight(){
 function saveWeight(){
   try {
     localStorage.setItem(WEIGHT_KEY, JSON.stringify({
-      app:'민정님의 레시피북', version:1, savedAt:new Date().toISOString(),
+      app:'민정이의 하루', version:1, savedAt:new Date().toISOString(),
       goal:weight.goal, entries:weight.entries
     }));
     return true;
@@ -4391,7 +4394,7 @@ function loadCycle(){
 function saveCycle(){
   try {
     localStorage.setItem(CYCLE_KEY, JSON.stringify({
-      app:'민정님의 레시피북', version:1, savedAt:new Date().toISOString(),
+      app:'민정이의 하루', version:1, savedAt:new Date().toISOString(),
       settings: cycle.settings, periods: cycle.periods, days: cycle.days
     }));
     return true;
@@ -4999,7 +5002,7 @@ function loadBikePrefs(){
 function saveBikePrefs(){
   try {
     localStorage.setItem(BIKE_KEY, JSON.stringify({
-      app:'민정님의 레시피북', version:1, savedAt:new Date().toISOString(),
+      app:'민정이의 하루', version:1, savedAt:new Date().toISOString(),
       mode:bikeTimer.mode, sound:bikeTimer.sound, bgm:bikeTimer.bgm
     }));
   } catch(e){}

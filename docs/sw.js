@@ -1,5 +1,5 @@
-/* 민정님의 레시피북 — 네트워크 우선(online) · 캐시 대체(offline) */
-var CACHE = 'minjeong-recipebook-pwa-2026-11-27-1';
+/* 민정이의 하루 — 네트워크 우선(online) · 캐시 대체(offline) */
+var CACHE = 'minjeong-recipebook-pwa-2026-11-27-2';
 var ASSETS = ['./', './index.html', './manifest.json', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', function(e){
