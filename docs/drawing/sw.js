@@ -1,5 +1,5 @@
 /* 독후감 그림 그리기 — 네트워크 우선(online) · 캐시 대체(offline) */
-var CACHE = 'minjeong-drawing-pwa-2026-11-28-2';
+var CACHE = 'minjeong-drawing-pwa-2026-11-28-3';
 var ASSETS = ['./', './index.html', './manifest.json', './icon-180.png', './icon-192.png', './icon-512.png', './icon-512-maskable.png', './icon.svg'];
 
 self.addEventListener('install', function (e) {
