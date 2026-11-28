@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="우리 가족 톡">
+  <title>우리 가족 톡</title>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#A5E4FD"/>
+      <stop offset="1" stop-color="#38BDF8"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.3" cy="0.05" r="0.65">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="sh" x="-20%" y="-20%" width="140%" height="150%">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+    <clipPath id="round"><rect width="512" height="512" rx="112"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#round)">
+    <rect width="512" height="512" fill="url(#sky)"/>
+    <rect width="512" height="512" fill="url(#glow)"/>
+  </g>
+
+  <!-- 말풍선 그림자 -->
+  <g filter="url(#sh)" opacity="0.38">
+    <path d="M132 152h248a34 34 0 0 1 34 34v130a34 34 0 0 1-34 34H132a34 34 0 0 1-34-34V186a34 34 0 0 1 34-34z" fill="#0C5A8C"/>
+  </g>
+
+  <!-- 말풍선 꼬리 + 몸통 -->
+  <path d="M188 336h70L120 432z" fill="#FFFFFF"/>
+  <rect x="59" y="100" width="394" height="245" rx="77" fill="#FFFFFF"/>
+
+  <!-- 가족 3색 점 -->
+  <circle cx="161" cy="223" r="32" fill="#0EA5E9"/>
+  <circle cx="146" cy="208" r="12" fill="#FFFFFF" opacity="0.75"/>
+  <circle cx="256" cy="223" r="32" fill="#FF9ABE"/>
+  <circle cx="241" cy="208" r="12" fill="#FFFFFF" opacity="0.75"/>
+  <circle cx="351" cy="223" r="32" fill="#7DE2C4"/>
+  <circle cx="336" cy="208" r="12" fill="#FFFFFF" opacity="0.75"/>
+
+  <!-- 하트 배지 -->
+  <circle cx="424" cy="108" r="69" fill="#FFC9DE"/>
+  <g transform="translate(424 112)">
+    <path d="M0 26c-24-18-37-30-37-46a20 20 0 0 1 37-11 20 20 0 0 1 37 11c0 16-13 28-37 46z" fill="#FFFFFF"/>
+  </g>
+</svg>
