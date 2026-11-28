@@ -1,5 +1,5 @@
 /* 우리 가족 톡 — 네트워크 우선(online) · 캐시 대체(offline) */
-var CACHE = 'minjeong-familytalk-pwa-2026-11-28-1';
+var CACHE = 'minjeong-familytalk-pwa-2026-11-28-2';
 var ASSETS = ['./', './index.html', './manifest.json', './icon-180.png', './icon-192.png', './icon-512.png', './icon-512-maskable.png', './icon.svg'];
 
 self.addEventListener('install', function (e) {

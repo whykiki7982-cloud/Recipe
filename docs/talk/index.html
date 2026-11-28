@@ -869,11 +869,16 @@ function randomRoom() {
   return 'fam-' + s;
 }
 
+/* ---- 우리 가족 기본 방 (모든 기기가 이 방으로 바로 연결돼요) ---- */
+const FAMILY_DB = 'https://family-talk-8a360-default-rtdb.asia-southeast1.firebasedatabase.app';
+const FAMILY_ROOM = 'fam-k882-home';
+
 const cfg = {
   code: '1004',
-  room: '',
+  room: FAMILY_ROOM,
   roomName: '우리 가족방',
-  db: '',
+  db: FAMILY_DB,
+  source: 'default',   /* default: 우리 가족 기본 방 · custom: 직접 넣은 주소 · local: 체험 모드 */
   members: {}
 };
 const state = {
@@ -900,6 +905,7 @@ function loadCfg() {
     if (typeof raw.room === 'string' && raw.room) cfg.room = raw.room;
     if (typeof raw.db === 'string') cfg.db = raw.db;
     if (typeof raw.roomName === 'string' && raw.roomName.trim()) cfg.roomName = raw.roomName.trim();
+    if (raw.source === 'default' || raw.source === 'custom' || raw.source === 'local') cfg.source = raw.source;
     if (raw.members && typeof raw.members === 'object') {
       MEMBER_IDS.forEach(id => {
         const m = raw.members[id];
@@ -914,13 +920,25 @@ function loadCfg() {
   }
   if (!cfg.members || !Object.keys(cfg.members).length) cfg.members = defaultMembers();
   MEMBER_IDS.forEach(id => { if (!cfg.members[id]) cfg.members[id] = { ...DEFAULT_MEMBERS.find(d => d.id === id) }; });
-  if (!cfg.room) cfg.room = randomRoom();
+
+  if (!(raw && typeof raw === 'object' && raw.source)) {
+    /* 예전에 쓰던 설정 → 직접 만든 주소가 아니면 우리 가족 기본 방으로 옮겨요 */
+    if (raw && typeof raw === 'object' && cfg.db && normalizeDb(cfg.db) !== FAMILY_DB) {
+      cfg.source = 'custom';
+    } else {
+      cfg.source = 'default';
+    }
+  }
+  if (cfg.source === 'default') { cfg.db = FAMILY_DB; cfg.room = FAMILY_ROOM; }
+  else if (cfg.source === 'local') { cfg.db = ''; }
+
+  if (!cfg.room) cfg.room = FAMILY_ROOM;
   saveCfg();
 }
 function saveCfg() {
   try {
     localStorage.setItem(LS.cfg, JSON.stringify({
-      code: cfg.code, room: cfg.room, roomName: cfg.roomName, db: cfg.db, members: cfg.members
+      code: cfg.code, room: cfg.room, roomName: cfg.roomName, db: cfg.db, source: cfg.source, members: cfg.members
     }));
   } catch (e) { }
 }
@@ -946,7 +964,10 @@ function saveMsgs() {
   }
 }
 
+const PUDDING_MEMBER = { id: 'pudding', role: '도우미', name: '푸딩', avatar: 'pudding' };
+
 function memberOf(id) {
+  if (id === 'pudding') return { ...PUDDING_MEMBER };
   const base = DEFAULT_MEMBERS.find(m => m.id === id) || DEFAULT_MEMBERS[0];
   const c = cfg.members[id] || {};
   return {
@@ -2341,6 +2362,28 @@ const Sync = {
 };
 
 /* ---------------- 실시간 연결 ---------------- */
+const isDemoMsg = m => /^seed/.test(String((m && m.id) || ''));
+const WELCOME_ID = 'welcome-pudding';
+
+/* 가족 방이 완전히 비었을 때 푸딩이 남기는 첫 인사 */
+async function seedCloudWelcome() {
+  const msg = {
+    id: WELCOME_ID,
+    sender: 'pudding',
+    type: 'text',
+    text: '안녕하세요, 우리 가족 톡이에요! 🩵\n이제 가족 모두 같은 대화를 실시간으로 나눠요.\n아래 🎤 를 누르면 목소리, ＋ 를 누르면 사진도 보낼 수 있어요.',
+    ts: Date.now(),
+    reactions: { '❤️': ['mom', 'dad'] }
+  };
+  try { await Sync._put('messages/' + msg.id, msg); } catch (e) { return null; }
+  if (!state.messages.some(m => m.id === msg.id)) {
+    state.messages.push(msg);
+    saveMsgs();
+    renderMessages(true);
+  }
+  return msg;
+}
+
 async function connectCloud() {
   if (!cfg.db) { setConn('local'); return; }
   setConn('connecting');
@@ -2349,17 +2392,25 @@ async function connectCloud() {
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const data = await r.json();
     const serverMsgs = (data && data.messages) ? Object.values(data.messages).filter(m => m && m.id) : [];
-    if (!serverMsgs.length && state.messages.length) {
-      /* 처음 연결: 이 기기의 대화를 가족 방에 올려요 */
-      const list = state.messages.slice(-120);
-      for (const m of list) {
-        try { await Sync._put('messages/' + m.id, m); } catch (e) { break; }
+    if (!serverMsgs.length) {
+      /* 가족 방이 아직 비었어요. 샘플 대화는 올리지 않고, 진짜 대화가 있으면 올리거나 푸딩의 인사로 시작해요 */
+      const real = state.messages.filter(m => !isDemoMsg(m));
+      if (real.length) {
+        for (const m of real.slice(-120)) {
+          try { await Sync._put('messages/' + m.id, m); } catch (e) { break; }
+        }
+        await Sync.putCfg();
+        toast('이 기기의 대화를 가족 방에 올렸어요 ☁️', { ms: 2200 });
+      } else {
+        state.messages = [];
+        saveMsgs();
+        renderMessages();
+        await seedCloudWelcome();
+        await Sync.putCfg();
       }
-      await Sync.putCfg();
-      toast('이 기기의 대화를 가족 방에 올렸어요 ☁️', { ms: 2200 });
     } else {
       mergeRemote(data, true);
-      if (!data || !data.cfg) Sync.putCfg();
+      if (!data.cfg) Sync.putCfg();
     }
     setConn('on');
     Sync.ready = true;
@@ -2589,7 +2640,7 @@ function openSettings() {
   const statusLine = cloud
     ? (state.conn === 'on' ? '<span style="color:#1FA97A;font-weight:800">● 연결됨</span>' : '<span style="color:#D89A2B;font-weight:800">● 연결 중…</span>')
     : '<span style="color:#8FA9BE;font-weight:800">● 체험 모드</span>';
-  const statusSub = cloud ? esc(shortUrl(cfg.db)) : '이 기기에만 저장돼요';
+  const statusSub = cloud ? esc(shortUrl(cfg.db) + ' · ' + cfg.room) : '이 기기에만 저장돼요';
   const link = inviteLink();
   openSheet(`
     <div class="grab"></div>
@@ -2619,7 +2670,7 @@ function openSettings() {
     <input class="txtin" id="dbInput" placeholder="https://우리집-default-rtdb.asia-southeast1.firebasedatabase.app" value="${esc(cfg.db || '')}" inputmode="url" autocapitalize="off" autocomplete="off">
     <div style="display:flex;gap:8px;margin-top:8px">
       <button class="btn" data-act="db" style="flex:1">연결하기</button>
-      ${cloud ? `<button class="btn ghost" data-act="db-off" style="flex:0 0 auto">체험 모드로</button>` : ''}
+      ${cloud ? `<button class="btn ghost" data-act="db-off" style="flex:0 0 auto">체험 모드로</button>` : `<button class="btn ghost" data-act="db-default" style="flex:0 0 auto">가족 방으로</button>`}
     </div>
     <details style="margin-top:10px">
       <summary style="font-size:12px;font-weight:800;color:#1679A8;cursor:pointer">무료 Firebase 만드는 방법 (2분)</summary>
@@ -2642,7 +2693,7 @@ function openSettings() {
 
     <div class="sect-title">🧪 체험용 대화</div>
     <div class="rowline">
-      <div class="rlabel"><b>샘플 대화 넣어 보기</b><span>가족 4명이 주고받은 예시로 채워요</span></div>
+      <div class="rlabel"><b>샘플 대화 넣어 보기</b><span>가족 방에도 함께 들어가니 확인 후 눌러 주세요</span></div>
       <button class="btn ghost sm" data-act="seed">넣기</button>
     </div>
     <div class="rowline">
@@ -2688,9 +2739,17 @@ function onSettingsClick(e) {
   else if (a === 'code') editCode();
   else if (a === 'db') saveDb();
   else if (a === 'db-off') {
-    cfg.db = ''; saveCfg();
+    cfg.db = ''; cfg.source = 'local'; saveCfg();
     stopSync(); state.mode = 'local'; setConn('local');
     toast('체험 모드로 돌아왔어요 (이 기기에서만 저장)');
+    openSettings();
+  }
+  else if (a === 'db-default') {
+    cfg.source = 'default'; cfg.db = FAMILY_DB; cfg.room = FAMILY_ROOM;
+    saveCfg();
+    Sync.stop(); state.mode = 'cloud'; setConn('connecting');
+    connectCloud();
+    toast('우리 가족 방으로 연결할게요 ☁️', { ms: 1600 });
     openSettings();
   }
   else if (a === 'noti') requestNotifications();
@@ -2811,7 +2870,7 @@ async function saveDb() {
   const raw = $('#dbInput') ? $('#dbInput').value : '';
   const url = normalizeDb(raw);
   if (!url) {
-    cfg.db = ''; saveCfg();
+    cfg.db = ''; cfg.source = 'local'; saveCfg();
     stopSync(); state.mode = 'local'; setConn('local');
     toast('체험 모드로 돌아왔어요');
     openSettings();
@@ -2823,6 +2882,7 @@ async function saveDb() {
   }
   toast('가족 방에 연결하는 중… ☁️', { ms: 1400 });
   cfg.db = url;
+  cfg.source = (url === FAMILY_DB) ? 'default' : 'custom';
   saveCfg();
   Sync.stop();
   state.mode = 'cloud';
@@ -3022,6 +3082,7 @@ function parseInvite() {
   if (pdb) cfg.db = normalizeDb(pdb);
   if (proom) cfg.room = decodeURIComponent(proom);
   if (pcode && /^\d{4}$/.test(pcode)) cfg.code = pcode;
+  cfg.source = (!cfg.db) ? 'local' : (cfg.db === FAMILY_DB && cfg.room === FAMILY_ROOM ? 'default' : 'custom');
   saveCfg();
   invited = true;
 }
@@ -3041,10 +3102,11 @@ function boot() {
     if (e.target.id === 'sheet') closeSheet();
   });
 
-  /* 첫 방문이면 샘플 대화 */
+  /* 첫 방문이면 샘플 대화 — 체험 모드(서버 주소 없음)에서만 넣어요.
+     가족 방이 연결되면 서버의 대화를 그대로 쓰고, 비었을 때만 푸딩의 인사가 들어갑니다. */
   let seeded = false;
   try { seeded = localStorage.getItem('ft.v1.seeded') === '1'; } catch (e) { }
-  if (!state.messages.length && !seeded) {
+  if (!cfg.db && !state.messages.length && !seeded) {
     try { localStorage.setItem('ft.v1.seeded', '1'); } catch (e) { }
     seedDemo(false);
   }
