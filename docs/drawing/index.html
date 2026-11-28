@@ -2061,6 +2061,598 @@ function tplPudding(ctx,ink){
   sparkLine(ctx,232,560,18,3); sparkLine(ctx,556,520,14,3); sparkLine(ctx,250,690,12,2.6);
   ctx.restore();
 }
+/* ==SHINBI-START== 신비아파트 귀신 도안 4종 (벽수귀·스마일러·강시·늪지남매) */
+function ghostEye(ctx,x,y,w,h,tilt){
+  /* 날카롭게 빛나는 눈 — 안쪽이 채워진 눈알 모양 */
+  ctx.save(); ctx.translate(x,y); ctx.rotate(tilt||0);
+  ctx.beginPath();
+  ctx.moveTo(-w/2,0);
+  ctx.quadraticCurveTo(-w*0.12,-h,w/2,0);
+  ctx.quadraticCurveTo(-w*0.12,h*0.66,-w/2,0);
+  ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+function tearDrop(ctx,x,y,r,rot){
+  ctx.save(); ctx.translate(x,y); ctx.rotate(rot||0);
+  ctx.beginPath();
+  ctx.moveTo(0,-r*1.5);
+  ctx.bezierCurveTo(r*0.55,-r*0.85,r,-r*0.1,r,r*0.4);
+  ctx.bezierCurveTo(r,r*1.05,r*0.55,r*1.05,0,r*1.05);
+  ctx.bezierCurveTo(-r*0.55,r*1.05,-r,r*1.05,-r,r*0.4);
+  ctx.bezierCurveTo(-r,-r*0.1,-r*0.55,-r*0.85,0,-r*1.5);
+  ctx.closePath(); ctx.stroke();
+  ctx.restore();
+}
+/* 수초 한 가닥 — 끝으로 갈수록 뾰족한 잎 (닫힌 도형) */
+function grassLock(ctx,x,y,len,lean,width,lw){
+  const w=width||9;
+  ctx.lineWidth=lw||3;
+  ctx.beginPath();
+  ctx.moveTo(x-w/2,y);
+  ctx.bezierCurveTo(x-w*0.3+lean*0.35,y+len*0.55,x+lean*0.7,y+len*0.8,x+lean,y+len);
+  ctx.bezierCurveTo(x+lean*0.45+w*0.2,y+len*0.62,x+w*0.35,y+len*0.3,x+w/2,y);
+  ctx.closePath();
+  ctx.stroke();
+}
+/* 수초가 층층이 늘어진 자락 — 아래로 볼록한 물결 */
+function scallopLine(ctx,x1,x2,y,bump,lw){
+  const n=Math.max(2,Math.round((x2-x1)/bump));
+  const step=(x2-x1)/n;
+  ctx.lineWidth=lw||3;
+  ctx.beginPath(); ctx.moveTo(x1,y);
+  for(let i=0;i<n;i++){
+    ctx.quadraticCurveTo(x1+step*(i+0.5),y+bump*1.15,x1+step*(i+1),y);
+  }
+  ctx.stroke();
+}
+function waveLine(ctx,x1,y1,x2,y2,amp,waves,lw){
+  ctx.lineWidth=lw||3.2;
+  const n=waves||3, step=(x2-x1)/n;
+  ctx.beginPath(); ctx.moveTo(x1,y1);
+  for(let i=0;i<n;i++){
+    const dir=i%2?1:-1;
+    ctx.quadraticCurveTo(x1+step*i+step*0.5,y1+dir*amp,x1+step*(i+1),y1);
+  }
+  ctx.stroke();
+}
+
+/* ============================================================
+   1) 벽수귀 · 물 속의 쌍둥이
+   ============================================================ */
+function tplWaterGhost(ctx,ink){
+  ctx.save(); inkSetup(ctx,ink,5.4);
+  titleText(ctx,'벽수귀',52);
+  label(ctx,'물 속의 쌍둥이',400,114,21);
+  /* ---------- 슬라임 아이 ---------- */
+  function slimeKid(cx,cy,r){
+    const sh=cy+r*0.58, waist=cy+r*1.34, hip=cy+r*2.12, hem=cy+r*2.5;
+    /* 머리 + 몸통 실루엣 */
+    ctx.lineWidth=5.6;
+    ctx.beginPath();
+    ctx.arc(cx,cy,r,Math.PI*1.03,Math.PI*-0.03);
+    ctx.bezierCurveTo(cx+r*0.92,cy+r*0.3,cx+r*0.9,sh,cx+r*0.82,sh);
+    ctx.bezierCurveTo(cx+r*0.66,sh+r*0.3,cx+r*0.62,waist-r*0.2,cx+r*0.64,waist);
+    ctx.bezierCurveTo(cx+r*0.86,waist+r*0.4,cx+r*1.02,hip-r*0.2,cx+r*1.0,hip);
+    /* 밑단 — 물이 뚝뚝 */
+    ctx.quadraticCurveTo(cx+r*0.8,hem+r*0.1,cx+r*0.58,hem-r*0.16);
+    ctx.quadraticCurveTo(cx+r*0.34,hem+r*0.12,cx+r*0.12,hem-r*0.1);
+    ctx.quadraticCurveTo(cx-r*0.12,hem+r*0.12,cx-r*0.34,hem-r*0.16);
+    ctx.quadraticCurveTo(cx-r*0.58,hem+r*0.1,cx-r*0.8,hem-r*0.06);
+    ctx.bezierCurveTo(cx-r*1.02,hip-r*0.2,cx-r*0.86,waist+r*0.4,cx-r*0.64,waist);
+    ctx.bezierCurveTo(cx-r*0.62,waist-r*0.2,cx-r*0.66,sh+r*0.3,cx-r*0.82,sh);
+    ctx.bezierCurveTo(cx-r*0.9,sh,cx-r*0.92,cy+r*0.3,cx-r,cy);
+    ctx.closePath(); ctx.stroke();
+    /* 젖은 머리카락 */
+    ctx.lineWidth=4.2;
+    ctx.beginPath();
+    ctx.arc(cx,cy,r-7,Math.PI*1.0,Math.PI*0.0);
+    ctx.quadraticCurveTo(cx+r*0.5,cy-r*0.16,cx+r*0.24,cy-r*0.34);
+    ctx.quadraticCurveTo(cx,cy-r*0.06,cx-r*0.24,cy-r*0.32);
+    ctx.quadraticCurveTo(cx-r*0.52,cy-r*0.14,cx-r+7,cy);
+    ctx.closePath(); ctx.stroke();
+    /* 관자놀이 물머리 */
+    [[-1],[1]].forEach(function(d){
+      ctx.lineWidth=3.8;
+      ctx.beginPath();
+      ctx.moveTo(cx+d[0]*(r-12),cy-r*0.06);
+      ctx.bezierCurveTo(cx+d[0]*(r+4),cy+r*0.24,cx+d[0]*(r-2),cy+r*0.5,cx+d[0]*(r-14),cy+r*0.66);
+      ctx.bezierCurveTo(cx+d[0]*(r-26),cy+r*0.46,cx+d[0]*(r-28),cy+r*0.18,cx+d[0]*(r-26),cy);
+      ctx.closePath(); ctx.stroke();
+    });
+    /* 눈 */
+    ctx.fillStyle=ink;
+    ghostEye(ctx,cx-r*0.4,cy+r*0.12,r*0.6,r*0.3,0.24);
+    ghostEye(ctx,cx+r*0.4,cy+r*0.12,r*0.6,r*0.3,-0.24);
+    /* 입 */
+    ctx.lineWidth=4.4;
+    ctx.beginPath();
+    ctx.moveTo(cx-r*0.46,cy+r*0.52);
+    ctx.quadraticCurveTo(cx,cy+r*0.88,cx+r*0.46,cy+r*0.52);
+    ctx.stroke();
+    ctx.lineWidth=3.2;
+    [-0.18,0,0.18].forEach(function(f){
+      ctx.beginPath();
+      ctx.moveTo(cx+r*f*2.4,cy+r*0.58); ctx.lineTo(cx+r*f*2.4,cy+r*0.76); ctx.stroke();
+    });
+    /* 몸통에 맺힌 물방울 · 물결 */
+    ctx.lineWidth=3.2;
+    tearDrop(ctx,cx-r*0.3,sh+r*0.45,13,0.1);
+    tearDrop(ctx,cx+r*0.32,sh+r*0.7,11,-0.1);
+    waveLine(ctx,cx-r*0.34,waist+r*0.35,cx+r*0.34,waist+r*0.35,7,2,3);
+  }
+  slimeKid(288,352,112);
+  slimeKid(512,352,112);
+  /* ---------- 물 팔 ---------- */
+  function slimeArm(sx,sy,dir){
+    ctx.lineWidth=4.8;
+    ctx.beginPath();
+    ctx.moveTo(sx,sy-26);
+    ctx.bezierCurveTo(sx+dir*30,sy-44,sx+dir*62,sy-44,sx+dir*74,sy-22);
+    /* 둥근 손 */
+    ctx.bezierCurveTo(sx+dir*86,sy-16,sx+dir*94,sy-4,sx+dir*88,sy+6);
+    ctx.quadraticCurveTo(sx+dir*100,sy+10,sx+dir*92,sy+22);
+    ctx.quadraticCurveTo(sx+dir*100,sy+32,sx+dir*84,sy+34);
+    ctx.bezierCurveTo(sx+dir*66,sy+36,sx+dir*42,sy+22,sx,sy+8);
+    ctx.closePath(); ctx.stroke();
+    /* 손가락 사이 금 */
+    ctx.lineWidth=2.8;
+    ctx.beginPath();
+    ctx.moveTo(sx+dir*86,sy+4); ctx.lineTo(sx+dir*72,sy+8); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(sx+dir*90,sy+20); ctx.lineTo(sx+dir*74,sy+22); ctx.stroke();
+  }
+  slimeArm(200,506,-1);
+  slimeArm(600,506,1);
+  /* ---------- 물보라 · 물결 ---------- */
+  ctx.lineWidth=4.8;
+  waveLine(ctx,56,806,744,806,16,7,4.8);
+  ctx.lineWidth=3.6;
+  waveLine(ctx,100,856,392,856,10,4,3.6);
+  waveLine(ctx,430,856,720,856,10,4,3.6);
+  function splash(x,y,dir){
+    ctx.lineWidth=4.4;
+    ctx.beginPath();
+    ctx.moveTo(x,y);
+    ctx.bezierCurveTo(x+dir*8,y-74,x+dir*62,y-86,x+dir*70,y-34);
+    ctx.bezierCurveTo(x+dir*46,y-62,x+dir*20,y-46,x+dir*18,y-8);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x+dir*50,y+4);
+    ctx.bezierCurveTo(x+dir*56,y-44,x+dir*88,y-52,x+dir*92,y-18);
+    ctx.stroke();
+  }
+  splash(112,812,-1); splash(688,812,1);
+  /* ---------- 튀는 물방울 ---------- */
+  ctx.lineWidth=3.6;
+  tearDrop(ctx,104,236,15,-0.3); tearDrop(ctx,700,214,14,0.35);
+  tearDrop(ctx,66,452,12,0.2); tearDrop(ctx,732,478,12,-0.2);
+  tearDrop(ctx,88,640,13,0.1); tearDrop(ctx,712,648,14,-0.1);
+  tearDrop(ctx,188,726,10,0); tearDrop(ctx,612,732,11,0);
+  tearDrop(ctx,262,178,9,0.2); tearDrop(ctx,540,160,10,-0.2);
+  ctx.restore();
+}
+/* ============================================================
+   2) 스마일러 · 웃음 사냥꾼
+   ============================================================ */
+function tplSmiler(ctx,ink){
+  ctx.save(); inkSetup(ctx,ink,5.2);
+  titleText(ctx,'스마일러',52);
+  label(ctx,'웃음 사냥꾼',400,114,21);
+  /* ---------- 머리 위 짧은 머리 · 귀 ---------- */
+  ctx.lineWidth=5;
+  ctx.beginPath();
+  ctx.moveTo(320,206);
+  ctx.bezierCurveTo(340,168,388,158,414,166);
+  ctx.bezierCurveTo(440,152,484,176,486,214);
+  ctx.stroke();
+  ctx.lineWidth=3.6;
+  ctx.beginPath(); ctx.moveTo(356,178); ctx.quadraticCurveTo(348,196,352,214); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(408,166); ctx.quadraticCurveTo(400,186,404,206); ctx.stroke();
+  ctx.lineWidth=4.4;
+  ctx.beginPath(); ctx.ellipse(290,330,13,26,0.2,0,7); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(510,330,13,26,-0.2,0,7); ctx.stroke();
+  /* ---------- 가면 ---------- */
+  ctx.lineWidth=5.6;
+  ctx.beginPath(); ctx.ellipse(400,300,112,122,0,0,7); ctx.stroke();
+  /* 다이아몬드 눈 */
+  ctx.fillStyle=ink;
+  [[346,264],[454,264]].forEach(function(p){
+    ctx.beginPath();
+    ctx.moveTo(p[0],p[1]-29); ctx.lineTo(p[0]+22,p[1]); ctx.lineTo(p[0],p[1]+29); ctx.lineTo(p[0]-22,p[1]);
+    ctx.closePath(); ctx.fill();
+  });
+  ctx.lineWidth=3.6;
+  [[346,264],[454,264]].forEach(function(p){
+    ctx.beginPath();
+    ctx.moveTo(p[0],p[1]-46); ctx.lineTo(p[0]+34,p[1]); ctx.lineTo(p[0],p[1]+46); ctx.lineTo(p[0]-34,p[1]);
+    ctx.closePath(); ctx.stroke();
+  });
+  /* 왼쪽 눈을 가로지르는 세로 흉터 */
+  ctx.lineWidth=4.6;
+  ctx.beginPath();
+  ctx.moveTo(338,186);
+  ctx.lineTo(348,240); ctx.lineTo(336,286); ctx.lineTo(350,338); ctx.lineTo(344,392);
+  ctx.stroke();
+  [[236,-9],[286,8],[338,-7],[386,7]].forEach(function(c,i){
+    const y=c[0], x=344+c[1];
+    ctx.beginPath(); ctx.moveTo(x-14,y-8); ctx.lineTo(x+14,y+8); ctx.stroke();
+  });
+  /* ---------- 큰 웃는 입 ---------- */
+  const mx=400, my=330, mw=198;
+  ctx.lineWidth=5;
+  ctx.beginPath();
+  ctx.moveTo(mx-mw/2,my);
+  ctx.quadraticCurveTo(mx,my+120,mx+mw/2,my);
+  ctx.quadraticCurveTo(mx,my+34,mx-mw/2,my);
+  ctx.closePath(); ctx.stroke();
+  ctx.lineWidth=2.8;
+  for(let i=1;i<8;i++){
+    const t=i/8, bx=mx-mw/2+mw*t, by=my+Math.sin(t*Math.PI)*30;
+    ctx.beginPath(); ctx.moveTo(bx,by+3); ctx.lineTo(bx,by+22); ctx.stroke();
+  }
+  /* ---------- 목 ---------- */
+  ctx.lineWidth=4.4;
+  ctx.beginPath(); ctx.moveTo(376,420); ctx.lineTo(376,458); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(424,420); ctx.lineTo(424,458); ctx.stroke();
+  /* ---------- 정장 상의 ---------- */
+  ctx.lineWidth=5.4;
+  ctx.beginPath();
+  ctx.moveTo(294,560);
+  ctx.bezierCurveTo(288,646,296,700,308,718);
+  ctx.bezierCurveTo(360,762,440,762,492,718);
+  ctx.bezierCurveTo(504,700,512,646,506,560);
+  ctx.bezierCurveTo(506,504,470,468,400,466);
+  ctx.bezierCurveTo(330,468,294,504,294,560);
+  ctx.closePath(); ctx.stroke();
+  /* 셔츠 · 깃 */
+  ctx.lineWidth=4;
+  ctx.beginPath(); ctx.moveTo(356,478); ctx.lineTo(400,604); ctx.lineTo(444,478); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(376,478); ctx.lineTo(400,552); ctx.lineTo(424,478); ctx.stroke();
+  /* 코트 여밈 · 단추 */
+  ctx.lineWidth=3.6;
+  ctx.beginPath(); ctx.moveTo(400,600); ctx.lineTo(400,700); ctx.stroke();
+  circleStroke(ctx,400,624,8,3.2); circleStroke(ctx,400,664,8,3.2);
+  /* 주머니 */
+  ctx.lineWidth=3.2;
+  ctx.beginPath(); ctx.moveTo(306,626); ctx.lineTo(352,632); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(494,626); ctx.lineTo(448,632); ctx.stroke();
+  /* ---------- 보타이 ---------- */
+  ctx.lineWidth=4.2;
+  ctx.beginPath(); ctx.moveTo(400,474); ctx.lineTo(356,454); ctx.lineTo(350,494); ctx.closePath(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(400,474); ctx.lineTo(444,454); ctx.lineTo(450,494); ctx.closePath(); ctx.stroke();
+  circleStroke(ctx,400,474,10,3.8);
+  /* ---------- 바지 · 구두 ---------- */
+  ctx.lineWidth=4.6;
+  [[-1],[1]].forEach(function(d){
+    const x=400+d[0]*44;
+    ctx.beginPath();
+    ctx.moveTo(x-18,700); ctx.lineTo(x-16,800);
+    ctx.quadraticCurveTo(x-16,808,x,808);
+    ctx.lineTo(x+16,800); ctx.lineTo(x+18,700);
+    ctx.stroke();
+  });
+  ctx.beginPath(); ctx.ellipse(340,824,42,18,-0.04,0,7); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(460,824,42,18,0.04,0,7); ctx.stroke();
+  /* ---------- 왼팔 (지팡이 짚은 팔) ---------- */
+  ctx.lineWidth=11; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(312,528); ctx.bezierCurveTo(280,570,262,610,258,650); ctx.stroke();
+  ctx.lineWidth=4.8;
+  ctx.beginPath(); ctx.ellipse(264,672,30,26,0.12,0,7); ctx.stroke();
+  ctx.lineWidth=3;
+  ctx.beginPath(); ctx.moveTo(248,660); ctx.lineTo(276,664); ctx.stroke();
+  /* 지팡이 */
+  ctx.lineWidth=4.6;
+  ctx.beginPath(); ctx.moveTo(252,700); ctx.lineTo(238,872); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(252,700); ctx.bezierCurveTo(230,682,232,652,258,656); ctx.stroke();
+  /* ---------- 오른팔 (폭탄 든 팔) ---------- */
+  ctx.lineWidth=11;
+  ctx.beginPath(); ctx.moveTo(488,528); ctx.bezierCurveTo(524,562,550,590,558,616); ctx.stroke();
+  ctx.lineWidth=4.8;
+  ctx.beginPath(); ctx.ellipse(562,644,30,26,-0.3,0,7); ctx.stroke();
+  ctx.lineWidth=3;
+  ctx.beginPath(); ctx.moveTo(548,628); ctx.lineTo(572,634); ctx.stroke();
+  const bx=646, by=566, br=54;
+  ctx.lineWidth=5;
+  circleStroke(ctx,bx,by,br,5);
+  ctx.fillStyle=ink;
+  ctx.beginPath(); ctx.arc(bx-18,by-9,7,0,7); ctx.fill();
+  ctx.beginPath(); ctx.arc(bx+18,by-9,7,0,7); ctx.fill();
+  ctx.lineWidth=3.6;
+  ctx.beginPath(); ctx.arc(bx,by+2,23,0.35,Math.PI-0.35); ctx.stroke();
+  ctx.lineWidth=4.4;
+  ctx.beginPath(); ctx.moveTo(bx+6,by-br+2); ctx.bezierCurveTo(bx+14,by-br-34,bx+48,by-br-30,bx+44,by-br-64); ctx.stroke();
+  sparkLine(ctx,bx+44,by-br-82,17,3.4);
+  /* ---------- 반짝이 · 바닥 ---------- */
+  sparkLine(ctx,138,244,18,3.2); sparkLine(ctx,676,318,14,2.8);
+  sparkLine(ctx,706,760,16,3); sparkLine(ctx,94,700,13,2.6);
+  ctx.lineWidth=4.4;
+  ctx.beginPath(); ctx.moveTo(90,880); ctx.lineTo(710,880); ctx.stroke();
+  ctx.restore();
+}
+/* ============================================================
+   3) 강시 · 죽음의 꼭두각시
+   ============================================================ */
+function tplJiangshi(ctx,ink){
+  ctx.save(); inkSetup(ctx,ink,5.2);
+  titleText(ctx,'강시',52);
+  label(ctx,'죽음의 꼭두각시',400,114,21);
+  /* ---------- 얼굴 ---------- */
+  ctx.lineWidth=5.4;
+  ctx.beginPath();
+  ctx.moveTo(316,264);
+  ctx.bezierCurveTo(308,330,314,378,340,404);
+  ctx.quadraticCurveTo(400,426,460,404);
+  ctx.bezierCurveTo(486,378,492,330,484,264);
+  ctx.stroke();
+  /* ---------- 관모 ---------- */
+  ctx.lineWidth=5.4;
+  ctx.beginPath();
+  ctx.moveTo(344,236); ctx.lineTo(350,178);
+  ctx.quadraticCurveTo(400,158,450,178);
+  ctx.lineTo(456,236); ctx.closePath(); ctx.stroke();
+  /* 챙 */
+  ctx.beginPath();
+  ctx.moveTo(312,240);
+  ctx.quadraticCurveTo(400,220,488,240);
+  ctx.lineTo(488,266);
+  ctx.quadraticCurveTo(400,250,312,266);
+  ctx.closePath(); ctx.stroke();
+  /* 옆 날개 */
+  ctx.beginPath();
+  ctx.moveTo(312,240); ctx.lineTo(282,230); ctx.lineTo(282,258); ctx.lineTo(312,266); ctx.closePath(); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(488,240); ctx.lineTo(518,230); ctx.lineTo(518,258); ctx.lineTo(488,266); ctx.closePath(); ctx.stroke();
+  /* 꼭지 */
+  circleStroke(ctx,400,156,17,4.8);
+  /* 늘어진 끈 + 구슬 */
+  ctx.lineWidth=3.4;
+  ctx.beginPath(); ctx.moveTo(326,264); ctx.quadraticCurveTo(306,296,300,326); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(474,264); ctx.quadraticCurveTo(494,296,500,326); ctx.stroke();
+  circleStroke(ctx,299,334,8,3.4); circleStroke(ctx,501,334,8,3.4);
+  /* ---------- 이마에 내려온 부적 ---------- */
+  ctx.lineWidth=4.8;
+  ctx.beginPath(); ctx.moveTo(400,258); ctx.lineTo(400,270); ctx.stroke();
+  ctx.beginPath(); ctx.rect(348,270,104,102); ctx.stroke();
+  ctx.lineWidth=3.8;
+  ctx.beginPath(); ctx.moveTo(400,280); ctx.lineTo(400,362); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(372,292); ctx.lineTo(354,308); ctx.lineTo(372,324); ctx.lineTo(354,340); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(428,292); ctx.lineTo(446,308); ctx.lineTo(428,324); ctx.lineTo(446,340); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(362,352); ctx.quadraticCurveTo(400,340,438,352); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(348,372); ctx.lineTo(366,362); ctx.lineTo(384,372); ctx.lineTo(402,362); ctx.lineTo(420,372); ctx.lineTo(438,362);
+  ctx.stroke();
+  /* ---------- 입 ---------- */
+  ctx.lineWidth=4;
+  ctx.beginPath();
+  ctx.moveTo(370,386); ctx.quadraticCurveTo(400,378,430,386);
+  ctx.quadraticCurveTo(400,408,370,386); ctx.closePath(); ctx.stroke();
+  ctx.lineWidth=3;
+  ctx.beginPath(); ctx.moveTo(385,383); ctx.lineTo(385,398); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(400,381); ctx.lineTo(400,400); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(415,383); ctx.lineTo(415,398); ctx.stroke();
+  /* ---------- 목 · 도포 ---------- */
+  ctx.lineWidth=4;
+  ctx.beginPath(); ctx.moveTo(382,414); ctx.lineTo(382,436); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(418,414); ctx.lineTo(418,436); ctx.stroke();
+  ctx.lineWidth=5.4;
+  ctx.beginPath();
+  ctx.moveTo(330,478);
+  ctx.bezierCurveTo(322,566,306,704,292,826);
+  ctx.quadraticCurveTo(400,862,508,826);
+  ctx.bezierCurveTo(494,704,478,566,470,478);
+  ctx.bezierCurveTo(470,446,442,432,400,432);
+  ctx.bezierCurveTo(358,432,330,446,330,478);
+  ctx.closePath(); ctx.stroke();
+  /* 교차 깃 */
+  ctx.lineWidth=4.2;
+  ctx.beginPath();
+  ctx.moveTo(360,436); ctx.lineTo(386,430); ctx.lineTo(426,502); ctx.lineTo(400,510); ctx.closePath(); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(440,436); ctx.lineTo(414,430); ctx.lineTo(374,502); ctx.lineTo(400,510); ctx.closePath(); ctx.stroke();
+  /* ---------- 왼쪽으로 뻗은 두 팔 ---------- */
+  function jArm(y){
+    /* 넓은 소매 */
+    ctx.lineWidth=5;
+    ctx.beginPath();
+    ctx.moveTo(346,y-28);
+    ctx.bezierCurveTo(316,y-34,286,y-36,258,y-38);
+    ctx.lineTo(254,y+42);
+    ctx.bezierCurveTo(288,y+42,318,y+38,352,y+34);
+    ctx.closePath(); ctx.stroke();
+    /* 소맷단 */
+    ctx.lineWidth=3.6;
+    ctx.beginPath(); ctx.moveTo(270,y-38); ctx.lineTo(266,y+42); ctx.stroke();
+    /* 손등 · 손바닥 */
+    ctx.lineWidth=4.6;
+    ctx.beginPath();
+    ctx.moveTo(254,y-36);
+    ctx.bezierCurveTo(226,y-34,214,y-10,218,y+14);
+    ctx.quadraticCurveTo(222,y+38,254,y+40);
+    ctx.closePath(); ctx.stroke();
+    /* 긴 손가락 네 개 + 손톱 */
+    ctx.lineWidth=3.8;
+    [[-20,-10],[-4,-4],[12,4],[28,12]].forEach(function(f){
+      const fy=y+f[0];
+      ctx.beginPath();
+      ctx.moveTo(222,fy-8);
+      ctx.lineTo(180+f[1]*0.2,fy-3);
+      ctx.quadraticCurveTo(170+f[1]*0.2,fy-3,170+f[1]*0.2,fy+3);
+      ctx.quadraticCurveTo(170+f[1]*0.2,fy+9,180,fy+9);
+      ctx.lineTo(222,fy+8);
+      ctx.closePath(); ctx.stroke();
+    });
+  }
+  jArm(494);
+  jArm(586);
+  /* ---------- 가슴 둥근 문양 ---------- */
+  circleStroke(ctx,400,644,42,4.6);
+  circleStroke(ctx,400,644,29,3.4);
+  ctx.lineWidth=3.4;
+  ctx.beginPath(); ctx.arc(400,644,17,0.6,4.3); ctx.stroke();
+  ctx.beginPath(); ctx.arc(400,640,8,3.3,6.5); ctx.stroke();
+  /* ---------- 허리띠 ---------- */
+  ctx.lineWidth=4.6;
+  ctx.beginPath(); ctx.moveTo(320,724); ctx.quadraticCurveTo(400,742,480,724); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(316,760); ctx.quadraticCurveTo(400,778,484,760); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(382,748); ctx.quadraticCurveTo(400,736,418,748);
+  ctx.lineTo(416,788); ctx.quadraticCurveTo(400,800,384,788); ctx.closePath(); ctx.stroke();
+  /* ---------- 옷자락 주름 ---------- */
+  ctx.lineWidth=3.2;
+  ctx.beginPath(); ctx.moveTo(346,792); ctx.quadraticCurveTo(338,818,334,840); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(454,792); ctx.quadraticCurveTo(462,818,466,840); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(400,792); ctx.lineTo(400,846); ctx.stroke();
+  /* ---------- 발 ---------- */
+  ctx.lineWidth=4;
+  ctx.beginPath(); ctx.ellipse(356,848,32,16,0,0,7); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(444,848,32,16,0,0,7); ctx.stroke();
+  /* ---------- 안개 ---------- */
+  ctx.lineWidth=3.6;
+  waveLine(ctx,60,904,320,904,10,3,3.6);
+  waveLine(ctx,500,904,740,904,10,3,3.6);
+  waveLine(ctx,120,950,300,950,8,2,3);
+  waveLine(ctx,520,950,700,950,8,2,3);
+  ctx.restore();
+}
+/* ============================================================
+   4) 늪지남매 · 안개 속의 불청객
+   ============================================================ */
+function tplSwampSiblings(ctx,ink){
+  ctx.save(); inkSetup(ctx,ink,5);
+  titleText(ctx,'늪지남매',52);
+  label(ctx,'안개 속의 불청객',400,114,21);
+  /* 삐죽삐죽한 수초 실루엣 */
+  function shaggy(cx,cy,rx,ry,n,seed,deep){
+    const rnd=mulberry32(seed);
+    const pts=[];
+    for(let i=0;i<n;i++){
+      const a=i/n*Math.PI*2;
+      const k=1+(i%2?(deep||0.11):0)+(rnd()-0.5)*0.03;
+      pts.push({x:cx+Math.cos(a)*rx*k,y:cy+Math.sin(a)*ry*k});
+    }
+    ctx.beginPath();
+    ctx.moveTo((pts[0].x+pts[n-1].x)/2,(pts[0].y+pts[n-1].y)/2);
+    for(let i=0;i<n;i++){
+      const p=pts[i], q=pts[(i+1)%n];
+      ctx.quadraticCurveTo(p.x,p.y,(p.x+q.x)/2,(p.y+q.y)/2);
+    }
+    ctx.closePath(); ctx.stroke();
+  }
+  /* ---------- 오빠 · 여동생 몸통 ---------- */
+  ctx.lineWidth=5.2;
+  shaggy(322,570,118,212,22,71,0.17);
+  shaggy(494,600,102,186,20,97,0.17);
+  /* ---------- 몸통을 덮은 수초 자락 (층층이 늘어진 잎) ---------- */
+  [[474,34],[526,40],[578,34],[630,40],[678,34]].forEach(function(r){
+    const half=104-Math.abs(r[0]-560)*0.2;
+    scallopLine(ctx,322-half,322+half,r[0],r[1],3.6);
+  });
+  [[556,32],[602,38],[648,32],[690,34]].forEach(function(r){
+    const half=88-Math.abs(r[0]-626)*0.18;
+    scallopLine(ctx,494-half,494+half,r[0],r[1],3.4);
+  });
+  /* 잎사귀 몇 장 */
+  [[268,600,-1],[360,650,1],[470,640,-1],[560,660,1],[300,690,1],[520,700,-1]].forEach(function(l){
+    ctx.lineWidth=3;
+    ctx.beginPath();
+    ctx.ellipse(l[0],l[1],20,9,l[2]*0.5,0,7); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(l[0]-18,l[1]+8); ctx.lineTo(l[0]+18,l[1]-8); ctx.stroke();
+  });
+  /* 길게 흘러내린 수초 몇 가닥 */
+  [[-96,520,96,-16],[-52,470,120,-6],[54,486,112,8],[96,540,86,16]].forEach(function(g){
+    grassLock(ctx,322+g[0],g[1],g[2],g[3],16,3.4);
+  });
+  [[-84,600,88,-12],[62,610,92,14]].forEach(function(g){
+    grassLock(ctx,494+g[0],g[1],g[2],g[3],15,3.2);
+  });
+  /* ---------- 얼굴 (수초 사이로 보이는 얼굴) ---------- */
+  const B={x:322,y:452,r:72}, G={x:494,y:512,r:60};
+  ctx.lineWidth=5;
+  ctx.beginPath();
+  ctx.moveTo(B.x-B.r,B.y+B.r*0.25);
+  ctx.bezierCurveTo(B.x-B.r*1.02,B.y-B.r*0.95,B.x+B.r*1.02,B.y-B.r*0.95,B.x+B.r,B.y+B.r*0.25);
+  ctx.bezierCurveTo(B.x+B.r*0.9,B.y+B.r*0.95,B.x-B.r*0.9,B.y+B.r*0.95,B.x-B.r,B.y+B.r*0.25);
+  ctx.closePath(); ctx.stroke();
+  ctx.lineWidth=4.6;
+  ctx.beginPath();
+  ctx.moveTo(G.x-G.r,G.y+G.r*0.25);
+  ctx.bezierCurveTo(G.x-G.r*1.02,G.y-G.r*0.95,G.x+G.r*1.02,G.y-G.r*0.95,G.x+G.r,G.y+G.r*0.25);
+  ctx.bezierCurveTo(G.x+G.r*0.9,G.y+G.r*0.95,G.x-G.r*0.9,G.y+G.r*0.95,G.x-G.r,G.y+G.r*0.25);
+  ctx.closePath(); ctx.stroke();
+  /* 얼굴 위로 늘어진 수초 */
+  scallopLine(ctx,B.x-B.r*0.86,B.x+B.r*0.86,B.y-B.r*0.58,16,3.6);
+  scallopLine(ctx,B.x-B.r*0.7,B.x+B.r*0.7,B.y-B.r*0.3,13,3.2);
+  scallopLine(ctx,G.x-G.r*0.84,G.x+G.r*0.84,G.y-G.r*0.54,13,3.2);
+  scallopLine(ctx,G.x-G.r*0.68,G.x+G.r*0.68,G.y-G.r*0.26,12,3);
+  /* 눈 · 입 */
+  ctx.fillStyle=ink;
+  ghostEye(ctx,B.x-27,B.y+10,42,19,0.16);
+  ghostEye(ctx,B.x+27,B.y+10,42,19,-0.16);
+  ghostEye(ctx,G.x-22,G.y+8,34,16,0.16);
+  ghostEye(ctx,G.x+22,G.y+8,34,16,-0.16);
+  ctx.lineWidth=3.6;
+  ctx.beginPath(); ctx.moveTo(B.x-21,B.y+44); ctx.quadraticCurveTo(B.x,B.y+60,B.x+21,B.y+44); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(G.x-16,G.y+34); ctx.quadraticCurveTo(G.x,G.y+46,G.x+16,G.y+34); ctx.stroke();
+  /* 여동생 수초 양갈래 */
+  [[-1],[1]].forEach(function(d){
+    const px=G.x+d[0]*(G.r+18), py=G.y-34;
+    ctx.lineWidth=3.6;
+    ctx.beginPath(); ctx.ellipse(px,py,13,22,d[0]*0.42,0,7); ctx.stroke();
+    for(let i=0;i<3;i++){
+      grassLock(ctx,px+d[0]*2,py+16,22+i*9,d[0]*(14+i*4),8,2.8);
+    }
+  });
+  /* ---------- 덩굴 팔 ---------- */
+  function vineArm(x,y,dir){
+    ctx.lineWidth=4.6;
+    ctx.beginPath();
+    ctx.moveTo(x,y-18);
+    ctx.bezierCurveTo(x+dir*52,y-32,x+dir*88,y+2,x+dir*124,y-20);
+    ctx.lineTo(x+dir*122,y+8);
+    ctx.bezierCurveTo(x+dir*86,y+26,x+dir*48,y+6,x,y+16);
+    ctx.closePath(); ctx.stroke();
+    ctx.lineWidth=3.8;
+    [-1,0,1].forEach(function(k){
+      ctx.beginPath();
+      ctx.moveTo(x+dir*122,y-14+k*2);
+      ctx.bezierCurveTo(x+dir*150,y-18+k*22,x+dir*160,y-40+k*26,x+dir*142,y-46+k*30);
+      ctx.stroke();
+    });
+  }
+  vineArm(222,612,-1);
+  vineArm(578,596,1);
+  /* ---------- 늪 바닥 · 물결 ---------- */
+  ctx.lineWidth=4.6;
+  ctx.beginPath(); ctx.moveTo(40,806); ctx.quadraticCurveTo(220,776,400,794); ctx.quadraticCurveTo(580,812,760,784); ctx.stroke();
+  ctx.lineWidth=3.4;
+  waveLine(ctx,60,872,340,872,10,3,3.4);
+  waveLine(ctx,440,872,740,872,10,3,3.4);
+  waveLine(ctx,110,920,330,920,9,3,3);
+  waveLine(ctx,470,920,690,920,9,3,3);
+  /* ---------- 갈대 · 부들 ---------- */
+  function reed(x,baseY,topY,side){
+    ctx.lineWidth=4.4;
+    ctx.beginPath();
+    ctx.moveTo(x,baseY);
+    ctx.quadraticCurveTo(x+side*18,topY+170,x+side*12,topY+34);
+    ctx.stroke();
+    ctx.lineWidth=3.8;
+    ctx.beginPath(); ctx.ellipse(x+side*12,topY+14,11,26,side*0.1,0,7); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x+side*12,topY-12); ctx.lineTo(x+side*14,topY-30); ctx.stroke();
+    ctx.lineWidth=3;
+    ctx.beginPath();
+    ctx.moveTo(x+side*8,topY+170); ctx.quadraticCurveTo(x+side*64,topY+216,x+side*46,topY+256); ctx.stroke();
+  }
+  reed(112,842,590,-1); reed(168,860,650,-1);
+  reed(644,846,600,1); reed(698,862,662,1);
+  /* ---------- 반딧불 ---------- */
+  sparkLine(ctx,100,292,11,2.6); sparkLine(ctx,706,398,13,3);
+  sparkLine(ctx,724,676,10,2.4); sparkLine(ctx,92,620,9,2.4);
+  ctx.restore();
+}
+/* ==SHINBI-END== */
 function tplMoon(ctx,ink){
   ctx.save(); inkSetup(ctx,ink,4.4);
   titleText(ctx,'달 크레이터',58);
@@ -2098,7 +2690,11 @@ const TEMPLATES=[
   {id:'kitten', name:'아기 고양이', emoji:'🐈', draw:tplKitten},
   {id:'bunny', name:'아기 토끼', emoji:'🐰', draw:tplBunny},
   {id:'raccoon', name:'너구리 카페', emoji:'🦝', draw:tplRaccoon},
-  {id:'pudding', name:'귀여운 푸딩', emoji:'💚', draw:tplPudding}
+  {id:'pudding', name:'귀여운 푸딩', emoji:'💚', draw:tplPudding},
+  {id:'waterghost', name:'벽수귀', emoji:'💧', draw:tplWaterGhost},
+  {id:'smiler', name:'스마일러', emoji:'🎭', draw:tplSmiler},
+  {id:'jiangshi', name:'강시', emoji:'🧿', draw:tplJiangshi},
+  {id:'swamp', name:'늪지남매', emoji:'🌿', draw:tplSwampSiblings}
 ];
 function inkFor(paperId){ return paperId==='night' ? '#FFF3E6' : '#4A3A31'; }
 function drawTemplateTo(ctx,id,ink){
