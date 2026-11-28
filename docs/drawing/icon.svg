@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="그림 그리기">
+  <title>독후감 그림 그리기</title>
+  <rect width="512" height="512" rx="112" fill="#FF6B35"/>
+  <ellipse cx="256" cy="261" rx="180" ry="143" fill="#FFF9F2" stroke="#FAE8D6" stroke-width="8"/>
+  <circle cx="158" cy="210" r="27" fill="#FFB7C9"/>
+  <circle cx="150" cy="201" r="7" fill="#FFFFFF" opacity="0.45"/>
+  <circle cx="240" cy="182" r="27" fill="#FFC24B"/>
+  <circle cx="232" cy="173" r="7" fill="#FFFFFF" opacity="0.45"/>
+  <circle cx="326" cy="208" r="27" fill="#A9D6F5"/>
+  <circle cx="318" cy="199" r="7" fill="#FFFFFF" opacity="0.45"/>
+  <circle cx="232" cy="320" r="27" fill="#9BDCC0"/>
+  <circle cx="224" cy="311" r="7" fill="#FFFFFF" opacity="0.45"/>
+  <ellipse cx="330" cy="318" rx="44" ry="38" fill="#FF6B35"/>
+</svg>
