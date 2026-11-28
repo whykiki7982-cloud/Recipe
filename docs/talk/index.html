@@ -3262,6 +3262,8 @@ function openSwitchProfile() {
     closeSheet();
     renderHeader();
     renderMessages(true);
+    markRead(true);
+    updateBadge();
     toast(memberOf(id).name + '(으)로 바꿨어요');
   });
 }
