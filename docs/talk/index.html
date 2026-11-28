@@ -191,6 +191,31 @@ input,textarea{font:inherit;color:inherit}
 .avatars-inline .ai{width:19px;height:19px;border-radius:50%;background:#fff;border:1.5px solid #fff;overflow:hidden;margin-left:-6px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .avatars-inline .ai svg{width:100%;height:100%;display:block}
 
+/* 알림 팝업 켜기 띠 */
+.noti-bar{
+  flex:none;z-index:5;display:flex;align-items:center;gap:8px;
+  margin:8px 10px 0;padding:8px 9px 8px 11px;
+  background:linear-gradient(150deg,#FFF8EA,#FFEFD6);
+  border:1.5px solid #FFE2AF;border-radius:16px;
+  box-shadow:0 4px 12px rgba(214,158,60,.15);
+  animation:drop .28s ease;
+}
+.noti-bar .nb-ic{font-size:16px;flex:none;animation:bob 2.6s ease-in-out infinite}
+.noti-bar .nb-tx{flex:1;min-width:0;font-size:11.5px;line-height:1.45;color:#7A5A1E;font-weight:600}
+.noti-bar .nb-tx b{color:#B4741A}
+.noti-bar .nb-btn{
+  flex:none;border:0;border-radius:12px;padding:6px 10px;cursor:pointer;
+  font-size:11.5px;font-weight:800;color:#fff;letter-spacing:-.2px;
+  background:linear-gradient(150deg,#FFC24D,#F59E0B);box-shadow:0 3px 9px rgba(245,158,11,.32);
+}
+.noti-bar .nb-btn:active{transform:scale(.95)}
+.noti-bar .nb-x{flex:none;border:0;background:transparent;color:#B99A62;font-size:13px;cursor:pointer;padding:2px}
+.noti-bar.denied{background:linear-gradient(150deg,#FFF0F0,#FFE3E3);border-color:#FFCACA;box-shadow:0 4px 12px rgba(200,110,110,.13)}
+.noti-bar.denied .nb-tx{color:#8C4A4A}
+.noti-bar.denied .nb-tx b{color:#C45353}
+.noti-bar.denied .nb-btn{background:linear-gradient(150deg,#F6A9A9,#E47272);box-shadow:none}
+@media (max-width:360px){.noti-bar{margin:6px 8px 0;padding:7px 8px}.noti-bar .nb-tx{font-size:11px}}
+
 /* 메시지 목록 */
 .msgs{
   flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;
@@ -232,6 +257,18 @@ input,textarea{font:inherit;color:inherit}
 .bub:active{transform:scale(.985)}
 .bub .t{font-size:9.5px;color:#9DB3C4;margin-left:7px;float:right;transform:translateY(4px);letter-spacing:0}
 .row.me .bub .t{color:#5A8BA6}
+.capt{font-size:9.5px;color:#A3BACA;margin:3px 4px 0;line-height:1.35}
+.capt.me{color:#5D90AB}
+/* 카톡식 안 읽은 숫자 */
+.unread{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:15px;height:15px;padding:0 4px;margin-right:4px;
+  border-radius:8px;font-size:9.5px;font-weight:800;line-height:1;letter-spacing:0;
+  font-variant-numeric:tabular-nums;vertical-align:1px;
+  background:linear-gradient(150deg,#FFC24D,#F59E0B);color:#fff;
+  box-shadow:0 2px 5px rgba(245,158,11,.35);animation:pop .24s ease;
+}
+.row.me .bub .t .unread{margin-right:3px}
 .bub.plain{padding:0;background:none;border:0;box-shadow:none}
 .bub.plain:active{transform:none}
 .quote{
@@ -553,6 +590,14 @@ body.inchat .toast-wrap{padding-top:calc(60px + env(safe-area-inset-top))}
       <button class="hbtn" id="btnSettings" aria-label="가족 방 설정">⚙️</button>
     </header>
 
+    <!-- 알림 팝업 켜기 안내 (권한이 없을 때만) -->
+    <div class="noti-bar hidden" id="notiBar">
+      <span class="nb-ic" aria-hidden="true">🔔</span>
+      <div class="nb-tx" id="notiText">새 메시지가 오면 <b>알림 팝업</b>으로 알려 드릴까요?</div>
+      <button class="nb-btn" id="notiBtn" data-act="ask">🔔 켜기</button>
+      <button class="nb-x" id="notiClose" aria-label="알림 안내 닫기">✕</button>
+    </div>
+
     <main class="msgs" id="msgList" aria-live="polite"></main>
 
     <div class="composer">
@@ -845,8 +890,10 @@ function stickerSVG(id) {
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const LS = {
-  cfg: 'ft.v1.cfg', msgs: 'ft.v1.msgs', me: 'ft.v1.me', unlock: 'ft.v1.unlock'
+  cfg: 'ft.v1.cfg', msgs: 'ft.v1.msgs', me: 'ft.v1.me', unlock: 'ft.v1.unlock',
+  reads: 'ft.v1.reads'
 };
+const BASE_TITLE = '우리 가족 톡 💬';
 
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -884,6 +931,7 @@ const cfg = {
 const state = {
   me: null,
   messages: [],
+  reads: {},          /* 멤버별 마지막으로 읽은 시각 (ms) */
   reply: null,
   mode: 'local',
   conn: 'off',
@@ -962,6 +1010,120 @@ function saveMsgs() {
       list = list.slice(Math.ceil(list.length / 2));
     }
   }
+}
+
+/* ---------------- 읽음 표시 (카톡식 안 읽은 수) ---------------- */
+function loadReads() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(LS.reads) || '{}');
+    if (raw && typeof raw === 'object') {
+      Object.keys(raw).forEach(k => {
+        const v = Number(raw[k]);
+        if (isFinite(v) && v > 0) state.reads[k] = Math.round(v);
+      });
+    }
+  } catch (e) { state.reads = {}; }
+}
+function saveReads() {
+  try { localStorage.setItem(LS.reads, JSON.stringify(state.reads)); } catch (e) { }
+}
+function latestMsgTs() {
+  let t = 0;
+  state.messages.forEach(m => { if (m && m.ts > t) t = m.ts; });
+  return t;
+}
+
+/* 메시지 하나를 아직 읽지 않은 가족 수 (보낸 사람 제외) */
+function unreadOf(m) {
+  if (!m) return 0;
+  let n = 0;
+  MEMBER_IDS.forEach(id => {
+    if (id === m.sender) return;
+    if ((state.reads[id] || 0) < m.ts) n++;
+  });
+  return n;
+}
+/* 내가 보낸 말풍선 옆에 붙는 카톡식 숫자 — 다 읽으면 사라져요 */
+function unreadBadge(m) {
+  if (!state.me || !m || m.sender !== state.me) return '';
+  const n = unreadOf(m);
+  if (n <= 0) return '';
+  return `<span class="unread" title="${n}명이 아직 읽지 않았어요">${n}</span>`;
+}
+/* 내가 아직 안 읽은 메시지 수 (다른 사람이 보낸 것) */
+function myUnreadCount() {
+  if (!state.me) return 0;
+  const r = state.reads[state.me] || 0;
+  let n = 0;
+  state.messages.forEach(m => { if (m && m.sender !== state.me && m.ts > r) n++; });
+  return n;
+}
+
+/* 앱 아이콘 배지 + 탭 제목의 (2) 표시 */
+let _lastBadge = -1;
+function updateBadge() {
+  const n = myUnreadCount();
+  if (n === _lastBadge) return;
+  _lastBadge = n;
+  try { document.title = n > 0 ? `(${n}) ${BASE_TITLE}` : BASE_TITLE; } catch (e) { }
+  try {
+    if ('setAppBadge' in navigator) {
+      if (n > 0) { const p = navigator.setAppBadge(n); if (p && p.catch) p.catch(() => { }); }
+      else if ('clearAppBadge' in navigator) { const p = navigator.clearAppBadge(); if (p && p.catch) p.catch(() => { }); }
+    }
+  } catch (e) { }
+}
+
+/* 화면의 안 읽은 수 숫자만 다시 칠해요 (전체 다시 그리지 않음) */
+function paintUnread() {
+  $$('[data-ub]').forEach(el => {
+    const m = findMsg(el.getAttribute('data-ub'));
+    const html = m ? unreadBadge(m) : '';
+    if (el.innerHTML !== html) el.innerHTML = html;
+  });
+}
+
+/* 내가 지금까지 읽은 시각을 기록 → 가족 모두에게 알려요 */
+let _lastReadWrite = 0, _readTrailTimer = null;
+function markRead(force) {
+  if (!state.me) return;
+  const t = latestMsgTs();
+  if (!t) { paintUnread(); updateBadge(); return; }
+  const cur = state.reads[state.me] || 0;
+  if (t <= cur) {
+    paintUnread();
+    updateBadge();
+    return;
+  }
+  state.reads[state.me] = t;
+  saveReads();
+  paintUnread();
+  updateBadge();
+  if (state.mode !== 'cloud' || !cfg.db) return;
+  const now = Date.now();
+  if (force || now - _lastReadWrite > 900) {
+    _lastReadWrite = now;
+    Sync.putRead(state.me, t);
+  } else {
+    if (_readTrailTimer) clearTimeout(_readTrailTimer);
+    _readTrailTimer = setTimeout(() => {
+      if (state.mode === 'cloud' && state.me) Sync.putRead(state.me, state.reads[state.me] || t);
+    }, 1000);
+  }
+}
+
+/* 서버에서 온 읽음 시각 반영 (뒤로 가지 않아요) */
+function applyRemoteReads(rd) {
+  if (!rd || typeof rd !== 'object') return;
+  let changed = false;
+  Object.keys(rd).forEach(k => {
+    if (MEMBER_IDS.indexOf(k) < 0) return;
+    const v = Number(rd[k]);
+    if (!isFinite(v) || v <= 0) return;
+    const vv = Math.round(v);
+    if (vv > (state.reads[k] || 0)) { state.reads[k] = vv; changed = true; }
+  });
+  if (changed) { saveReads(); paintUnread(); updateBadge(); }
 }
 
 const PUDDING_MEMBER = { id: 'pudding', role: '도우미', name: '푸딩', avatar: 'pudding' };
@@ -1534,7 +1696,8 @@ function enterChat() {
   showView('chat');
   renderMessages(true);
   startSync();
-  setTimeout(() => { scrollBottom(true); autoGrow(); updateSendBtn(); }, 60);
+  markRead(true);
+  setTimeout(() => { scrollBottom(true); autoGrow(); updateSendBtn(); updateNotiBar(); }, 60);
 }
 
 function renderHeader() {
@@ -1545,6 +1708,7 @@ function renderHeader() {
     .map(id => `<span class="ai">${charSVG(memberOf(id).avatar)}</span>`).join('');
   updateStatus();
   updateBell();
+  updateNotiBar();
 }
 
 function updateStatus() {
@@ -1563,17 +1727,45 @@ function updateStatus() {
 function updateBell() {
   const b = $('#btnBell');
   if (!b) return;
-  let ok = false;
-  try { ok = ('Notification' in window) && Notification.permission === 'granted'; } catch (e) { }
-  b.textContent = '🔔';
-  b.style.opacity = ok ? '1' : '.55';
-  b.title = ok ? '새 메시지 알림이 켜져 있어요' : '눌러서 새 메시지 알림을 켜요';
+  let perm = 'unsupported';
+  try { if ('Notification' in window) perm = Notification.permission; } catch (e) { }
+  b.textContent = perm === 'denied' ? '🔕' : '🔔';
+  b.style.opacity = perm === 'granted' ? '1' : '.55';
+  b.title = perm === 'granted' ? '새 메시지 알림이 켜져 있어요'
+    : (perm === 'denied' ? '알림이 꺼져 있어요 · 브라우저 설정에서 허용해 주세요' : '눌러서 새 메시지 알림을 켜요');
+}
+
+/* 헤더 아래 알림 켜기 띠 — 한 번 누르면 폰에서 바로 알림 팝업이 떠요 */
+function notiBarClosed() {
+  try { return Number(localStorage.getItem('ft.v1.notiBar') || 0) > Date.now(); } catch (e) { return false; }
+}
+function updateNotiBar() {
+  const bar = $('#notiBar');
+  if (!bar) return;
+  let perm = 'unsupported';
+  try { if ('Notification' in window) perm = Notification.permission; } catch (e) { }
+  if (perm === 'granted' || perm === 'unsupported' || notiBarClosed()) { bar.classList.add('hidden'); return; }
+  bar.classList.remove('hidden');
+  const txt = $('#notiText'), btn = $('#notiBtn');
+  if (!txt || !btn) return;
+  if (perm === 'denied') {
+    bar.classList.add('denied');
+    txt.innerHTML = '알림이 꺼져 있어요 · 주소창 옆 <b>자물쇠</b> → <b>알림 허용</b>으로 바꿔 주세요';
+    btn.textContent = '방법 보기';
+    btn.dataset.act = 'help';
+  } else {
+    bar.classList.remove('denied');
+    txt.innerHTML = '새 메시지가 오면 <b>알림 팝업</b>으로 알려 드릴까요?';
+    btn.textContent = '🔔 켜기';
+    btn.dataset.act = 'ask';
+  }
 }
 
 /* ---------------- 말풍선 ---------------- */
 function bubbleHTML(m, mine) {
   const q = m.replyTo ? `<div class="quote"><span class="qn">${esc(memberOf(m.replyTo.sender).name)}</span><span class="qt">${esc(m.replyTo.preview || '')}</span></div>` : '';
-  const cap = `<div style="font-size:9.5px;color:${mine ? '#5D90AB' : '#A3BACA'};margin:3px 4px 0">${fmtTime(m.ts)}</div>`;
+  const ub = `<span class="ub" data-ub="${esc(m.id)}">${unreadBadge(m)}</span>`;
+  const cap = `<div class="capt${mine ? ' me' : ''}">${ub}${fmtTime(m.ts)}</div>`;
   switch (m.type) {
     case 'sticker': {
       const s = STICKER_MAP[m.sticker] || STICKERS[0];
@@ -1606,7 +1798,7 @@ function bubbleHTML(m, mine) {
           <button class="fdl" data-dl="${m.id}" aria-label="저장">⬇️</button>
         </div></div>${cap}`;
     default:
-      return `<div class="bub">${q}<span class="tx">${esc(m.text)}</span><span class="t">${fmtTime(m.ts)}</span></div>`;
+      return `<div class="bub">${q}<span class="tx">${esc(m.text)}</span><span class="t">${ub}${fmtTime(m.ts)}</span></div>`;
   }
 }
 
@@ -1727,6 +1919,8 @@ function addMessage(msg, opts = {}) {
     ding('in');
     if (document.hidden) notifyBrowser(msg); else toastMsg(msg);
   }
+  if (!opts.mine && msg.sender !== state.me && !document.hidden && state.view === 'chat') markRead();
+  updateBadge();
 }
 
 /* ---------------- 음성 재생 ---------------- */
@@ -1863,13 +2057,41 @@ function closeViewer() {
   $('#viewerImg').src = '';
 }
 
-function notifyBrowser(msg) {
+/* 서비스 워커가 준비될 때까지 잠깐 기다려요 (안 되면 null) */
+function swReady(timeout) {
+  if (!('serviceWorker' in navigator)) return Promise.resolve(null);
+  return Promise.race([
+    navigator.serviceWorker.ready.catch(() => null),
+    new Promise(res => setTimeout(() => res(null), timeout || 2200))
+  ]).catch(() => null);
+}
+
+/* 안드로이드 크롬·삼성 인터넷·PWA 에서도 뜨는 알림 팝업
+   → new Notification 은 안드로이드에서 조용히 실패하므로 서비스 워커로 띄워요 */
+async function notifyBrowser(msg) {
   try {
-    if (!('Notification' in window) || Notification.permission !== 'granted') return;
+    if (!('Notification' in window) || Notification.permission !== 'granted') return false;
     const mem = memberOf(msg.sender);
-    const n = new Notification(`💬 ${mem.name}`, { body: previewOf(msg), tag: 'ft-' + msg.id, silent: false });
-    n.onclick = () => { window.focus(); n.close(); };
-  } catch (e) { }
+    const title = `💬 ${mem.name}`;
+    const opts = {
+      body: previewOf(msg) || '새 메시지가 도착했어요',
+      icon: 'icon-192.png',
+      badge: 'icon-192.png',
+      tag: 'family-talk-msg',
+      renotify: true,
+      silent: false,
+      vibrate: [80, 40, 80],
+      timestamp: msg.ts || Date.now(),
+      data: { id: msg.id, sender: msg.sender, url: location.href }
+    };
+    const reg = await swReady(2200);
+    if (reg && typeof reg.showNotification === 'function') {
+      try { await reg.showNotification(title, opts); return true; } catch (e) { }
+    }
+    const n = new Notification(title, { body: opts.body, icon: opts.icon, tag: opts.tag, silent: false });
+    n.onclick = () => { try { window.focus(); } catch (e) { } n.close(); };
+    return true;
+  } catch (e) { return false; }
 }
 
 /* ---------------- 이벤트 연결 ---------------- */
@@ -1967,6 +2189,22 @@ function bindChat() {
   $('#btnMyAvatar').addEventListener('click', openSwitchProfile);
   $('#btnBell').addEventListener('click', requestNotifications);
 
+  const nb = $('#notiBtn');
+  if (nb) nb.addEventListener('click', async () => {
+    if (nb.dataset.act === 'help') {
+      toast('주소창 옆 자물쇠 → 알림 → 허용 으로 바꾸면 돼요', { ms: 3400 });
+      return;
+    }
+    await requestNotifications();
+    updateNotiBar();
+    updateBell();
+  });
+  const nx = $('#notiClose');
+  if (nx) nx.addEventListener('click', () => {
+    try { localStorage.setItem('ft.v1.notiBar', String(Date.now() + 3 * 86400000)); } catch (e) { }
+    $('#notiBar').classList.add('hidden');
+  });
+
   $('#recCancel').addEventListener('click', cancelRecording);
   $('#recSend').addEventListener('click', finishRecording);
 
@@ -1975,6 +2213,7 @@ function bindChat() {
   $('#fileAny').addEventListener('change', onPickFile);
 
   window.addEventListener('resize', () => { scrollBottom(); closeActions(); setPlaceholder(); });
+  window.addEventListener('focus', () => { if (state.view === 'chat') markRead(); updateNotiBar(); });
   setPlaceholder();
 }
 
@@ -2280,12 +2519,26 @@ async function requestNotifications() {
   try {
     if (Notification.permission === 'granted') {
       updateBell();
+      updateNotiBar();
       toast('알림이 이미 켜져 있어요 🔔');
+      return;
+    }
+    if (Notification.permission === 'denied') {
+      updateBell();
+      updateNotiBar();
+      toast('브라우저 설정에서 알림을 허용해 주세요 · 주소창 옆 자물쇠 → 알림', { ms: 3200 });
       return;
     }
     const p = await Notification.requestPermission();
     updateBell();
-    toast(p === 'granted' ? '새 메시지 알림을 켰어요 🔔' : '알림이 꺼져 있어요. 브라우저 설정에서 허용할 수 있어요', { ms: 2600 });
+    updateNotiBar();
+    if (p === 'granted') {
+      toast('새 메시지 알림을 켰어요 🔔', { ms: 2400 });
+      /* 바로 한 번 보여 줘서 "정말 뜨는지" 확인할 수 있게 */
+      notifyBrowser({ id: 'hello-noti', sender: state.me === 'mom' ? 'dad' : 'mom', type: 'text', text: '이제 새 메시지가 오면 이렇게 알려 드릴게요!', ts: Date.now() });
+    } else {
+      toast('알림이 꺼져 있어요. 브라우저 설정에서 허용할 수 있어요', { ms: 2600 });
+    }
   } catch (e) { }
 }
 
@@ -2351,6 +2604,10 @@ const Sync = {
     });
   },
   putMessage(msg) { this.write('messages/' + msg.id, msg); },
+  putRead(id, ts) {
+    if (!cfg.db || !id || !ts) return;
+    this.write('reads/' + id, Math.round(ts));
+  },
   putReactions(msg) {
     const r = msg.reactions || {};
     this.write('messages/' + msg.id + '/reactions', Object.keys(r).length ? r : null);
@@ -2415,6 +2672,7 @@ async function connectCloud() {
     setConn('on');
     Sync.ready = true;
     Sync.lastOk = Date.now();
+    markRead(true);   /* 지금 보고 있는 대화는 읽은 걸로 올려요 */
   } catch (e) {
     setConn('retry');
   }
@@ -2497,6 +2755,10 @@ function applyPut(p) {
   if (parts[0] === 'cfg' && parts.length === 2 && p.data) {
     mergeRemote({ cfg: p.data }, true);
   }
+  if (parts[0] === 'reads' && parts.length === 2) {
+    if (p.data) applyRemoteReads({ [parts[1]]: p.data });
+    return;
+  }
 }
 
 function applyPatch(p) {
@@ -2528,7 +2790,9 @@ function upsertRemote(m, silent) {
   if (!silent && Sync.ready && m.sender !== state.me) {
     ding('in');
     if (document.hidden) notifyBrowser(m); else toastMsg(m);
+    if (!document.hidden && state.view === 'chat') markRead();
   }
+  updateBadge();
 }
 
 function removeRemote(id) {
@@ -2540,6 +2804,7 @@ function removeRemote(id) {
 function mergeRemote(d, silent) {
   if (!d) return;
   if (d.cfg) applyRemoteCfg(d.cfg);
+  if (d.reads) applyRemoteReads(d.reads);
   if (!d.messages) return;
   const remote = Object.values(d.messages).filter(m => m && m.id && m.ts);
   const ids = new Set(remote.map(m => m.id));
@@ -2552,6 +2817,7 @@ function mergeRemote(d, silent) {
       if (!silent && Sync.ready && m.sender !== state.me) {
         ding('in');
         if (document.hidden) notifyBrowser(m); else toastMsg(m);
+        if (!document.hidden && state.view === 'chat') markRead();
       }
     } else if (JSON.stringify(state.messages[i]) !== JSON.stringify(m)) {
       state.messages[i] = m;
@@ -2564,6 +2830,7 @@ function mergeRemote(d, silent) {
   if (changed) {
     saveMsgs();
     renderMessages();
+    updateBadge();
   }
 }
 
@@ -3090,6 +3357,7 @@ function parseInvite() {
 function boot() {
   loadCfg();
   loadMsgs();
+  loadReads();
   parseInvite();
 
   renderLogin();
@@ -3123,6 +3391,7 @@ function boot() {
   } else {
     showView('profile');
   }
+  updateBadge();
 
   /* 같은 기기의 다른 탭과 맞추기 (체험 모드) */
   window.addEventListener('storage', e => {
@@ -3144,13 +3413,21 @@ function boot() {
         const raw = JSON.parse(e.newValue || 'null');
         if (raw) applyRemoteCfg(raw);
       } catch (err) { }
+    } else if (e.key === LS.reads) {
+      try {
+        const raw = JSON.parse(e.newValue || '{}');
+        if (raw && typeof raw === 'object') applyRemoteReads(raw);
+      } catch (err) { }
     }
   });
 
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {
       updateBell();
-      if (state.view === 'chat') scrollBottom();
+      updateNotiBar();
+      if (state.view === 'chat') { scrollBottom(); markRead(); }
+    } else {
+      updateBadge();
     }
   });
 

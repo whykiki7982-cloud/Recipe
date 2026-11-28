@@ -1,5 +1,5 @@
 /* 우리 가족 톡 — 네트워크 우선(online) · 캐시 대체(offline) */
-var CACHE = 'minjeong-familytalk-pwa-2026-11-28-2';
+var CACHE = 'minjeong-familytalk-pwa-2026-11-28-3';
 var ASSETS = ['./', './index.html', './manifest.json', './icon-180.png', './icon-192.png', './icon-512.png', './icon-512-maskable.png', './icon.svg'];
 
 self.addEventListener('install', function (e) {
@@ -40,5 +40,21 @@ self.addEventListener('fetch', function (e) {
         return Response.error();
       });
     })
+  );
+});
+
+/* 알림 팝업을 누르면 이미 열려 있는 앱으로 돌아가요 (안드로이드 PWA) */
+self.addEventListener('notificationclick', function (e) {
+  e.notification.close();
+  e.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (list) {
+      for (var i = 0; i < list.length; i++) {
+        var c = list[i];
+        if (c.url.indexOf(self.registration.scope) === 0 && 'focus' in c) {
+          return c.focus().catch(function () {});
+        }
+      }
+      if (self.clients.openWindow) return self.clients.openWindow('./');
+    }).catch(function () {})
   );
 });
